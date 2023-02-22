@@ -1,6 +1,6 @@
 <template>
   <div class="head">
-    <span>考试页面</span>
+    <span>试卷页面</span>
     <el-button type="primary">创建试卷</el-button>
   </div>
 
