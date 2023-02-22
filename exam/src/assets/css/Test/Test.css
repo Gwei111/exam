@@ -1,0 +1,30 @@
+.head{
+  display: flex;
+  justify-content: space-between
+}
+.head span{
+  font-size: 22px;
+}
+.head_inp{
+  width: 100%;
+  height: 60px;
+  background-color: red;
+  border: 1px solid red;
+}
+
+.el-form{
+ margin-top: 10px;
+ display: flex;
+}
+#fon{
+  font-size: 14px;
+}
+.t{
+  margin-top: 5px;
+}
+.Blue{
+  color: #409EFF;
+}
+.Blue:hover{
+  border-bottom: 1px solid #409EFF;
+}

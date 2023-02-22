@@ -177,6 +177,7 @@ const retreat_login = () => {
     height: 40px;
     border-radius: 40px;
     margin-bottom: 30px;
+margin-left: 15px;
 
     img {
       width: 100%;
@@ -301,5 +302,48 @@ const retreat_login = () => {
   border-radius: 40px;
   margin-bottom: 30px;
   margin: 23px auto;
+}
+::-webkit-scrollbar {
+width: 0 !important;
+}
+::-webkit-scrollbar {
+width: 0 !important;height: 0;
+}
+.icon-kaoshi_moren2x:before {
+    content: "\e602";
+    font-size: 28px;
+}
+.icon-shenpishenhe:before {
+    content: "\e633";
+        font-size: 28px;
+}
+.icon-wenben:before {
+    content: "\e600";
+      font-size: 26px;
+}
+.icon-changjianwenti:before {
+    content: "\e6c8";
+    font-size: 26px;
+}
+.icon-a-1kehudanweitaizhang:before {
+    content: "\e628";
+      font-size: 26px;
+}
+.icon-qiyeguanli_yuangongguanli:before {
+    content: "\e62c";
+          font-size: 26px;
+}
+.icon-banji:before {
+    content: "\e608";
+      font-size: 26px;
+      // margin-left: 10px;
+}
+.icon-bumen:before {
+    content: "\e758";
+    font-size: 26px;
+}
+.icon-wutouxiang:before {
+    content: "\e63c";
+     font-size: 26px;
 }
 </style>
