@@ -3,12 +3,12 @@
       <el-card class="box-card">
         <div class="Login_item_box">
           <div class="QRimg" @click="qiehuan"> <!--点击切换登录方式-->
-            <img src="../../assets/pc.png" alt="" v-show="!biaodan" />
-            <img class="pc" src="../../assets/pass.png" alt="" v-show="biaodan" />
+            <img src="../assets/pc.png" alt="" v-show="!biaodan" />
+            <img class="pc" src="../assets/pass.png" alt="" v-show="biaodan" />
           </div>
           <div class="titleBox">
             <div class="imgbox">
-              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQA…lpgm6PKnyBE2eVHiCjCfhB4/kuLSh1hUaAAAAAElFTkSuQmCC" alt="" />
+              <img src="http://edu.90000p.com/exam/cyx/assets/log.6449415e.png" alt="" />
             </div>
             <div class="logTitle">
               <p class="titleOne">考试系统</p>
@@ -51,7 +51,7 @@
   import { ElMessage, FormInstance, FormRules } from 'element-plus'
   import { checklogin } from '../api/login'
   
-//   import store from '../../store';
+  import store from '../store/index';
   import { useRouter } from 'vue-router';
   const router = useRouter();
   
@@ -108,9 +108,8 @@
       sessionStorage.setItem('studentid', res.data.model.id)
       data123.menu = res.data.menu.filter((item: any) => item.pid === 0)  //过滤 只要左侧菜单栏的数据
       sessionStorage.setItem('data', JSON.stringify(data123.menu))  //左侧菜单栏数据
-    //   store.commit('getMenu', data123.menu)     //左侧菜单栏数据 存到vuex里
-    //   router.push(data123.menu[0].url)   //跳转页面
-    router.push('/index')
+      store.commit('getMenu', data123.menu)     //左侧菜单栏数据 存到vuex里
+      router.push(data123.menu[0].url)   //跳转页面
       ElMessage({
         message: '登陆成功',
         type: 'success',
