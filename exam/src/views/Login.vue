@@ -121,7 +121,7 @@
     //     message: res.errMsg,
     //     type: 'error',
     //   })
-    // }
+    }
   }
   </script>
   <style lang="less" scoped>

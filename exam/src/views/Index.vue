@@ -302,4 +302,8 @@ const retreat_login = () => {
   margin-bottom: 30px;
   margin: 23px auto;
 }
+:deep(.icon){
+    content: "\e602";
+    margin-left: 5px;
+}
 </style>
