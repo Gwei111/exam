@@ -7,7 +7,6 @@
         <el-tree :data="taabledata.arr" :props="defaultProps" @node-click="handleNodeClick"   default-expand-all/>
       </div>
     </div>
-    
     <div class="right" v-if="show">
       <div class="one">
         <div class="dan">当前节点:</div>&nbsp;&nbsp;&nbsp;

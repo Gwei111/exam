@@ -94,8 +94,8 @@
   
   
   let data123:any = reactive({  //参数
-    username: "admin",
-    pass: "admin",
+    username: "",
+    pass: "",
     menu: []
   })
   
@@ -104,7 +104,6 @@
     console.log(res);
     if (res.errCode === 10000) {
       sessionStorage.setItem('token', res.data.token)
-      // sessionStorage.setItem('token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyVHlwZSI6IkFETUlOIiwiZXhwIjoxNjcwODkwNzg2LCJ1c2VyaWQiOiIxIn0.f740kuam7H_01OpnmqoUqu1eGIfkAqgQrUgp6ogz3G8')
       sessionStorage.setItem('name', res.data.model.username)
       sessionStorage.setItem('studentid', res.data.model.id)
       data123.menu = res.data.menu.filter((item: any) => item.pid === 0)  //过滤 只要左侧菜单栏的数据
@@ -112,15 +111,15 @@
     //   store.commit('getMenu', data123.menu)     //左侧菜单栏数据 存到vuex里
     //   router.push(data123.menu[0].url)   //跳转页面
     router.push('/index')
-    //   ElMessage({
-    //     message: '登陆成功',
-    //     type: 'success',
-    //   })
-    // } else if (res.errCode === 10300) {
-    //   ElMessage({
-    //     message: res.errMsg,
-    //     type: 'error',
-    //   })
+      ElMessage({
+        message: '登陆成功',
+        type: 'success',
+      })
+    } else if (res.errCode === 10300) {
+      ElMessage({
+        message: res.errMsg,
+        type: 'error',
+      })
     }
   }
   </script>

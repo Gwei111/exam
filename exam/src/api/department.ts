@@ -23,3 +23,7 @@ export const databasedelete= (data: any) => {
 export const deleteall= (data: any) => {
   return request.post('database/deleteall', data)
 }
+// 添加题库
+export const deleadd= (data: any) => {
+  return request.post('database/add', data)
+}
