@@ -1,85 +1,99 @@
 <template>
-    <div>
-        <el-dialog v-model="props.dialogVisible" :title="props.title" width="90%" :before-close="closedetailsList">
-            <div class="top">
-                <div class="title">
-                    <div class="zong">
-                        <span>总分</span>
-                        <span>{{ arr.scores }}</span>
-                    </div>
-                    <div class="zong">
-                        <span>通过分数</span>
-                        <span>{{ arr.pastscores }}</span>
-                    </div>
-                    <div class="zong">
-                        <span>考试时长</span>
-                        <span>{{ arr.begintime == null ? '不限' : arr.begintime + '至' + arr.endtime }}</span>
-                    </div>
-                    <div class="zong">
-                        <span>开放时间</span>
-                        <span>{{ arr.begintime == null ? '不限' : arr.begintime + '至' + arr.endtime }}</span>
-                    </div>
-                </div>
-                <div>
-                    <el-button>导出excel</el-button>
-                </div>
-            </div>
-            <div class="content">
-                <div class="titletop" v-for="(item, index) in arr.questions" :key="index">
-                    <span> {{ index + 1 }}.{{ item.type }}</span><span> 分值：{{ item.scores }}</span>
-                    <p v-html="item.title"></p>
-                    <!-- 问答题 -->
-                    <div v-if="item.type == '单选题'">
-                        <div class="options" v-for="items in item.answers">
-                            <div :class="item.answer === items.answerno ? 'options optionsbox' : 'options optionerr'">
-                                <div class="round"></div>
-                                {{ items.answerno }}:{{ items.content }}
-                            </div>
-                        </div>
-                    </div>
-                    <!-- 简答题 -->
-                    <div v-if="item.type == '问答题'">
-                        <div class="analysis">
-                            答案解析：{{ item.explains }}
-                        </div>
-                    </div>
-                    <!-- 判断题 -->
-                    <div class="judge" v-if="item.type == '判断题' || item.type == '填空题'">
-                        正确答案：{{ item.answer }}
-                    </div>
-                    <!-- 多选 -->
-                    <div v-if="item.type == '多选题'">
-                        <div class="checkbox" v-for="items in item.answers">
-                            <div :class="item.answer.includes(items.answerno) ? 'checkbox checkone' : 'checkbox checkerr'">
-                                <div class="fang"></div>
-                                {{ items.answerno }}:{{ items.content }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </el-dialog>
-    </div>
+  <div>
+    <el-dialog :model-value="Detailsdialog"
+               :title="model.title"
+               width="80%"
+               :before-close="handleClose">
+      <div class="head">
+        <div>
+          <span>总分</span>
+          <p>{{model.scores}}</p>
+        </div>
+        &emsp; &emsp;
+        <div>
+          <span>添加时间</span>
+          <p>{{model.addtime}}</p>
+        </div>
+      </div>
+      <div v-for="item,index in model.questions"
+           :key="index">
+        <div style="padding-top:30px">
+          <span>{{index+1}}.</span><span>{{item.type}}</span><span style="margin-left:10px;">分值：{{item.scores}}</span>
+          <p style="padding:10px 0 10px 0"
+             v-html="item.title.replaceAll('[]','__')"></p>
+        </div>
+        <!-- 单选题 -->
+        <div v-for="items in item.answers"
+             :key="items.id"
+             :class="item.answer.includes(items.answerno) ? 'bgcolor' : ''"
+             style="display: flex;margin-top:5px;padding: 10px;">
+          <div :class="item.type==='单选题' ? 'radio' : 'check'">
+          </div>
+          <div style="padding-left:10px">
+            <span>{{items.answerno}}</span>
+            <span style="padding-left:10px">{{items.content}}</span>
+          </div>
+        </div>
+        <!-- 填空 -->
+        <div v-if="item.type=='填空题' || item.type=='判断题'"
+             class="yes">
+          <span style="color:#5acda6;padding-left: 20px;">正确答案</span><span style="color:#5acda6;padding-left: 20px;">{{item.answer}}</span>
+        </div>
+        <div v-if="item.type=='填空题' || item.type=='问答题'"
+             class="analy">
+          <span style="color:#ccd5df;padding-left: 20px;">答案解析</span><span style="color:#abb8c6;padding-left: 20px;">{{item.explains}}</span>
+        </div>
+
+      </div>
+
+      <template>
+        <span class="dialog-footer">
+          <el-button @click="dialogVisible = false">取消</el-button>
+          <el-button type="primary"
+                     @click="dialogVisible = false">
+            确定
+          </el-button>
+        </span>
+      </template>
+    </el-dialog>
+  </div>
+
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { testDetails } from '../../api/test'
-const props = defineProps(['dialogVisible', 'getid', 'title']);//父传子
-// console.log(props);
+import { ref, reactive, toRefs, defineEmits } from "vue";
+import { ElMessageBox } from "element-plus";
+import { getSubjects } from "../../api/Test/Test";
+const dialogVisible = ref(false);
+const emits = defineEmits(["update:modelValue"]);
+const prop = defineProps({
+  Detailsid: Number,
+  subjectsID: Number,
+});
+const data: any = reactive({
+  model: {},
+  Detailsdialog: true,
+  id: prop.Detailsid,
+  sid: prop.subjectsID,
+  arr: ["错误", "正确"],
+});
+// console.log(data.sid);
 
-const emit = defineEmits(['closedetailsList'])//子传父
-const closedetailsList = () => {
-    emit('closedetailsList', false)
-}
-let arr: any = ref({})
-const getList = async () => {
-    let res: any = await testDetails({ id: props.getid })
-    console.log(res);
-    arr.value = res.data
+const { Detailsdialog, id, model, sid } = toRefs(data);
+const handleClose = () => {
+  emits("update:modelValue", false);
+};
 
-}
-getList()
+// 请求详情数据
+const getPSubjects = async () => {
+  let res = await getSubjects({ id: sid.value });
+  // console.log(res);
+  if (res.errCode === 10000) {
+    model.value = res.data;
+    console.log(model.value);
+  }
+};
+getPSubjects();
 </script>
 
 <style scoped lang="less">
@@ -200,5 +214,61 @@ getList()
             }
         }
     }
+}
+.head {
+  width: 100%;
+  height: 50px;
+  border-bottom: 0.5px solid #efefef;
+  margin-top: -25px;
+  display: flex;
+}
+.head div p {
+  margin-top: 5px;
+}
+.topic {
+  width: 100%;
+  /* background-color: gray; */
+  margin-top: 10px;
+}
+.yes {
+  width: 90%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  background-color: #eefaf6;
+  margin: 10px 10px;
+}
+#xia {
+  margin-top: 5px;
+}
+.yuan {
+  width: 20px;
+  margin-top: 10px;
+  height: 20px;
+  /* background-color: #fafafa; */
+  border: 1px solid #e3e3e3;
+  border-radius: 20px;
+}
+.da {
+  display: flex;
+}
+.yuan1 {
+  margin-top: 10px;
+}
+.bgcolor {
+  background-color: #eefaf6;
+}
+.radio {
+  width: 20px;
+  height: 20px;
+  background-color: #fcf8f8;
+  border: 1px solid #dfdfde;
+  border-radius: 50%;
+}
+.check {
+  width: 20px;
+  height: 20px;
+  background-color: #fcf8f8;
+  border: 1px solid #dfdfde;
 }
 </style>

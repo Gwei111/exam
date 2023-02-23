@@ -2,7 +2,7 @@
 <div>
   <el-config-provider :locale="zhCn">
     <el-pagination
-      :page-sizes="[10, 20, 30, 50]"
+      :page-sizes="[5, 10, 20, 30]"
       :small="small"
       :disabled="disabled"
       :background="background"
