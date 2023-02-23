@@ -1,7 +1,7 @@
 <template>
   <div class="head">
     <span>试卷页面</span>
-    <el-button type="primary">创建试卷</el-button>
+    <el-button type="primary" @click="add">创建试卷</el-button>
   </div>
 
   <div class="ip">
@@ -60,7 +60,7 @@
       <el-table-column label="操作">
         <template #default="scope">
           <el-button type="primary"
-                     link>编辑</el-button>&emsp;&nbsp;|
+                     link @click="upd(scope.row.id)">编辑</el-button>&emsp;&nbsp;|
           <el-button type="primary"
                      link
                      @click="del(scope.row.id)">删除</el-button>
@@ -74,17 +74,20 @@
     <TestDetails v-model="Detailsdialog"
                  v-if="Detailsdialog"
                  :subjectsID="subjectsID "></TestDetails>
-
   </div>
 </template>
 
 <script setup lang="ts">
 const checked1 = ref(false);
+// 抽屉
+// import Drawer from "../../components/Test/Drawer.vue" 
 import { reactive, ref } from "vue";
 import { FormInstance, ElMessage, ElMessageBox } from "element-plus";
 import { Text_List, Text_del } from "../../api/Test/Test";
 import TestDetails from "../../components/Test/TestDetails.vue";
 import FenYe from "../../components/FenYe/FenYe.vue"
+import {useRouter} from "vue-router"
+const router=useRouter()
  const counts = ref(0);
 const formRef = ref<FormInstance>();
 const Detailsdialog = ref(false);
@@ -98,7 +101,7 @@ const tableData = reactive([]);
 const subjectsID = ref();
 const GetText_List = async () => {
   let res = await Text_List(numberValidateForm);
-  console.log(res);
+  // console.log(res);
   if (res.errCode === 10000) {
     Object.assign(tableData, res.data.list);
     counts.value=res.data.counts
@@ -151,6 +154,23 @@ const del = async (id: number) => {
       });
     });
 };
+// 添加跳转
+const add=()=>{
+  router.push("/AddText")
+  // console.log("添加");
+  
+}
+const upd=(id:any)=>{
+router.push({
+  path:"/AddText",
+  query:{
+    id,
+  }
+})
+// console.log("修改");
+}
+
+
 </script>
 
 <style scoped>

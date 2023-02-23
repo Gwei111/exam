@@ -31,6 +31,12 @@ const routes: Array<RouteRecordRaw> = [
         meta: { title: '试卷', isAuth: true },
       },
       {
+        path: '/AddText',
+        name: 'AddText',
+        component: () => import('../views/Test/AddText.vue'),
+        meta: { title: '试卷', isAuth: true },
+      },
+      {
         path: '/databaselist',
         name: 'databaselist',
         component: () => import('../views/QueStion/QueStion.vue'),
