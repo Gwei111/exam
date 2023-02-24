@@ -1,8 +1,8 @@
 <!-- 添加角色 -->
 <template>
-    <el-dialog v-model="centerDialogVisible" title="添加" style="padding-bottom: 20px;">
-        <el-form :model="tableData">
-            <el-form-item label="角色名称" :label-width="formLabelWidth">
+    <el-dialog v-model="centerDialogVisible" :title="id ? '修改' : '添加'" style="padding-bottom: 20px;">
+        <el-form :model="tableData"  ref="ruleFormRef" :rules="rules" status-icon >
+            <el-form-item label="角色名称" :label-width="formLabelWidth" prop="name">
                 <el-input style="width: 200px;" v-model="tableData.name" autocomplete="off" />
             </el-form-item>
             <el-form-item label="权限" :label-width="formLabelWidth">
@@ -40,61 +40,78 @@
             </el-form-item>
         </el-form>
     </el-dialog>
-<!-- 添加角色结束 --></template>
+    <!-- 添加角色结束 -->
+</template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted, watch, toRefs, markRaw } from 'vue'
+import { reactive, ref, onMounted, watch, toRefs, markRaw, toRaw } from 'vue'
 import { roleAdd, menuList } from '../api/role';
-import type { FormInstance, FormRules } from 'element-plus';
 import { ElMessage, ElMessageBox } from 'element-plus'
+import type { FormInstance, FormRules } from 'element-plus'
 
 
 onMounted(() => {
     getMenuList()
 })
+// 传
+const props = defineProps({
+    dislogShow: Boolean,
+    item: Number,
+    upid: Number,
+    upname: String,
+    upmenus: Array
+})
+watch([
+    props
+], () => {
+    centerDialogVisible.value = props.dislogShow
+    id.value = props.upid
+    name.value = props.upname
+    menus.value = props.upmenus
+})
 
-// const ruleFormRef = ref<FormInstance>();
 
 // 添加
 const centerDialogVisible = ref(false)
-const emit =defineEmits(['click'])
+const emit = defineEmits(['click'])
 const formLabelWidth = '140px'
 
 const menuDate = reactive<any>({
     list: []
 })
 
-// 添加多选框
+
 // 权限列表
 // const menuDate = ref<any>([])
 const tableData: any = reactive({
     id: 0,
     name: '',
-    // roleid:0
+    menus: [],
+    roleid: 0,
+    info: []
 })
-const { name, id } = toRefs(tableData)
+const { name, roleid, id, menus, info } = toRefs(tableData)
 const getMenuList = async () => {
     const res: any = await menuList({ roleid: tableData.id })
     // console.log(res.data.list);
     if (res.errCode == 10000) {
         menuDate.list = res.data.list
         tableData.id = props.item
-        // console.log(tableData.value); 
-        // cities.value = res.data.list[0].children
-
+        menus.value = props.upmenus
     }
 }
-
+// 添加多选框
 const handleCheckAllChange = (index: number) => {
     let ids: Array<number> = [];
     if (!menuDate.list[index].checkedids || menuDate.list[index].checkedids.length == 0) {
         ids = menuDate.list[index].children.map((item: any) => item.id);
     }
     menuDate.list[index].checkedids = ids;
+    // console.log(ids);
+
 }
 const handleCheckedCitiesChange = (index: number) => {
-
-
+    console.log(menuDate.list[index].checkedids);
     let len1 = menuDate.list[index].checkedids.length;
     let len2 = menuDate.list[index].children.length;
     menuDate.list[index].isIndeterminate = false;
@@ -110,40 +127,69 @@ const handleCheckedCitiesChange = (index: number) => {
     }
 }
 
-const props = defineProps({
-    dislogShow: Boolean,
-    item: Number
+// 表单校验
+const ruleFormRef = ref<FormInstance>()
+
+const rules = reactive<FormRules>({
+    name:[
+    { required: true, message: '角色名不能为空', trigger: 'blur' },
+    ]
 })
-watch([
-    props
-], () => {
-    centerDialogVisible.value = props.dislogShow
-    // item.value=props.item
-    // console.log(dialogFormVisible.value);
-
-
-})
-
 // 点击确定
 const getaddRole = async () => {
     centerDialogVisible.value = false
-    const res: any = await roleAdd({
-        name: tableData.name,
-        id:tableData.id
-    })
-    console.log(res);
-    if (res.errCode == 10000) {
-        ElMessage({
-            type: 'success',
-            message: '添加成功',
+    if (id.value == 0) {
+        // 获取id
+        tableData.menus = toRaw(menuDate.list)
+        // console.log(menus);
+        let tomenus: Array<any> = []
+        tableData.menus.forEach((item: any) => {
+            if (item.checkedids) {
+                item.checkedids.forEach((item1: any) => {
+                    tomenus.push({ id: item1 })
+                })
+            }
         })
-        emit('click',false)
+        console.log(111111111, tomenus);
+        // 接口
+        const res: any = await roleAdd({
+            name: tableData.name,
+            menus: tomenus
+        })
+        console.log(res);
+        if (res.errCode == 10000) {
+            ElMessage({
+                type: 'success',
+                message: '添加成功',
+            })
+            emit('click', false)
+        } else {
+            ElMessage({
+                type: 'error',
+                message: res.errMsg,
+            })
+        }
     } else {
-        ElMessage({
-            type: 'success',
-            message: res.errMsg,
+        const res: any = await roleAdd({
+            name: props.upname,
+            id: props.upid,
+            menus: []
         })
+        console.log(res);
+        if (res.errCode == 10000) {
+            ElMessage({
+                type: 'success',
+                message: '修改成功',
+            })
+            emit('click', false)
+        } else {
+            ElMessage({
+                type: 'error',
+                message: res.errMsg,
+            })
+        }
     }
+
 }
 </script>
 
