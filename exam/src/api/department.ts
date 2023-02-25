@@ -27,3 +27,19 @@ export const deleteall= (data: any) => {
 export const deleadd= (data: any) => {
   return request.post('database/add', data)
 }
+// 获取老师信息
+export const teachelistr= (data: any) => {
+  return request.get('teacher/list', data)
+}
+// 删除角色
+export const roledelete= (data: any) => {
+  return request.get('teacher/delete', data)
+}
+// 添加老师信息
+export const teacheradd= (data: any) => {
+  return request.post('teacher/add', data)
+}
+// 老师修改密码
+export const teacherchangePass= (data: any) => {
+  return request.post('teacher/changePass', data)
+}

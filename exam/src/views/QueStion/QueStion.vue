@@ -52,8 +52,8 @@
     </el-table>
     <FenYe @getChildData="getChildData" :counts="counts"> </FenYe>
   </div>
-  <el-dialog v-model="dialogVisible" :title="textle===true ? '题库添加' : '题库修改'"  v-if="dialogVisible">  
-    <Queston :upAata="upAata.data"  @emitShow="emitShow"></Queston>
+  <el-dialog  v-model="dialogVisible" :title="textle===true ? '题库添加' : '题库修改'"  v-if="dialogVisible">  
+    <Queston  :upAata="upAata.data"  @emitShow="emitShow"></Queston>
   </el-dialog>
  
 </template>
@@ -140,8 +140,8 @@ onMounted(() => {
 });
 
 const data = reactive({
-  page: 1,
-  psize: '',
+  page: '',
+  psize: 10,
   key: '',
   ids: '',
 });
@@ -150,7 +150,7 @@ const counts = ref();
 const tableData = reactive({ arr: [] });
 const list = async () => {
   let res = await databaselist(data);
-  // console.log(res);
+  console.log(res);
   tableData.arr = res.data.list;
   counts.value = res.data.counts;
 };
@@ -166,6 +166,7 @@ const clasAdd = (val:string) => {
   // console.log(val);
   dialogVisible.value = true;
   textle.value=true
+  upAata.data ={}
   list()
 };
 // 编辑

@@ -204,7 +204,7 @@ const getChildData = (val: any) => {
   console.log(111, val)
   numberValidateForm.page = val.page;
   numberValidateForm.psize = val.psize;
-  console.log(numberValidateForm.psize, numberValidateForm.page,1234);
+
   
  GetClass_List();
 };

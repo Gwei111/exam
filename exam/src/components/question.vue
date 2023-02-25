@@ -1,7 +1,7 @@
 <template #footer>
   <el-form ref="ruleFormRef" :model="data" :rules="rules">
     <el-form-item label="题库名称" prop="title">
-      <el-input v-model="data.title" autocomplete="off" />
+      <el-input  v-model="data.title" autocomplete="off" />
     </el-form-item>
  
     <el-form-item label="被他人使用">
@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, defineProps } from 'vue';
+import { reactive, ref, defineProps,onUpdated } from 'vue';
 import { deleadd } from '../api/department';
 import { ElMessage} from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus';
@@ -34,7 +34,7 @@ const props :any= defineProps({
 // 父传子   子页面来接值
   upAata: {
     type: Object,
-    default: () => Object,
+    default: () => {},
   },
 });
 const data :any= reactive({
@@ -42,16 +42,15 @@ const data :any= reactive({
   title: props.upAata.title,
   isshow: 1,
   limits: [],
-  // id: props.upAata.id,
-  // title: props.upAata.title,
-  // isshow: 1,
-  // limits: [],
 });
 console.log(data);
 
 // 取消
 const cancel = () => {
   emit('emitShow',false)
+  data.id=''
+  data.title=''
+  console.log(data)
 };
 // 确定
 const submit = async () => {
@@ -62,9 +61,14 @@ const submit = async () => {
           type: 'success',
           message: '修改成功',
     });
-    props.upAata.id=''
-    emit('emitShow',false)
+  
   }
+  // props.upAata.id=''
+  // props.upAata.title=''
+  data.id=''
+  data.title=''
+  console.log(data)
+    emit('emitShow',false)
 }else{
     data.id=0
     let res:any=await deleadd(data)
@@ -83,6 +87,9 @@ const ruleFormRef = ref<FormInstance>();
 const rules = reactive<FormRules>({
   title: [{ required: true, message: '请输入题库名称', trigger: 'blur' }],
 });
+onUpdated(() => {
+  console.log(123)
+})
 </script>
 
 <style scoped>
