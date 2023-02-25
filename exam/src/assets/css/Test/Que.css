@@ -1,0 +1,22 @@
+.head{
+  width: 100%;
+  /* height: 40px; */
+margin-top:-10px ;
+}
+.dialog-footer button:first-child {
+  margin-right: 10px;
+}
+.inp{
+  display: flex;
+}
+.head_inp{
+  width: 250px;
+  display: flex;
+  align-items: center;
+}
+.head_inp span{
+  width: 100px;
+}
+.ye{
+  margin-left: 200px;
+}

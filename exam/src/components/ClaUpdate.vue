@@ -74,7 +74,6 @@ const cancel = () => {
 // 添加接口
 const submit = async () => {
   // if (父组件传过来当前行里面的数据，取里面的id不等于0时走修改接口) {
-
   // }else{走添加接口}
   if (props.upAata.id) {
     console.log("修改");

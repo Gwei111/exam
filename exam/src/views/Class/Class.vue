@@ -27,7 +27,8 @@
                  @click="Search">查询</el-button>
     </el-form>
     <el-button type="danger"
-               @click="delAll" v-show="multipleSelection.length > 0">批量删除</el-button>
+               @click="delAll"
+               v-show="multipleSelection.length > 0">批量删除</el-button>
     <el-table ref="multipleTableRef"
               :data="tableData"
               style="width: 100%"
@@ -46,7 +47,6 @@
       <el-table-column width="200"
                        label="操作">
         <template #default="scope">
-
           <el-button type="danger"
                      link
                      @click="del(scope.row.id)">删除</el-button>
@@ -78,7 +78,7 @@
 import { reactive, ref } from "vue";
 import type { FormInstance } from "element-plus";
 import ClaUpdate from "../../components/ClaUpdate.vue";
-import FenYe from "../../components/FenYe/FenYe.vue"
+import FenYe from "../../components/FenYe/FenYe.vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Class_List, DelList, getDelAll } from "../../api/Class/list";
 import type { Action } from "element-plus";
@@ -89,8 +89,8 @@ const formRef = ref<FormInstance>();
 
 const numberValidateForm = reactive({
   key: "",
-  page:"",
-  psize:""
+  page: "",
+  psize: "",
 });
 const props1 = {
   checkStrictly: true,
@@ -143,7 +143,7 @@ const GetClass_List = async () => {
   if (res.errCode === 10000) {
     Object.assign(tableData, res.data.list);
     // console.log(tableData);
-    counts.value=res.data.counts
+    counts.value = res.data.counts;
   }
 };
 GetClass_List();
@@ -201,12 +201,17 @@ const close = (e: boolean) => {
 
 // 分页
 const getChildData = (val: any) => {
-  console.log(111, val)
+  console.log(111, val);
   numberValidateForm.page = val.page;
   numberValidateForm.psize = val.psize;
 
   
  GetClass_List();
+
+  console.log(numberValidateForm.psize, numberValidateForm.page, 1234);
+
+  GetClass_List();
+
 };
 </script>
 
