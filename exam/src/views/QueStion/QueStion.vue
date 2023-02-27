@@ -37,7 +37,7 @@
       <el-table-column property="admin" label="创建人" width="250" />
       <el-table-column label="操作" width="250">
         <template #default="scope">
-          <el-button link type="primary" size="small"> 试题 </el-button>
+          <el-button link type="primary" size="small" @click="questions(scope.row.id)"> 试题 </el-button>
           <el-button link type="primary" size="small" @click="updata(scope.row)"> 编辑 </el-button>
           <el-button
             link
@@ -64,6 +64,8 @@ import { ElMessage, ElMessageBox, ElTable } from 'element-plus';
 import { databaselist, databasedelete, deleteall } from '../../api/department';
 import FenYe from '../../components/FenYe/FenYe.vue';
 import Queston from '../../components/question.vue'
+import { useRouter } from "vue-router";
+const router = useRouter();
 const form = reactive({
   name: '',
   type: [],
@@ -72,6 +74,10 @@ const form = reactive({
 const emitShow=(e:boolean)=>{
   dialogVisible.value = e;
   list()
+}
+// 试题
+const questions=(val:any)=>{
+  router.push({path:"/questionlist",query:{databaseid:val}});
 }
 // 分页
 const getChildData = (val: any) => {
@@ -150,7 +156,7 @@ const counts = ref();
 const tableData = reactive({ arr: [] });
 const list = async () => {
   let res = await databaselist(data);
-  console.log(res);
+  // console.log(res);
   tableData.arr = res.data.list;
   counts.value = res.data.counts;
 };

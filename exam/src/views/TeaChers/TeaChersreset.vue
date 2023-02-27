@@ -19,7 +19,7 @@
        <el-form-item label="姓名">{{ ruleForm.name }}</el-form-item>
   
         <el-form-item label="密码" prop="pass">
-            <el-input v-model="ruleForm.passs" />
+            <el-input v-model="ruleForm.pass" />
         </el-form-item>
         <el-form-item label="确认密码" prop="checkPass">
             <el-input v-model="ruleForm.oldpass" />
@@ -76,8 +76,8 @@ const ruleForm = reactive({
 });
 const ruleFormRef: any = ref<FormInstance>();
 const rules = reactive<FormRules>({
- name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
  pass: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+ checkPass: [{ required: true, message: '请再次输入密码', trigger: 'blur' }],
 });
 // 暴露在外面
 defineExpose({

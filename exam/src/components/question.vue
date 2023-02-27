@@ -1,4 +1,5 @@
 <template #footer>
+  <!-- 题库首页的修改添加 -->
   <el-form ref="ruleFormRef" :model="data" :rules="rules">
     <el-form-item label="题库名称" prop="title">
       <el-input  v-model="data.title" autocomplete="off" />

@@ -27,6 +27,14 @@ export const deleteall= (data: any) => {
 export const deleadd= (data: any) => {
   return request.post('database/add', data)
 }
+// 根据题库id获取试题列表
+export const databasequestion= (data: any) => {
+  return request.get('databasequestion/list', data)
+}
+// 题库试题删除
+export const datadelete= (data: any) => {
+  return request.get('databasequestion/delete', data)
+}
 // 获取老师信息
 export const teachelistr= (data: any) => {
   return request.get('teacher/list', data)
@@ -43,3 +51,4 @@ export const teacheradd= (data: any) => {
 export const teacherchangePass= (data: any) => {
   return request.post('teacher/changePass', data)
 }
+
