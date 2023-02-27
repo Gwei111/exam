@@ -120,7 +120,7 @@ import router from '../../router/index'
 
 import { testList, testDel, testDelAll, testState ,departmentList} from '../../api/test'
 import { ElMessageBox } from 'element-plus'
-import TestDetails from "../../components/test/testDetails.vue";
+import TestDetails from "../../components/exam/testDetails.vue";
 import Students from '../../components/test/studentList.vue'
 import moment from "moment";
 import Pages from '../../components/FenYe/FenYe.vue'
