@@ -20,7 +20,19 @@ export const AddSub = (params: any) => {
 export const SubUa = (params: any) => {
   return request.get('subjects/get', params)
 }
-// 试题存入题库
+// 试题试卷存入题库
 export const QueList = (params: any) => {
   return request.get('database/list', params)
+}
+// 获取试卷下拉菜单
+export const SeleList = (params: any) => {
+  return request.get('department/list', params)
+}
+// 获取试卷穿梭框数据
+export const ForList = (params: any) => {
+  return request.get('teacher/list', params)
+}
+// 文件上传
+export const databasequestion  = (params: any) => {
+  return request.post('databasequestion/addlist', params)
 }

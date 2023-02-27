@@ -107,7 +107,7 @@ interface User {
   name: string;
   address: string;
 }
-const tableData: User[] = reactive([]);
+const tableData: User[] = ref([]);
 const multipleTableRef = ref<InstanceType<typeof ElTable>>();
 const multipleSelection = ref<User[]>([]);
 
@@ -141,7 +141,8 @@ const GetClass_List = async () => {
   let res = await Class_List(numberValidateForm);
   console.log(res);
   if (res.errCode === 10000) {
-    Object.assign(tableData, res.data.list);
+    // Object.assign(tableData, res.data.list);
+    tableData.value=res.data.list
     // console.log(tableData);
     counts.value = res.data.counts;
   }

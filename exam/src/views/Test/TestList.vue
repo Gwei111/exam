@@ -1,6 +1,6 @@
 <template>
   <div class="head">
-    <span>试卷页面</span>
+    <span>试卷管理</span>
     <el-button type="primary" @click="add">创建试卷</el-button>
   </div>
 
@@ -54,6 +54,7 @@
       <el-table-column prop="multiples"
                        label="问答  " />
       <el-table-column prop="scores"
+      width="70"
                        label="总分" />
       <el-table-column prop="admin"
                        label="创建人" />
@@ -97,13 +98,13 @@ const numberValidateForm = reactive({
   psize:"10"
 });
 // 试卷页面列表展示
-const tableData = reactive([]);
+const tableData = ref([]);
 const subjectsID = ref();
 const GetText_List = async () => {
   let res = await Text_List(numberValidateForm);
-  // console.log(res);
+  console.log(res);
   if (res.errCode === 10000) {
-    Object.assign(tableData, res.data.list);
+    tableData.value=res.data.list
     counts.value=res.data.counts
     // console.log(tableData);
   }
@@ -157,7 +158,6 @@ const del = async (id: number) => {
 // 添加跳转
 const add=()=>{
   router.push("/AddText")
-  // console.log("添加");
   
 }
 const upd=(id:any)=>{
@@ -167,7 +167,6 @@ router.push({
     id,
   }
 })
-// console.log("修改");
 }
 
 

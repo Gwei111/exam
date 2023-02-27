@@ -49,13 +49,13 @@
     </div>
     <div class="list">
       <el-table ref="multipleTableRef" :data="tableData" style="width: 100%, " @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55" />
-        <el-table-column label="考试名称" width="180" prop="title">
+        <el-table-column type="selection" width="100" />
+        <el-table-column label="考试名称" width="100"  prop="title">
           <template #default="scope">
             <span @click="getDetails(scope.row.id,scope.row.title)">{{ scope.row.title }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="状态" width="180">
+        <el-table-column label="状态" width="100" >
           <template #default="scope">
             <span :class="
               scope.row.state == 0 || scope.row.state == 1 ? 'blues' : 'reds'">
@@ -63,11 +63,11 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column property="scores" label="总分" width="120" />
-        <el-table-column property="pastscores" label="通过分数" width="180" />
-        <el-table-column property="studentcounts" label="考试人数" width="180" />
-        <el-table-column property="pastnum" label="通过人数" width="180" />
-        <el-table-column property="name" label="开放时间" width="180">
+        <el-table-column property="scores" label="总分" width="100" />
+        <el-table-column property="pastscores" label="通过分数" width="100"  />
+        <el-table-column property="studentcounts" label="考试人数" width="100"  />
+        <el-table-column property="pastnum" label="通过人数" width="100"  />
+        <el-table-column property="name" label="开放时间" width="100" >
           <template #default="scope">
             <p v-if="scope.row.begindate == null">不限</p>
             <p v-else>
