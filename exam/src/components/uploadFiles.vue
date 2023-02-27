@@ -80,8 +80,7 @@ const beforeAvatarUpload: UploadProps["beforeUpload"] = (rawFile) => {
 };
 const download = () => {
   let a = document.createElement("a");
-  console.log(a);
-  
+  console.log(a); 
   a.style.display = "none";
   a.href = "http://estate.eshareedu.cn/exam/upload/question.xlsx";
   document.body.appendChild(a);

@@ -219,7 +219,7 @@
             </div>
             <el-form-item style="margin-top: 50px; margin-left: 120px;">
                 <el-button type="primary" @click="onSubmit(form)">发布</el-button>
-                <el-button size="default" @click="">保存不发布</el-button>
+                <el-button size="default">保存不发布</el-button>
                 <el-button>取消</el-button>
             </el-form-item>
         </el-form>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div>123456564321
     <el-form ref="ruleFormRef"
              :model="ruleForm"
              :rules="rules">
@@ -27,9 +27,7 @@
     title="可见老师"
     width="50%"
     :before-close="handleClose"
-  >
-     <!-- <TeacherShuttlebox v-model="teacherDialog" v-if="teacherDialog"></TeacherShuttlebox> -->
-    
+  >    
   </el-dialog>
   <TeacherShuttlebox v-model="teacherDialog" v-if="teacherDialog" @teacherIds="teacherIds"></TeacherShuttlebox>
   </div>

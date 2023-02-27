@@ -100,7 +100,7 @@
           </div>
           <div class="btns"
                style="padding:10px">
-            <el-button>添加题目</el-button>
+            <el-button @click="addOne">添加题目</el-button>
             <el-button @click="Updatadialog=true">批量导入</el-button>
             <el-button @click="impA"> 从题库中导出</el-button>
             <el-dialog v-model="dialogVisible"
@@ -110,6 +110,12 @@
             </el-dialog>
           </div>
         </div>
+        <!-- 抽屉组件 -->
+        <Drawers :table="table"
+                 v-if="table == true"
+                 @Drawerclose="Drawerclose"
+                 @adds="DrawerClick"
+                 @DrawerCancel="DrawerCancel"></Drawers>
         <!-- 文件上传，模块 -->
         <UploadFiles v-if="Updatadialog"
                      v-model="Updatadialog"
@@ -134,7 +140,7 @@
                    title="题库添加"
                    width="50%"
                    :before-close="handleClose">
-          <CreaTi></CreaTi>
+          <CreaTi @isadd="isadd"></CreaTi>
         </el-dialog>
       </div>
     </div>
@@ -147,7 +153,6 @@
       <el-button @click="xuan"> +选择 </el-button>
       <div class="qqqq"><span>{{numberValidateForm.limits.length}}</span></div>
       <el-dialog v-model="dialogVisible1"
-                 v-if="dialogVisible1"
                  :title="可见老师"
                  width="50%"
                  :before-close="handleClose">
@@ -164,7 +169,6 @@
     </div>
   </div>
 </template>
-
 <script setup lang="ts">
 import { ElMessage } from "element-plus";
 import { ref, reactive, watchEffect, onMounted, toRefs } from "vue";
@@ -172,6 +176,7 @@ import { useRouter, useRoute } from "vue-router";
 import impData from "../../components/Test/impData.vue";
 import Forth from "../../components/Test/Forth.vue";
 import UploadFiles from "../../components/uploadFiles.vue";
+import Drawers from "../../components/exam/drawer.vue";
 import CreaTi from "../../components/CreaTi.vue";
 import { AddSub, SubUa, QueList, databasequestion } from "../../api/Test/Test";
 const Updatadialog = ref(false);
@@ -197,7 +202,6 @@ const numberValidateForm = reactive({
   questions: [],
   teacherDialog: "",
 });
-
 const data: any = reactive({
   multipleArr: [],
   RadioArr: [],
@@ -241,11 +245,9 @@ const huixian = async (id: any) => {
     data.questionsArr = questions.value
       .map((item: any) => item)
       .filter((items: any) => items.type == "问答题");
-      console.log(data.multipleArr,"123");
-      
+    console.log(data.multipleArr, "123");
   }
 };
-
 // 页面加载前回显数据
 onMounted(() => {
   huixian();
@@ -253,7 +255,12 @@ onMounted(() => {
 const id = route.query.id;
 console.log(id);
 const Submit = async (id: any) => {
-  if (id) {
+  if (numberValidateForm.title == "") {
+    ElMessage({
+      message: "请输入考试名称",
+      type: "error",
+    });
+  } else if (id) {
     console.log(id, "tryuioj");
     let res = await AddSub(numberValidateForm);
     if (res.errCode === 10000) {
@@ -274,7 +281,6 @@ const Submit = async (id: any) => {
     }
   }
 };
-
 const limitss = (e: any) => {
   console.log(e, "dfghj");
   console.log(numberValidateForm.limits);
@@ -297,7 +303,6 @@ watchEffect(() => {
   }
 });
 sum();
-
 // input事件
 const ipt = (e: any, type: string) => {
   //  console.log(item,123233333333);
@@ -336,7 +341,6 @@ const ipt = (e: any, type: string) => {
     });
   }
 };
-
 // 存入试题库
 const options = reactive([]);
 const GetQueList = async () => {
@@ -362,9 +366,7 @@ const xuan = () => {
 const sub = (e: any) => {
   dialogVisible1.value = false;
 };
-
 // 文件上传
-
 const url = ref("http://estate.eshareedu.cn/exam/api/test/upload");
 const updataFile = async (e: any) => {
   // 把文件里的所有数据赋值给questions.value
@@ -393,6 +395,29 @@ const updataFile = async (e: any) => {
       .filter((items: any) => items.type == "问答题");
   }
   console.log(res);
+};
+// 抽屉
+const table = ref(false);
+// 点击添加单个试题
+const addOne = () => {
+  table.value = true;
+};
+// 点击
+// 点击完成
+const DrawerCancel = (val: any) => {
+  table.value = val;
+};
+const Drawerclose = (val: any) => {
+  table.value = val;
+};
+// 点击确定
+const DrawerClick = (bool: any, val: any) => {
+  table.value = bool;
+  params.value.questions.push(val);
+  console.log(params.value.questions, 2222);
+};
+const isadd = (val: any) => {
+  dialogVisible2.value = val;
 };
 </script>
 

@@ -17,13 +17,10 @@
 
       <el-form-item label="部门："
                     prop="region">
-        <el-select v-model="ruleForm.region"
-                   placeholder="请选择">
-          <el-option label="Zone one"
-                     value="shanghai" />
-          <el-option label="Zone two"
-                     value="beijing" />
-        </el-select>
+        <el-cascader v-model="date.depid"
+                     :options="options.arr"
+                     @change="handleChange"
+                     :props="props22"/>
       </el-form-item>
       <el-form-item>
         <div class="btn">
@@ -38,7 +35,8 @@
 
 <script setup lang="ts">
 import { ElMessage, ElMessageBox } from "element-plus";
-import { reactive, ref, defineEmits, defineProps } from "vue";
+import { reactive, ref, defineEmits, toRaw ,defineProps } from "vue";
+import { departmentlist } from "../api/department";
 import { Add } from "../api/Class/list";
 import { useRouter } from "vue-router";
 import type { FormInstance, FormRules } from 'element-plus';
@@ -57,12 +55,14 @@ const props :any= defineProps({
 console.log(props.upAata.id);
 const ruleForm = reactive({
   name: "",
-  region: "",
+  id:" ",
+  depid: "",
+
 });
 const rules = reactive<FormRules>({
   name: [
     { required: true, message: "请输入班级名称", trigger: "blur" },
-    { min: 8, max: 15, message: "最少三位，最多五位", trigger: "blur" },
+    { min: 5, max: 15, message: "最少五位，最多十五位", trigger: "blur" },
   ],
 });
 
@@ -75,14 +75,17 @@ const cancel = () => {
 const submit = async () => {
   // if (父组件传过来当前行里面的数据，取里面的id不等于0时走修改接口) {
   // }else{走添加接口}
-  if (props.upAata.id) {
-    console.log("修改");
+  if(ruleForm.name===""){
+    ElMessage({
+      message:"请填写班级名称",
+      type:"error"
+    })
+  }else if (props.upAata.id) {
     let res:any = await Add({
       id: props.upAata.id,
       name: ruleForm.name,
       depid: ruleForm.region,
     });
-    // console.log(res.data);
     if (res.errCode === 10000) {
       emits("close", false);
       ElMessage({
@@ -90,13 +93,12 @@ const submit = async () => {
         type: "success",
       });
     }
-    props.upAata.id = "";
+    props.upAata.id = "id";
     ruleForm.name = "";
     ruleForm.region = "";
   } else {
-    console.log("tianjai");
+    ruleForm.depid=date.depid
     let res:any = await Add(ruleForm);
-    console.log(res);
     if (res.errCode === 10000) {
       emits("close", false);
       ElMessage({
@@ -108,6 +110,30 @@ const submit = async () => {
     ruleForm.name = "";
     ruleForm.region = "";
   }
+ 
+};
+const options: any = reactive({ arr: [] });
+// 部门列表
+const date: any = reactive({
+  page: "",
+  psize: "",
+  depid: "",
+  rolename: "", // 角色
+});
+const props22 = ref({
+  value: "id",
+  label: "name",
+  children: "children",
+});
+
+const partmentlist = async () => {
+  let res: any = await departmentlist(date);
+  options.arr = res.data.list;
+  console.log(options.arr);
+};
+partmentlist()
+const handleChange = (val: any) => {
+  date.depid = val[toRaw(val).length - 1];
 };
 </script>
 

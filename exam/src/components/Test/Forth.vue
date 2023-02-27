@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div>子
     <div class="head">
       <span>部门：</span>
       <el-select v-model="id"
@@ -17,6 +17,7 @@
                  @left-check-change="leafChange"
                  @right-check-change='rightChange'
                  :data="dataa"
+        
                  :titles="['未选', '已选']" />
 
     <div class="tom">
@@ -28,18 +29,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from "vue";
+import { ref, reactive,defineEmits } from "vue";
 import { SeleList, ForList } from "../../api/Test/Test";
 import { ElMessageBox } from "element-plus";
-const emit = defineEmits(["sub", "limitss","valuesss"]);
+const emit = defineEmits(["sub", "limitss","valuesss","isshow"]);
 const dialogVisible1 = ref(false);
 const value = ref([]);
 const options = reactive([]);
 const dataa = ref([]);
+
+
 const numberValidateForm = reactive({
   depid: "",
   multiples: "", //可见老师
 });
+
 // 请求下拉列表
 const GetSeleList = async () => {
   let res = await SeleList();
@@ -71,6 +75,7 @@ const submit = () => {
   });
   emit("valuesss", arr);
   emit("sub", false);
+    emit('isshow',false)
 };
 // 取消
 const quxiao = () => {
