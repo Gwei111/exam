@@ -41,11 +41,13 @@ import { ElMessage, ElMessageBox } from "element-plus";
 import { reactive, ref, defineEmits, defineProps } from "vue";
 import { Add } from "../api/Class/list";
 import { useRouter } from "vue-router";
+import type { FormInstance, FormRules } from 'element-plus';
+
 const router = useRouter();
 const emits = defineEmits(["close"]);
 const formSize = ref("default");
 const dialogVisible = ref(false);
-const props = defineProps({
+const props :any= defineProps({
   // 父传子   子页面来接值
   upAata: {
     type: Array,
@@ -75,7 +77,7 @@ const submit = async () => {
   // }else{走添加接口}
   if (props.upAata.id) {
     console.log("修改");
-    let res = await Add({
+    let res:any = await Add({
       id: props.upAata.id,
       name: ruleForm.name,
       depid: ruleForm.region,
@@ -93,7 +95,7 @@ const submit = async () => {
     ruleForm.region = "";
   } else {
     console.log("tianjai");
-    let res = await Add(ruleForm);
+    let res:any = await Add(ruleForm);
     console.log(res);
     if (res.errCode === 10000) {
       emits("close", false);

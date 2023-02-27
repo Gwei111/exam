@@ -58,7 +58,7 @@
                        label="总分" />
       <el-table-column prop="admin"
                        label="创建人" />
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="150px">
         <template #default="scope">
           <el-button type="primary"
                      link @click="upd(scope.row.id)">编辑</el-button>&emsp;&nbsp;|

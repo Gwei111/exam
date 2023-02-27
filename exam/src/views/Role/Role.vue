@@ -5,20 +5,23 @@
       <p><el-button type="primary" @click="add">添加角色</el-button></p>
     </div>
     <!-- 添加弹出框 -->
-    <AddRole :dislogShow="dislogShow" :item="item" @click="click"></AddRole>
+    <AddRole :dislogShow="dislogShow" :item="item" @click="click" :upid="upid" :upname="upname" :upmenus="upmenus"></AddRole>
 
 
     <div class="main">
-      <el-table :data="tableData" style="width: 100%">
-        <el-table-column prop="name" label="名称" width="1280" />
-        <el-table-column label="操作">
+      <el-table :data="tableData" :model="data">
+        <el-table-column prop="name" label="名称"/>
+        <el-table-column label="操作" class="right">
           <template #default="scope">
-            <span class="font" @click="update">编辑</span>
-            &nbsp;
-            <span class="font" @click="del(scope.row.id)">删除</span>
+            <span class="font right" @click="update(scope.row)">编辑 &nbsp; &nbsp;</span>
+            <span class="font right" @click="del(scope.row.id)">删除 </span> 
           </template>
         </el-table-column>
       </el-table>
+    </div>
+    <div class="foot">
+      <FenYe :counts="counts"
+           @getChildData="getChildData" />
     </div>
   </div>
 </template>
@@ -28,21 +31,36 @@ import { reactive, ref, onMounted } from 'vue'
 import { roleList, roleAdd, roleDelete, menuList } from '../../api/role';
 import AddRole from '../../components/AddRole.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import FenYe from "../../components/FenYe/FenYe.vue"
 
 onMounted(() => {
   getRoleList()
 })
 // 角色列表
 const tableData = ref([])
+const data = reactive({
+  page:1,
+  psize:10
+
+})
+const counts = ref(0);
 const getRoleList = async () => {
-  const res: any = await roleList({})
-  // console.log(res);
+  const res: any = await roleList(data)
+  console.log(res.data.counts);
   if (res.errCode == 10000) {
     tableData.value = res.data.list
-    // console.log(tableData.value); 
+    counts.value=res.data.counts
+    // menus.value = res.data.list.index
   }
 }
-
+// 分页
+const getChildData = (val: any) => {
+  data.page = val.page;
+  data.psize = val.psize;
+  // console.log(data.psize, data.page,1234);
+  
+ getRoleList();
+};
 
 // 添加
 let dislogShow = ref(false)
@@ -56,7 +74,16 @@ const click = (e:boolean)=>{
 
 }
 // 修改
-const update = ()=>{
+let upid = ref(0)
+let upname = ref('')
+let upmenus = ref([])
+const update = (row:any)=>{
+  // console.log(id);
+  upid=row.id
+  upname.value = row.name
+  upmenus.value = row.menus
+  console.log(row);
+  
   dislogShow.value = true
   getRoleList()
 }
@@ -88,7 +115,6 @@ const del = (id: any) => {
           message: '删除成功',
         })
       }
-
     })
     .catch(() => {
       ElMessage({
@@ -96,9 +122,8 @@ const del = (id: any) => {
         message: '已取消删除',
       })
     })
-
-
 }
+
 </script>
 
 <style scoped lang="less">
@@ -121,41 +146,29 @@ const del = (id: any) => {
   color: rgb(64 158 255);
   font-size: 12px;
   cursor: pointer;
+  // float: right;
 }
+// /deep/.el-table_1_column_2 {
+//   float: right!important;
+// }
 
 .main .font:hover {
   color: rgb(160 207 255);
 }
 
+/deep/.el-table tr{
+  // background-color: red;
+  display: flex;
+  width: 90vw;
+  justify-content: space-between;
+  border-bottom:var(--el-table-border)
+}
+/deep/.el-table tr:hover {
+background-color: var(--el-fill-color-light);
+}
 /* 添加角色 */
-.el-button--text {
-  margin-right: 15px;
-}
-
-.el-select {
-  width: 300px;
-}
-
-.el-input {
-  width: 300px;
-}
-
-.dialog-footer button:first-child {
-  margin-right: 10px;
-}
-
-/deep/.el-form-item__content {
-  clear: both !important
-}
-
-.boxall {
-  margin: 0 60px;
-}
-
-.dialog-footer button:first-child {
-  margin-right: 10px;
-}
 /deep/.el-button>span{
   font-size: 12px!important
 }
+
 </style>

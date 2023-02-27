@@ -9,17 +9,17 @@ export default createStore({
   },
   getters: {},
   mutations: {
-    getass(state, val) {
+    getass(state:any, val:any) {
       state.arr = val
       sessionStorage.setItem('ass', val)
       console.log(val);
     },
-    getMenu(state:any, val) {
+    getMenu(state:any, val:any) {
       state.menu = val
       console.log(state.menu);
       // sessionStorage.setItem('arr', state.menu)
     },
-    getarr(state, val) {
+    getarr(state:any, val:any) {
       state.arr = val
       sessionStorage.setItem('arr', val)
       console.log(val);

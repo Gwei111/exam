@@ -303,6 +303,10 @@ margin-left: 15px;
   margin-bottom: 30px;
   margin: 23px auto;
 }
+:deep(.icon){
+    content: "\e602";
+    margin-left: 5px;
+
 ::-webkit-scrollbar {
 width: 0 !important;
 }
@@ -345,5 +349,9 @@ width: 0 !important;height: 0;
 .icon-wutouxiang:before {
     content: "\e63c";
      font-size: 26px;
+}
+}
+.iconfont {
+  font-size: 28px;
 }
 </style>

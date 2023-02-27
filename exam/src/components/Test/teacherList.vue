@@ -1,17 +1,11 @@
 <template>
     <div>
-        <el-dialog :model-value="props.dialogstudent" title="学生考试列表" width="45%" :before-close="studentClose">
+        <el-dialog :model-value="props.dialogTeacher" title="可见老师" width="45%" :before-close="teacherClose">
             <div class="top">
                 <div class="topbranch">
                     <span>部门</span>
                     <el-select v-model="depval" class="m-2" placeholder="请选择" size="default">
                         <el-option v-for="item in studentList" :key="item.id" :label="item.name" :value="item.id" />
-                    </el-select>
-                </div>
-                <div class="topbranch">
-                    <span>班级</span>
-                    <el-select v-model="classval" class="m-2" placeholder="请选择" size="default">
-                        <el-option v-for="item1 in classlists" :key="item1.id" :label="item1.name" :value="item1.id" />
                     </el-select>
                 </div>
             </div>
@@ -20,8 +14,8 @@
             </div>
             <template #footer>
                 <span class="dialog-footer">
-                    <el-button @click="studentCancel">取消</el-button>
-                    <el-button type="primary" @click="studentConfirm">
+                    <el-button @click="teacherCancel">取消</el-button>
+                    <el-button type="primary" @click="teacherConfirm">
                         确认
                     </el-button>
                 </span>
@@ -35,26 +29,26 @@ import { ref } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import { classList,departmentList} from '../../api/test'
 
-const props = defineProps(['dialogstudent'])
+const props = defineProps(['dialogTeacher'])
 console.log(props);
 
-const emit = defineEmits(['studentCancel', 'studentClose', 'studentConfirm'])
+const emit = defineEmits(['teacherCancel', 'teacherClose', 'teacherConfirm'])
 
 
-const studentCancel = () => {
-    emit('studentCancel', false)
+const teacherCancel = () => {
+    emit('teacherCancel', false)
 }
-const studentClose = () => {
-    emit('studentClose', false)
+const teacherClose = () => {
+    emit('teacherClose', false)
 }
-const studentConfirm = () => {
-    emit('studentConfirm', false)
+const teacherConfirm = () => {
+    emit('teacherConfirm', false)
 }
 
 const depval = ref('')//当前选中的
 let studentList:any=ref([])//部门
 
-// 学生列表
+// 部门列表
 const getstudentlist=async()=>{
   let res:any=await departmentList({})
 //   console.log(res);
@@ -62,16 +56,7 @@ const getstudentlist=async()=>{
   
 }
 getstudentlist()
-let classval=ref('')//当前选中的
-let classlists:any=ref([])//班级
-// 班级列表
-const getclasses=async()=>{
-    let res:any=await classList({})
-    // console.log(res);
-    classlists.value=res.data.list
-    
-}
-getclasses()
+
 </script>
 
 <style scoped lang="less">
