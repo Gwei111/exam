@@ -46,7 +46,7 @@ const numberValidateForm = reactive({
 
 // 请求下拉列表
 const GetSeleList = async () => {
-  let res = await SeleList();
+  let res:any= await SeleList();
   console.log(res);
   if (res.errCode === 10000) {
     options.push(...res.data.list);
@@ -56,7 +56,7 @@ GetSeleList();
 // 穿梭框
 const changes = async (depid: any) => {
   console.log(depid);
-  let res = await ForList({ depid });
+  let res:any = await ForList({ depid });
   console.log(res);
   if (res.errCode === 10000) {
     dataa.value = res.data.list.map((item: any) => {

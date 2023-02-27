@@ -27,15 +27,17 @@
     />
       </el-select>
       <el-button type="primary" @click="supes()">查询</el-button>
-      <el-button type="danger" :disabled="show">批量删除</el-button>
+      <el-button type="danger" :disabled="show" @click="depls()">批量删除</el-button>
+      <el-button plain  @click="addall">导出excel</el-button>
     </div>
     <div>
-      <el-table ref="multipleTableRef" :data="lits" style="width: 100%">
+      <el-table ref="multipleTableRef" :data="lits" style="width: 100%"  @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" />
         <el-table-column label="题目名称" width="520">
           <template #default="scope">
-            <span v-html="scope.row.title"></span> </template
-        ></el-table-column>
+            <span v-html="scope.row.title"  class="butle"></span> </template
+        >
+      </el-table-column>
         <el-table-column property="type" label="题量类型" width="220" />
         <el-table-column property="addtime" label="创建时间" width="220" />
         <el-table-column property="admin" label="创建人" width="220" />
@@ -47,23 +49,25 @@
         </el-table-column>
       </el-table>
     </div>
+    <Qfenye :counts="total" @getChildData="getChildData"></Qfenye>
   </div>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue';
-import { databasequestion, datadelete } from '../../api/department';
+import { databasequestion, datadelete,databdeleteall ,exportExcel} from '../../api/department';
 import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router';
-import { ElMessage } from 'element-plus'
+import { ElMessage ,ElMessageBox} from 'element-plus'
+import Qfenye from '../../components/FenYe/FenYe.vue'
 const show = ref(true);
 const route = useRoute();
 const router = useRouter();
 let databaseid = route.query.databaseid;
 const data = reactive({
   databaseid: databaseid, //题库id
-  psize: 20,
-  page: 1,
+  psize: '',
+  page: '',
   name: '',
   key:'', //关键字
   admin:'', //创建人
@@ -72,15 +76,29 @@ const data = reactive({
 onMounted(() => {
   list();
 });
+//导出excel 
+const addall=async()=>{
+  let res:any=await exportExcel({id:databaseid})
+  let blob= new Blob([res], {type: 'application/vnd.ms-excel'});
+    let url= URL.createObjectURL(blob);
+    let a= document.createElement("a");
+    a.href=url;
+    a.style.display="none";
+    document.body.appendChild(a);
+    a.setAttribute("download",top.title);
+    a.click();
+    document.body.removeChild(a);
+}
 // 列表
 const top: any = ref({});
 const lits: any = ref([]);
+const total=ref()
 const list = async () => {
   let res = await databasequestion(data);
-  // console.log(res);
+  console.log(res);
   top.value = res.data.database;
   lits.value = res.data.list;
-  // console.log(lits.value);
+  total.value=res.data.counts
 };
 // 返回
 const goBack = () => {
@@ -97,6 +115,40 @@ const del=async(id:any)=>{;
   })
   list()
   }
+}
+let lids:any=ref()
+const handleSelectionChange = (val:any) => {
+ lids.value=val.map((item:any)=>item.id)
+show.value=false
+}
+// 批量删除
+const depls=()=>{
+  ElMessageBox.confirm(
+    '此操作将永久删除选中的文件, 是否继续?',
+    '提示',
+    {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  )
+    .then(async() => {
+  let ids=lids.value
+  let res:any=await databdeleteall({ids:ids})
+  if(res.errCode===10000){
+    ElMessage({
+        type: 'success',
+        message: '删除成功',
+      })
+      list()
+  }
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: '删除失败',
+      })
+    })
   
 }
 // 查询
@@ -126,6 +178,13 @@ const options = [
     label: '问答题',
   },
 ]
+// 分页
+const getChildData=(val:any)=>{
+  data.psize=val.psize
+  data.page=val.page
+  list()
+}
+
 </script>
 
 <style scoped>
@@ -148,5 +207,12 @@ const options = [
 :deep(.el-input__wrapper){
   height: 31px;
   margin-left: 12px;
+}
+.butle {
+  color: #409eff;
+}
+:deep(.el-pagination){
+  margin-left: 320px;
+    margin-top: 20px
 }
 </style>

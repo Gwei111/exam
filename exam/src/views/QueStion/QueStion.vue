@@ -27,7 +27,7 @@
       <el-table-column type="selection" width="55" />
       <el-table-column property="title" label="题库" width="320">
         <template #default="scope">
-          <span class="butle">
+          <span class="butle" @click="questions(scope.row.id)">
             {{ scope.row.title }}
           </span>
         </template>
@@ -75,6 +75,17 @@ const emitShow=(e:boolean)=>{
   dialogVisible.value = e;
   list()
 }
+onMounted(() => {
+  list();
+});
+// 列表
+const counts = ref();
+const tableData = reactive({ arr: [] });
+const list = async () => {
+  let res = await databaselist(data);
+  tableData.arr = res.data.list;
+  counts.value = res.data.counts;
+};
 // 试题
 const questions=(val:any)=>{
   router.push({path:"/questionlist",query:{databaseid:val}});
@@ -96,11 +107,11 @@ const del = (val: any) => {
       let res: any = await databasedelete({ id: val });
       console.log(res);
       if (res.errCode === 10000) {
+        list();
         ElMessage({
           type: 'success',
           message: '删除成功',
         });
-        list();
       }
     })
     .catch(() => {
@@ -112,20 +123,18 @@ const del = (val: any) => {
 };
 const handleSelectionChange = (val: any) => {
   data.ids = val.map((item: any) => item.id);
-  // console.log(data.ids);
 };
+
 // 批量删除
-const delass = () => {
+const delass =() => {
   ElMessageBox.confirm('是否批量删除', '提示', {
-    confirmButtonText: 'OK',
-    cancelButtonText: 'Cancel',
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
     type: 'warning',
   })
     .then(async () => {
-      let _ids: any = data.ids;
-      // console.log(_ids);
-      let res: any = await deleteall({ _ids });
-      // console.log(res);
+      let ids: any = data.ids
+      let res: any = await deleteall({ids:ids});     
       if (res.errCode === 10000) {
         ElMessage({
           type: 'success',
@@ -141,35 +150,21 @@ const delass = () => {
       });
     });
 };
-onMounted(() => {
-  list();
-});
 
 const data = reactive({
   page: '',
-  psize: 10,
+  psize: '',
   key: '',
   ids: '',
 });
-const counts = ref();
-// 列表
-const tableData = reactive({ arr: [] });
-const list = async () => {
-  let res = await databaselist(data);
-  // console.log(res);
-  tableData.arr = res.data.list;
-  counts.value = res.data.counts;
-};
 // 查询
 const inquire = () => {
   list();
 };
-
 // 提示
 const textle=ref(true)
 const dialogVisible=ref(false)
 const clasAdd = (val:string) => {
-  // console.log(val);
   dialogVisible.value = true;
   textle.value=true
   upAata.data ={}
@@ -179,8 +174,6 @@ const clasAdd = (val:string) => {
 const upAata:any= reactive({data:{}});
 const updata=(val:any)=>{
   upAata.data = val;
-  console.log(  upAata.data );
-  
   dialogVisible.value = true;  
   textle.value=false
   list()
