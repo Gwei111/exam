@@ -48,6 +48,12 @@ const routes: Array<RouteRecordRaw> = [
         meta: { title: '题库', isAuth: true },
       },
       {
+        path: '/questionlist',
+        name: 'questionlist',
+        component: () => import('../views/QueStion/questionlist.vue'),
+        meta: { title: '根据题库id获取试题列表', isAuth: true },
+      },
+      {
         path: '/department',
         name: 'department',
         component: () => import('../views/DePartMent/DePartMent.vue'),

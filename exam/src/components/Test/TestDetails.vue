@@ -98,122 +98,115 @@ getPSubjects();
 
 <style scoped lang="less">
 .top {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #eee;
+
+  .title {
     display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid #eee;
 
-    .title {
-        display: flex;
+    .zong {
+      display: flex;
+      flex-direction: column;
+      margin: 0 10px;
 
-        .zong {
-            display: flex;
-            flex-direction: column;
-            margin: 0 10px;
-
-            span {
-                margin: 5px;
-            }
-        }
+      span {
+        margin: 5px;
+      }
     }
+  }
 }
 
 .content {
-    margin: 10px;
+  margin: 10px;
 
-    .titletop {
-        p {
-            color: #ccc;
-        }
-
-        .options {
-
-
-            .optionsbox {
-                display: flex;
-                height: 40px;
-                line-height: 40px;
-                background-color: #eefaf6;
-
-                .round {
-                    width: 20px;
-                    height: 20px;
-                    border-radius: 50%;
-                    border: 1px solid #ccc;
-                    background-color: #fff;
-                    margin: 10px;
-                }
-            }
-
-            .optionerr {
-                display: flex;
-                height: 40px;
-                line-height: 40px;
-
-                // background-color: #eefaf6;
-                .round {
-                    width: 20px;
-                    height: 20px;
-                    border-radius: 50%;
-                    border: 1px solid #ccc;
-                    background-color: #fff;
-                    margin: 10px;
-                }
-            }
-        }
-
-        .analysis {
-            background-color: #f5faff;
-            padding: 10px;
-            color: #9dadbc;
-        }
-
-        .judge {
-            padding: 10px;
-            color: #70d3b2;
-            background-color: #eefaf6;
-
-        }
-
-        .checkbox {
-
-
-            .checkone {
-                display: flex;
-                height: 40px;
-                line-height: 40px;
-                background-color: #eefaf6;
-
-                .fang {
-                    width: 15px;
-                    height: 15px;
-                    border-radius: 5px;
-                    border: 1px solid #ccc;
-                    background-color: #fff;
-                    margin: 10px;
-                }
-            }
-        }
-
-        .checkbox {
-
-
-            .checkerr {
-                display: flex;
-                height: 40px;
-                line-height: 40px;
-                // background-color: #eefaf6;
-
-                .fang {
-                    width: 15px;
-                    height: 15px;
-                    border-radius: 5px;
-                    border: 1px solid #ccc;
-                    background-color: #fff;
-                    margin: 10px;
-                }
-            }
-        }
+  .titletop {
+    p {
+      color: #ccc;
     }
+
+    .options {
+      .optionsbox {
+        display: flex;
+        height: 40px;
+        line-height: 40px;
+        background-color: #eefaf6;
+
+        .round {
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          border: 1px solid #ccc;
+          background-color: #fff;
+          margin: 10px;
+        }
+      }
+
+      .optionerr {
+        display: flex;
+        height: 40px;
+        line-height: 40px;
+
+        // background-color: #eefaf6;
+        .round {
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          border: 1px solid #ccc;
+          background-color: #fff;
+          margin: 10px;
+        }
+      }
+    }
+
+    .analysis {
+      background-color: #f5faff;
+      padding: 10px;
+      color: #9dadbc;
+    }
+
+    .judge {
+      padding: 10px;
+      color: #70d3b2;
+      background-color: #eefaf6;
+    }
+
+    .checkbox {
+      .checkone {
+        display: flex;
+        height: 40px;
+        line-height: 40px;
+        background-color: #eefaf6;
+
+        .fang {
+          width: 15px;
+          height: 15px;
+          border-radius: 5px;
+          border: 1px solid #ccc;
+          background-color: #fff;
+          margin: 10px;
+        }
+      }
+    }
+
+    .checkbox {
+      .checkerr {
+        display: flex;
+        height: 40px;
+        line-height: 40px;
+        // background-color: #eefaf6;
+
+        .fang {
+          width: 15px;
+          height: 15px;
+          border-radius: 5px;
+          border: 1px solid #ccc;
+          background-color: #fff;
+          margin: 10px;
+        }
+      }
+    }
+  }
 }
 .head {
   width: 100%;

@@ -1,0 +1,21 @@
+.head {
+  margin-left: 40px;
+  margin-top: -20px;
+}
+
+dialog-footer button:first-child {
+  margin-right: 10px;
+}
+
+:deep(.el-transfer__buttons) {
+  display: none;
+}
+:deep( .el-transfer-panel){
+  width: 270px;
+  margin-left: 40px;
+  margin-top: 25px;
+}
+.tom{
+  margin-left: 500px;
+  margin-top: 20px;
+}

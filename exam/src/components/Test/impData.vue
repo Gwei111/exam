@@ -69,7 +69,7 @@ const multipleSelection = ref<User[]>([]);
 const handleSelectionChange = (val: User[]) => {
   multipleSelection.value = val;
 };
-const tableData: User[] = reactive([]);
+const tableData: User[] = ref([]);
 const numberValidateForm = reactive({
   key:"",
   page: "1",
@@ -85,8 +85,7 @@ const GetQueList = async () => {
   let res = await QueList(numberValidateForm);
   console.log(res);
   if (res.errCode === 10000) {
-    Object.assign(tableData, res.data.list);
-    console.log(tableData);
+    tableData.value=res.data.list
     counts.value = res.data.counts;
   }
 };

@@ -64,7 +64,7 @@
     <el-dialog v-model="dialogVisible"
                :title="textss===true ? '添加' : '修改'"
                width="40%"
-               :before-close="handleClose">
+               >
       <ClaUpdate @close='close'
                  :upAata="upAata"></ClaUpdate>
     </el-dialog>
@@ -107,7 +107,7 @@ interface User {
   name: string;
   address: string;
 }
-const tableData: User[] = reactive([]);
+const tableData: User[] = ref([]);
 const multipleTableRef = ref<InstanceType<typeof ElTable>>();
 const multipleSelection = ref<User[]>([]);
 
@@ -120,7 +120,7 @@ const handleSelectionChange = (val: User[]) => {
 // 批量删除
 const delAll = async () => {
   let req = { ids: multipleSelection.value };
-  let res = await getDelAll(req);
+  let res:any = await getDelAll(req);
   // console.log(res);
   if (res.errCode === 10000) {
     ElMessage({
@@ -138,10 +138,11 @@ const delAll = async () => {
 const counts = ref(0);
 // 请求班级列表数据接口
 const GetClass_List = async () => {
-  let res = await Class_List(numberValidateForm);
+  let res:any = await Class_List(numberValidateForm);
   console.log(res);
   if (res.errCode === 10000) {
-    Object.assign(tableData, res.data.list);
+    // Object.assign(tableData, res.data.list);
+    tableData.value=res.data.list
     // console.log(tableData);
     counts.value = res.data.counts;
   }
@@ -162,7 +163,7 @@ const del = (id: any) => {
       const params = {
         id: id,
       };
-      const res = await DelList(params);
+      const res:any = await DelList(params);
       // console.log(res);
       if (res.errCode === 10000) {
         GetClass_List();
@@ -204,9 +205,14 @@ const getChildData = (val: any) => {
   console.log(111, val);
   numberValidateForm.page = val.page;
   numberValidateForm.psize = val.psize;
+
+  
+ GetClass_List();
+
   console.log(numberValidateForm.psize, numberValidateForm.page, 1234);
 
   GetClass_List();
+
 };
 </script>
 
