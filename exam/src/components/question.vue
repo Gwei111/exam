@@ -24,13 +24,14 @@
     </div>
   </el-form-item>
   <el-dialog v-model="dialogVisible1" v-if="dialogVisible1">
-      <Forth ></Forth>
+      <Forth  @isshow="isshow"></Forth>
   </el-dialog>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref, defineProps, onUpdated ,watch} from 'vue';
 import { deleadd } from '../api/department';
+import { ShuttleAdd} from '../api/Test/Test'  //穿梭框
 import { ElMessage } from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus';
 import Forth from '../components/Test/Forth.vue';
@@ -44,6 +45,9 @@ const props: any = defineProps({
 });
 // 穿梭框
 const dialogVisible1 = ref(false);
+const isshow=(val:any)=>{
+  dialogVisible1.value=false
+}
 const data: any = reactive({
   id:props.upAata.id,
   title:'',
@@ -67,6 +71,7 @@ const cancel = () => {
 const submit = async () => {
   if (props.upAata.id > 0) {
     let res: any = await deleadd(data);
+    
     if (res.errCode === 10000) {
       ElMessage({
         type: 'success',
@@ -79,12 +84,12 @@ const submit = async () => {
     emit('emitShow', false);
   } else {
     let res: any = await deleadd(data);
-    if(!data.title){
-      return ElMessage({
-        message:"请填写标题",
-        type:"error"
-      })
-    }
+    // if(!data.title){
+    //   return ElMessage({
+    //     message:"请填写标题",
+    //     type:"error"
+    //   })
+    // }
     if (res.errCode === 10000) {
       ElMessage({
         type: 'success',

@@ -36,6 +36,9 @@ export const ForList = (params: any) => {
 export const databasequestion  = (params: any) => {
   return request.post('databasequestion/addlist', params)
 }
+export const dataaddlist  = (params: any) => {
+  return request.post('databasequestion/addlist', params)
+}
 // 穿梭框添加
 export const ShuttleAdd  = (params: any) => {
   return request.post('database/add', params)

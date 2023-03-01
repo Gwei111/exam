@@ -59,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue';
+import { reactive, ref, onMounted,toRaw } from 'vue';
 import { ElMessage, ElMessageBox, ElTable } from 'element-plus';
 import { databaselist, databasedelete, deleteall } from '../../api/department';
 import FenYe from '../../components/FenYe/FenYe.vue';
@@ -75,6 +75,11 @@ const emitShow=(e:boolean)=>{
   dialogVisible.value = e;
   list()
 }
+const data = reactive({
+  page: 1,
+  psize: 10,
+  key: '',
+});
 onMounted(() => {
   list();
 });
@@ -121,10 +126,10 @@ const del = (val: any) => {
       });
     });
 };
+const id_s=ref()
 const handleSelectionChange = (val: any) => {
-  data.ids = val.map((item: any) => item.id);
+  id_s.value = val.map((item: any) => item.id);
 };
-
 // 批量删除
 const delass =() => {
   ElMessageBox.confirm('是否批量删除', '提示', {
@@ -133,8 +138,11 @@ const delass =() => {
     type: 'warning',
   })
     .then(async () => {
-      let ids: any = data.ids
-      let res: any = await deleteall({ids:ids});     
+      // 将对象转为普通对象
+      // console.log(toRaw(data));
+      let ids: any =  id_s.value
+      let res: any = await deleteall({ids:ids});
+      console.log(res);
       if (res.errCode === 10000) {
         ElMessage({
           type: 'success',
@@ -151,12 +159,7 @@ const delass =() => {
     });
 };
 
-const data = reactive({
-  page: '',
-  psize: '',
-  key: '',
-  ids: '',
-});
+
 // 查询
 const inquire = () => {
   list();

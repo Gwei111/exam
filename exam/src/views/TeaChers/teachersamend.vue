@@ -66,7 +66,6 @@ import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus';
 const emits=defineEmits(['isShow'])
 const dialogVisible = ref(false);
-// 暴露在外面
 onMounted(() => {
   getdepartmentList();
   getroleList();
@@ -145,6 +144,8 @@ const rules = reactive<FormRules>({
   username: [{ required: true, message: '请输入账号', trigger: 'blur' }],
   pass: [{ required: true, message: '请输入密码', trigger: 'blur' }],
 });
+// 暴露在外面
+
 defineExpose({
   dialogVisible,
   ruleForm

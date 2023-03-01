@@ -15,8 +15,8 @@
                     <div style="border: 1px solid #ccc">
                         <Toolbar style="border-bottom: 1px solid #ccc" :editor="editorRef" :defaultConfig="toolbarConfig"
                             mode="small" />
-                        <!-- <Editor v-model="form.title"
-                            :defaultConfig="editorConfig" mode="small" @onCreated="handleCreated" /> -->
+                        <Editor v-model="form.title"
+                            :defaultConfig="editorConfig" mode="small" @onCreated="handleCreated" />
                     </div>
                 </el-form-item>
                 <!-- 选择题 -->
@@ -70,7 +70,7 @@
                         </div>
                     </el-form-item>
                     <el-form-item label="解析" size="normal">
-                        <el-input placeholder="" type="textarea" size="normal" autosize clearable v-model="form.explains"
+                        <el-input placeholder="" type="textarea" size="normal" autosize clearable v-model="form.scores"
                             style="width: 350px;"></el-input>
                     </el-form-item>
                 </div>
@@ -92,12 +92,12 @@
 <script setup lang="ts">
 import { ref, reactive, shallowRef, onBeforeUnmount, onMounted } from "vue";
 import { ElDrawer, ElMessage, ElMessageBox } from 'element-plus'
-// import '@wangeditor/editor/dist/css/style.css';
+import '@wangeditor/editor/dist/css/style.css';
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import { CirclePlus, CircleClose } from '@element-plus/icons-vue';
 
-const props = defineProps(['table'])
-// console.log(props);
+const props = defineProps(['table','databaseid'])
+console.log(props.databaseid);
 const emit = defineEmits(['Drawerclose', 'adds', 'DrawerCancel'])
 const checkList = ref([])
 const radio = ref(3)
@@ -113,6 +113,7 @@ const form = reactive({
     scores: 0,//分数
     answer: ''||[],//正确答案的值 单选是''多选是[]'
     explains: '',//简答题
+    databaseid:props.databaseid,
     answers: [
         {
             id: 0,
