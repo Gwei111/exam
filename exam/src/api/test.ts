@@ -19,7 +19,7 @@ export const testDetails = (data: any) => {
   export const testState = (data: any) => {
     return request.post('test/updateState', data)
   } 
-  // 学生部门列表 
+  // 部门列表 
   export const departmentList = (data: any) => {
     return request.get('department/list', data)
   }
@@ -27,7 +27,19 @@ export const testDetails = (data: any) => {
   export const classList = (data: any) => {
     return request.get('classes/list', data)
   }
-  // 题库列表 
+  //老师列表 
+  export const teacherList = (data: any) => {
+    return request.get('teacher/list', data)
+  }
+  // 题库列表
   export const baseList = (data: any) => {
     return request.get('database/list', data)
+  }
+  // 考试添加 
+  export const testAdd = (data: any) => {
+    return request.post('test/add', data)
+  }
+  // 穿梭框 学生列表 
+  export const studentlist = (params: any) => {
+    return request.get('student/list', params)
   }
