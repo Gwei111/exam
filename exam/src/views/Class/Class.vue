@@ -12,16 +12,17 @@
              ref="formRef"
              class="demo-ruleForm">
       <el-form-item label="班级姓名"
-                    prop="key">
+                    prop="key">·
         <el-input placeholder="请输入关键字"
                   v-model="numberValidateForm.key"
                   type="text" />
       </el-form-item>&emsp;
       <div class="m-4">
-        <p>班级部门</p>&emsp;
-        <el-cascader :options="options"
-                     :props="props1"
-                     clearable />
+        <p>部门</p>&emsp;
+        <el-cascader v-model="date.depid"
+                     :options="options.arr"
+                     @change="handleChange"
+                     :props="propsAAA"/>
       </div>
       &emsp;&emsp;<el-button type="primary"
                  @click="Search">查询</el-button>
@@ -37,13 +38,13 @@
                        width="55" />
       <el-table-column label="班级名称"
                        property="name"
-                       width="600"
+                       width="500"
                        align="center">
       </el-table-column>
       <el-table-column property="depname"
                        label="部门"
                        align="center"
-                       width="600" />
+                       width="500" />
       <el-table-column width="200"
                        label="操作">
         <template #default="scope">
@@ -63,8 +64,7 @@
     <!-- 点击添加弹出框 -->
     <el-dialog v-model="dialogVisible"
                :title="textss===true ? '添加' : '修改'"
-               width="40%"
-               >
+               width="40%">
       <ClaUpdate @close='close'
                  :upAata="upAata"></ClaUpdate>
     </el-dialog>
@@ -75,18 +75,17 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from "vue";
+import { reactive, ref ,toRaw} from "vue";
 import type { FormInstance } from "element-plus";
 import ClaUpdate from "../../components/ClaUpdate.vue";
 import FenYe from "../../components/FenYe/FenYe.vue";
 import { ElMessage, ElMessageBox } from "element-plus";
+import { departmentlist } from "../../api/department";
 import { Class_List, DelList, getDelAll } from "../../api/Class/list";
 import type { Action } from "element-plus";
 import { ElTable } from "element-plus";
 import { Loading } from "element-plus/es/components/loading/src/service";
-
 const formRef = ref<FormInstance>();
-
 const numberValidateForm = reactive({
   key: "",
   page: "",
@@ -95,13 +94,7 @@ const numberValidateForm = reactive({
 const props1 = {
   checkStrictly: true,
 };
-const options = [
-  {
-    value: "guide",
-    label: "Guide",
-  },
-];
-
+const options: any = reactive({ arr: [] });
 interface User {
   date: string;
   name: string;
@@ -110,18 +103,15 @@ interface User {
 const tableData: User[] = ref([]);
 const multipleTableRef = ref<InstanceType<typeof ElTable>>();
 const multipleSelection = ref<User[]>([]);
-
 const handleSelectionChange = (val: User[]) => {
   multipleSelection.value = val;
   // 获取到数据  处理数据得到id
   multipleSelection.value = val.map((item: any) => item.id);
-  // console.log(multipleSelection.value);
 };
 // 批量删除
 const delAll = async () => {
   let req = { ids: multipleSelection.value };
-  let res:any = await getDelAll(req);
-  // console.log(res);
+  let res: any = await getDelAll(req);
   if (res.errCode === 10000) {
     ElMessage({
       message: "删除成功",
@@ -138,12 +128,10 @@ const delAll = async () => {
 const counts = ref(0);
 // 请求班级列表数据接口
 const GetClass_List = async () => {
-  let res:any = await Class_List(numberValidateForm);
+  let res: any = await Class_List(numberValidateForm);
   console.log(res);
   if (res.errCode === 10000) {
-    // Object.assign(tableData, res.data.list);
-    tableData.value=res.data.list
-    // console.log(tableData);
+    tableData.value = res.data.list;
     counts.value = res.data.counts;
   }
 };
@@ -163,8 +151,7 @@ const del = (id: any) => {
       const params = {
         id: id,
       };
-      const res:any = await DelList(params);
-      // console.log(res);
+      const res: any = await DelList(params);
       if (res.errCode === 10000) {
         GetClass_List();
       }
@@ -202,17 +189,31 @@ const close = (e: boolean) => {
 
 // 分页
 const getChildData = (val: any) => {
-  console.log(111, val);
   numberValidateForm.page = val.page;
   numberValidateForm.psize = val.psize;
-
-  
- GetClass_List();
-
-  console.log(numberValidateForm.psize, numberValidateForm.page, 1234);
-
   GetClass_List();
+};
+// 三级联动部门列表
+const date: any = reactive({
+  page: "",
+  psize: "",
+  depid: "",
+  rolename: "", // 角色
+});
+const propsAAA = ref({
+  value: "id",
+  label: "name",
+  children: "children",
+});
 
+const partmentlist = async () => {
+  let res: any = await departmentlist(date);
+  options.arr = res.data.list;
+  console.log(options.arr);
+};
+partmentlist()
+const handleChange = (val: any) => {
+  date.depid = val[toRaw(val).length - 1];
 };
 </script>
 

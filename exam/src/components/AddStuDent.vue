@@ -21,8 +21,7 @@
             <el-form-item label="备注" :label-width="formLabelWidth">
                 <el-input type="textarea" style="width:300px;" v-model="state.remarks" autocomplete="off" />
             </el-form-item>
-{{ id }}
-            <div v-show="id==0">
+            <div v-show="id!==0">
                 <el-form-item label="账号" :label-width="formLabelWidth" prop="username">
                     <el-input style="width: 300px;" v-model="state.username" autocomplete="off" />
                 </el-form-item>

@@ -15,8 +15,8 @@
                     <div style="border: 1px solid #ccc">
                         <Toolbar style="border-bottom: 1px solid #ccc" :editor="editorRef" :defaultConfig="toolbarConfig"
                             mode="small" />
-                        <Editor style="height: 200px; overflow-y: hidden;" v-model="form.title"
-                            :defaultConfig="editorConfig" mode="small" @onCreated="handleCreated" />
+                        <!-- <Editor v-model="form.title"
+                            :defaultConfig="editorConfig" mode="small" @onCreated="handleCreated" /> -->
                     </div>
                 </el-form-item>
                 <!-- 选择题 -->
@@ -92,7 +92,7 @@
 <script setup lang="ts">
 import { ref, reactive, shallowRef, onBeforeUnmount, onMounted ,toRefs,watch} from "vue";
 import { ElDrawer, ElMessage, ElMessageBox } from 'element-plus'
-import '@wangeditor/editor/dist/css/style.css';
+// import '@wangeditor/editor/dist/css/style.css';
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import { CirclePlus, CircleClose } from '@element-plus/icons-vue';
 
