@@ -26,8 +26,8 @@
         </el-form-item>
         <el-form-item label="状态">
           <el-select v-model="stateVal" clearable placeholder="选择状态" style="width: 100px" @change="changeState">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
+            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="Search">查询</el-button>
@@ -48,12 +48,14 @@
     <div class="list">
       <el-table ref="multipleTableRef" :data="tableData" style="width: 100%, " @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="100" />
-        <el-table-column label="考试名称" width="100"  prop="title">
+        <el-table-column label="考试名称" width="100" prop="title">
           <template #default="scope">
-            <span @click="getDetails(scope.row.id, scope.row.title)">{{ scope.row.title }}</span>
+            <span @click="getDetails(scope.row.id, scope.row.title)" v-html="scope.row.title">
+
+            </span>
           </template>
         </el-table-column>
-        <el-table-column label="状态" width="100" >
+        <el-table-column label="状态" width="100">
           <template #default="scope">
             <span :class="
               scope.row.state == 0 || scope.row.state == 1 ? 'blues' : 'reds'">
@@ -62,11 +64,11 @@
           </template>
         </el-table-column>
 
-        <el-table-column property="scores" label="总分" width="100" />
-        <el-table-column property="pastscores" label="通过分数" width="100"  />
-        <el-table-column property="studentcounts" label="考试人数" width="100"  />
-        <el-table-column property="pastnum" label="通过人数" width="100"  />
-        <el-table-column property="name" label="开放时间" width="100" >
+        <el-table-column property="scores" label="总分" width="130" />
+        <el-table-column property="pastscores" label="通过分数" width="180" />
+        <el-table-column property="studentcounts" label="考试人数" width="150" />
+        <el-table-column property="pastnum" label="通过人数" width="120" />
+        <el-table-column property="name" label="开放时间" width="120">
           <template #default="scope">
             <p v-if="scope.row.begindate == null">不限</p>
             <p v-else>
@@ -91,11 +93,11 @@
             <el-divider direction="vertical" />
             <span @click="getTeacher(scope.row.id)">可见</span>
             <el-divider direction="vertical" />
-            <span>阅卷老师</span>
+            <span @click="dialogyueTeacher=true">阅卷老师</span>
             <el-divider direction="vertical" />
             <span>分析</span>
             <el-divider direction="vertical" />
-            <span>编辑</span>
+            <span @click="upd(scope.row.id,scope.row)">编辑</span>
             <el-divider direction="vertical" />
             <span class="red" @click="handleDelete(scope.row.id)">删除</span>
           </template>
@@ -107,10 +109,22 @@
       <TestDetails :dialogVisible="dialogVisible" v-if="dialogVisible == true" @closedetailsList="closedetailsList"
         :getid="getid" :title="title"></TestDetails>
       <!-- 学生列表 -->
-      <Students :dialogstudent="dialogstudent" v-if="dialogstudent==true" @studentCancel="studentCancel"
-        @studentConfirm="studentConfirm" @studentClose="studentClose"></Students>
-        <!-- 可见老师 -->
-        <Teacher :dialogTeacher="dialogTeacher" v-if="dialogTeacher==true" @teacherConfirm="teacherConfirm" @teacherClose="teacherClose"></Teacher>
+      <el-dialog title="学生考试列表" v-model="dialogstudent" width="50%">
+        <Students :dialogstudent="dialogstudent" v-if="dialogstudent == true" @studentCancel="studentCancel"
+          @studentConfirm="studentConfirm" @studentClose="studentClose"></Students>
+      </el-dialog>
+
+      <!-- 可见老师 -->
+      <el-dialog title="可见老师" v-model="dialogTeacher" width="50%">
+        <Teacher :dialogTeacher="dialogTeacher" v-if="dialogTeacher == true" @teacherConfirm="teacherConfirm"
+          @teacherClose="teacherClose"></Teacher>
+      </el-dialog>
+
+       <!-- 阅卷老师 -->
+       <el-dialog title="阅卷老师" v-model="dialogyueTeacher" width="50%">
+            <TascherList v-model="dialogyueTeacher" v-if="dialogyueTeacher==true" @teacherConfirm="teacherConfirm"></TascherList>
+        </el-dialog>
+
     </div>
   </div>
 </template>
@@ -119,14 +133,14 @@ import { reactive, ref, toRefs } from 'vue'
 import { ElMessage, ElTable } from 'element-plus'
 import router from '../../router/index'
 
-import { testList, testDel, testDelAll, testState ,departmentList} from '../../api/test'
+import { testList, testDel, testDelAll, testState, departmentList } from '../../api/test'
 import { ElMessageBox } from 'element-plus'
 import TestDetails from "../../components/exam/testDetails.vue";
 import Students from '../../components/test/studentList.vue'
 import moment from "moment";
 import Pages from '../../components/FenYe/FenYe.vue'
 import Teacher from '../../components/test/teacherList.vue'
-
+import TascherList from '../../components/test/teacherList.vue'
 let getid = ref(0)
 let title = ref('')
 const data: any = reactive({
@@ -243,7 +257,7 @@ const getChildData = (val: any) => {
 }
 // 状态搜索
 const changeState = (val: any) => {
-  console.log(val,111);
+  console.log(val, 111);
   query.state = Number(val)
 
 }
@@ -327,21 +341,38 @@ const studentCancel = (val: any) => {
   dialogstudent.value = val
 };
 // 老师弹框
-let dialogTeacher=ref(false)
-const getTeacher=(val:any)=>{
-  dialogTeacher.value=true
+let dialogTeacher = ref(false)
+const getTeacher = (val: any) => {
+  dialogTeacher.value = true
 }
 // 老师点击确认 
-const teacherConfirm=(val:any)=>{
-  dialogTeacher.value=val
+const teacherConfirm = (val: any) => {
+  dialogTeacher.value = val
 }
 // 老师点击关闭
-const teacherClose=(val:any)=>{
-  dialogTeacher.value=val
+const teacherClose = (val: any) => {
+  dialogTeacher.value = val
 }
 // 老师点击取消
-const teacherCancel=(val:any)=>{
-  dialogTeacher.value=val
+const teacherCancel = (val: any) => {
+  dialogTeacher.value = val
+}
+
+// 阅卷老师弹框
+const dialogyueTeacher=ref(false)
+
+// 点击编辑 
+const upd=(id:any,val:any)=>{
+  // console.log(id,val);
+  if(val.studentcounts==0){
+    router.push({path:'/testadd',query:{id:id}})
+  }else{
+    ElMessage({
+      message:'本场有学生参加考试，不可编辑',
+      type:'error'
+    })
+  }
+  
 }
 </script>
 
