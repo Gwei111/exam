@@ -21,14 +21,13 @@
             <el-form-item label="备注" :label-width="formLabelWidth">
                 <el-input type="textarea" style="width:300px;" v-model="state.remarks" autocomplete="off" />
             </el-form-item>
-            <div v-show="id!==0">
+            <div v-show="id? false:true">
                 <el-form-item label="账号" :label-width="formLabelWidth" prop="username">
                     <el-input style="width: 300px;" v-model="state.username" autocomplete="off" />
                 </el-form-item>
                 <el-form-item label="密码" :label-width="formLabelWidth" prop="pass">
                     <el-input style="width: 300px;" v-model="state.pass" autocomplete="off" />
                 </el-form-item>
-
             </div>
             <el-form-item style="float: right;padding-top: 10px;">
                 <div>
