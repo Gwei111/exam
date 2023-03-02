@@ -40,3 +40,8 @@ export const databasequestion  = (params: any) => {
 export const ShuttleAdd  = (params: any) => {
   return request.post('database/add', params)
 }
+
+// 导出execl
+export const execls  = (params: any) => {
+  return request.get('subjects/exportExcel', params,{responseType:'blob'})
+}

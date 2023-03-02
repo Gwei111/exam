@@ -1,5 +1,5 @@
 <template>
-  <div>子
+  <div>
     <div class="head">
       <span>部门：</span>
       <el-select v-model="id"
@@ -17,7 +17,6 @@
                  @left-check-change="leafChange"
                  @right-check-change='rightChange'
                  :data="dataa"
-        
                  :titles="['未选', '已选']" />
 
     <div class="tom">
@@ -29,15 +28,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive,defineEmits } from "vue";
+import { ref, reactive, defineEmits } from "vue";
 import { SeleList, ForList } from "../../api/Test/Test";
 import { ElMessageBox } from "element-plus";
-const emit = defineEmits(["sub", "limitss","valuesss","isshow"]);
+const emit = defineEmits(["sub", "limitss", "valuesss", "isshow"]);
 const dialogVisible1 = ref(false);
 const value = ref([]);
 const options = reactive([]);
 const dataa = ref([]);
-
 
 const numberValidateForm = reactive({
   depid: "",
@@ -71,11 +69,11 @@ const changes = async (depid: any) => {
 const teacherid = ref([]);
 const submit = () => {
   const arr = value.value.map((item: any) => {
-    return{id: item}
+    return { id: item };
   });
   emit("valuesss", arr);
   emit("sub", false);
-    emit('isshow',false)
+  emit("isshow", false);
 };
 // 取消
 const quxiao = () => {
@@ -88,20 +86,15 @@ interface Option {
   disabled: boolean;
 }
 const leafChange = (res: any) => {
-  console.log(res, "zuo");
-
   value.value = [...value.value, ...res];
   limitss.value = value.value.length;
   emit("limitss", limitss.value);
 };
 const limitss = ref([]);
 const rightChange = (res: any) => {
-  console.log(i, "ytgvubhinjkml,");
-  console.log(res, "yyo");
   value.value = value.value.filter((item) => !res.includes(item));
   limitss.value = value.value.length;
   emit("limitss", limitss.value);
-  console.log(limitss, "dfghjk");
 };
 const generateData = () => {
   const data: Option[] = [];

@@ -1,5 +1,4 @@
 <template>
-  父
   <div class="TiMax">
     <div class="TiAdd">
       <el-form ref="formRef"
@@ -38,27 +37,27 @@
                      @valuesss='valuessss'></Forth>
             </el-dialog>
           </el-radio-group>
+          <div class="quanquan"
+               v-if="numberValidateForm.limits.length>0"><span>{{numberValidateForm.limits.length}}</span></div>
         </el-form-item>
         <el-form-item>
           <div class="bo">
-            <el-button>取消</el-button>
+            <el-button @click="quxiao">取消</el-button>
             <el-button type="primary"
-                       @click="submits" >确定</el-button>
+                       @click="submits">确定</el-button>
           </div>
         </el-form-item>
       </el-form>
     </div>
-
   </div>
 </template>
-
 <script setup lang="ts">
 import Forth from "../components/Test/Forth.vue";
 import { ref, defineEmits } from "vue";
 import { ShuttleAdd } from "../api/Test/Test";
 import { ElMessage, ElMessageBox } from "element-plus";
-const emit =defineEmits(["isadd"])
-
+// 子传父
+const emit = defineEmits(["isadd", "can"]);
 const dialogVisible1 = ref(false);
 const radio = ref(3);
 const handleClose = (done: () => void) => {
@@ -79,18 +78,44 @@ const numberValidateForm = reactive({
 });
 
 const submits = async () => {
-  let res = await ShuttleAdd(numberValidateForm);
-  console.log(res);
-  if (res.errCode === 10000) {
+  if (numberValidateForm.title === "") {
     ElMessage({
-      message: "添加成功",
-      type: "success",
+      message: "请填土题库名称",
+      type: "error",
     });
-emit('isadd',false)
+  } else {
+    let res = await ShuttleAdd(numberValidateForm);
+    console.log(res);
+    if (res.errCode === 10000) {
+      ElMessage({
+        message: "添加成功",
+        type: "success",
+      });
+      // 子传父
+      emit("isadd", false);
+   
+    }
   }
 };
 const isshow = (val: any) => {
   dialogVisible1.value = val;
+};
+//穿梭框获取到的值
+const valuessss = (val: any) => {
+  numberValidateForm.limits = val;
+  console.log(numberValidateForm.limits.length);
+};
+const limitss = (e: any) => {
+  console.log(e, "dfghj");
+  console.log(numberValidateForm.limits);
+};
+// 子传父
+const sub = (e: any) => {
+  dialogVisible1.value = false;
+};
+// 取消
+const quxiao = () => {
+   emit("can", false);
 };
 </script>
 
@@ -115,5 +140,22 @@ const isshow = (val: any) => {
   width: 150px;
   margin-left: 270px;
   margin-top: 80px;
+}
+.quanquan {
+  width: 15px;
+  height: 15px;
+  border-radius: 20px;
+  background-color: #46a3ff;
+  position: absolute;
+  left: 128px;
+  top: 32px;
+  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.quanquan span {
+  color: white;
+  font-size: 12px;
 }
 </style>
