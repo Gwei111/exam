@@ -89,6 +89,12 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/Role/Role.vue'),
         meta: { title: '角色', isAuth: true },
       },
+      {
+        path: '/stutest',
+        name: 'Stutest',
+        component: () => import('../views/Stutest/stutest.vue'),
+        meta: { title: '学生端', isAuth: true },
+      },
     ]
   },
 
