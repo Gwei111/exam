@@ -95,7 +95,7 @@
             <el-divider direction="vertical" />
             <span @click="dialogyueTeacher=true">阅卷老师</span>
             <el-divider direction="vertical" />
-            <span>分析</span>
+            <span @click='getAnalyse(scope.row)'>分析</span>
             <el-divider direction="vertical" />
             <span @click="upd(scope.row.id,scope.row)">编辑</span>
             <el-divider direction="vertical" />
@@ -141,6 +141,7 @@ import moment from "moment";
 import Pages from '../../components/FenYe/FenYe.vue'
 import Teacher from '../../components/test/teacherList.vue'
 import TascherList from '../../components/test/teacherList.vue'
+import { Message } from '@element-plus/icons-vue'
 let getid = ref(0)
 let title = ref('')
 const data: any = reactive({
@@ -372,7 +373,18 @@ const upd=(id:any,val:any)=>{
       type:'error'
     })
   }
-  
+}
+// 分析
+const getAnalyse=(val:any)=>{
+  console.log(val);
+  if(val.studentcounts==0){
+    ElMessage.error('没有学生考试')
+  }else if(val.isread==1){
+    ElMessage.error('本场考试还未判完卷')
+  }else{
+     router.push({path:'./ Analyse',query:{id:val.id}})
+  }
+ 
 }
 </script>
 

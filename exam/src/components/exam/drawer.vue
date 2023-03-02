@@ -15,14 +15,15 @@
                     <div style="border: 1px solid #ccc">
                         <Toolbar style="border-bottom: 1px solid #ccc" :editor="editorRef" :defaultConfig="toolbarConfig"
                             mode="small" />
-                        <!-- <Editor v-model="form.title"
-                            :defaultConfig="editorConfig" mode="small" @onCreated="handleCreated" /> -->
+                        <Editor v-model="form.title"
+                            :defaultConfig="editorConfig" mode="small" @onCreated="handleCreated" />
                     </div>
                 </el-form-item>
                 <!-- 选择题 -->
                 <div v-if="form.type == '单选题' || form.type == '多选题'">
                     <el-form-item label="选项" size="normal" class="options">
-                        <div v-for="(item, index) in form.answers" :key="index">{{ data.letter[index] }}：<el-input
+                        <div v-for="(item, index) in form.answers" :key="index">{{ data.letter[index] }}：
+                            <el-input
                                 type="textarea" autosize style="width: 400px; height: 32px;"
                                 v-model="item.content"></el-input><el-icon style="font-size: 22px; color: #f56c6c;">
                                 <CircleClose @click="delOptions(index)" />
@@ -90,13 +91,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, shallowRef, onBeforeUnmount, onMounted ,toRefs,watch} from "vue";
+import { ref, reactive, shallowRef, onBeforeUnmount, onMounted ,toRefs,watch,nextTick} from "vue";
 import { ElDrawer, ElMessage, ElMessageBox } from 'element-plus'
-// import '@wangeditor/editor/dist/css/style.css';
+import '@wangeditor/editor/dist/css/style.css';
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
-import { CirclePlus, CircleClose } from '@element-plus/icons-vue';
+import { CirclePlus, CircleClose, List } from '@element-plus/icons-vue';
 
 const props = defineProps(['table','updArr','title'])
+watch([props],()=>{
+    form=props.updArr
+})
 // console.log(props);
 const emit = defineEmits(['Drawerclose', 'adds', 'DrawerCancel'])
 
@@ -143,10 +147,7 @@ let form:any = reactive({
     ],
 
 })
-// 监听types变化，重置表单
-watch(form.type, (newVal) => {
-  form.value.type = newVal;
-});
+
 const{answer}=toRefs(form)
 const data = reactive({
     letter: [ //选项的名
@@ -244,17 +245,22 @@ const onClick = (val: any) => {
 }
 // 修改回显数据
 if(props.title=='修改'){
-    let list:any=JSON.parse(props.updArr)
+    form=JSON.parse(props.updArr)
     // console.log(list);
-    form={...list}
-    check=list.answer.split('|')
+    // form={...list}
+    check=form.answer.split('|')
     console.log(form);
     
 }
+
+
 onMounted(() => {
     if(props.title=='修改'){
         data.leng=form.answer
     }
+})
+nextTick(()=>{
+
 })
 // 保存并继续
 const clickup=()=>{

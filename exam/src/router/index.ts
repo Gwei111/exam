@@ -24,6 +24,11 @@ const routes: Array<RouteRecordRaw> = [
         meta: { title: '创建考试', isAuth: true },
       },
       {
+        path:'/Analyse',
+        component:()=>import('../views/ExamInation/Analyse.vue'),
+        meta:{title:'考试分析',isAuth:true}
+      },
+      {
         path: "/exam",
         name: 'exam',
         component: () => import('../views/ExamPapers/ExamPapers.vue'),
