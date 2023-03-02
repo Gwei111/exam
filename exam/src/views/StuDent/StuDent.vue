@@ -27,7 +27,7 @@
             :props="props" clearable />
         </el-form-item>
         <el-form-item label="班级">
-          <el-select placeholder="请选择" v-model="state.classid">
+          <el-select placeholder="请选择" v-model="state.classid" @change="changeclass">
             <el-option v-for="item in classlistInfo" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
@@ -82,7 +82,7 @@ const route = useRoute()
 onMounted(() => {
   getStudentList()
   getdepartmentsList()
-  getclassesList()
+  // getclassesList()
 })
 
 const count = reactive({
@@ -144,16 +144,7 @@ const getChildData = (val: any) => {
 };
 
 
-// 班级列表
-const depidid = ref('')
-const classlistInfo: any = ref([])
-const getclassesList = async () => {
-  const res: any = await classesList({ depid: state.value.depid })
-  // console.log('班级列表', res.data.list);
-  classlistInfo.value = res.data.list
-  // console.log(state.value.depid);
 
-}
 // 部门列表
 const props = {
   label: 'name',
@@ -173,8 +164,28 @@ const getdepartmentsList = async () => {
 const getDepid = (val: any) => {
   if (val) {
     state.value.depid = val.at(-1)
-
+    console.log(state.value.depid );
+    
   }
+  getclassesList()
+
+}
+// 班级列表
+const depid = ref(0)
+const classlistInfo: any = ref([])
+const getclassesList = async () => {
+  
+  const res: any = await classesList({ depid: state.value.depid })
+  // console.log('班级列表', res.data.list);
+  classlistInfo.value = res.data.list
+  // console.log(state.value.depid);
+
+}
+const changeclass = async( val:any)=>{
+  console.log(val);
+  state.value.classid = val
+  
+  // depid.value = val
 }
 // 查询
 const search = () => {
