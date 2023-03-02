@@ -3,10 +3,13 @@
     <div class="top">
       <h3>学员管理</h3>
       <div>
-        <el-button plain>批量添加</el-button>
+        <el-button plain @click="addall">批量添加</el-button>
         <el-button type="primary" @click="add">添加学生</el-button>
       </div>
     </div>
+    <!-- 批量添加 -->
+    <AddAllAtuDent v-if="centerDialogVisible" :centerDialogVisible="centerDialogVisible" :databaseid="route.query.id"
+      @cancel="centerDialogVisible = false" @batchAdd="batchAdd"></AddAllAtuDent>
     <!-- 添加弹出框 -->
     <AddStuDent :dislogShow="dislogShow" :upusername="upusername" :uppass="uppass" :upclassid="upclassid"
       :updepid="updepid" :upname="upname" :upmobile="upmobile" :upremarks="upremarks" :upid="upid" @stuCancel="stuCancel"
@@ -37,7 +40,8 @@
       </el-form>
     </div>
     <div class="table">
-      <el-table ref="multipleTableRef" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange">
+      <el-table ref="multipleTableRef" :data="tableData" style="width: 100%" enctype=“multipart/form-data”
+        @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" />
         <el-table-column property="name" label="学生姓名" />
         <el-table-column property="remarks" label="备注" />
@@ -69,9 +73,11 @@ import { ElTable } from 'element-plus'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { studentList, departmentsList, classesList, studentDelete, studentDeleteall } from '../../api/student';
 import AddStuDent from '../../components/AddStuDent.vue'
+import AddAllAtuDent from '../../components/AddAllAtuDent.vue'
 import FenYe from "../../components/FenYe/FenYe.vue"
 import UpPass from "../../components/UpPass.vue"
-
+import { useRoute, useRouter } from 'vue-router';
+const route = useRoute()
 
 onMounted(() => {
   getStudentList()
@@ -87,11 +93,13 @@ const count = reactive({
     depid: '',
     page: 1,
     ids: 0,
-    psize: 10
+    psize: 10,
+    databaseid:Number(route.query.id),
   },
-  total: 0
+  total: 0,
+  centerDialogVisible: false,
 })
-const { state, total } = toRefs(count)
+const { state, total, centerDialogVisible } = toRefs(count)
 
 // 多选
 interface User {
@@ -300,7 +308,17 @@ const upoldpass = (row: any) => {
   pass.value = row.pass
   console.log(row);
   getStudentList()
-  
+
+}
+
+// 批量添加试题
+const addall = () => {
+  centerDialogVisible.value = true
+}
+// 批量添加试题关闭
+const batchAdd = () => {
+  centerDialogVisible.value = false
+  getStudentList()
 }
 </script>
 

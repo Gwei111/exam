@@ -81,7 +81,9 @@
                          width="100"
                          prop="title">
           <template #default="scope">
-            <span @click="getDetails(scope.row.id, scope.row.title)">{{ scope.row.title }}</span>
+            <span @click="getDetails(scope.row.id, scope.row.title)" v-html="scope.row.title">
+
+            </span>
           </template>
         </el-table-column>
         <el-table-column label="状态"
@@ -136,11 +138,11 @@
             <el-divider direction="vertical" />
             <span @click="getTeacher(scope.row.id)">可见</span>
             <el-divider direction="vertical" />
-            <span>阅卷老师</span>
+            <span @click="dialogyueTeacher=true">阅卷老师</span>
             <el-divider direction="vertical" />
             <span>分析</span>
             <el-divider direction="vertical" />
-            <span>编辑</span>
+            <span @click="upd(scope.row.id,scope.row)">编辑</span>
             <el-divider direction="vertical" />
             <span class="red"
                   @click="handleDelete(scope.row.id)">删除</span>

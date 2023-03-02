@@ -35,6 +35,19 @@ export const databasequestion= (data: any) => {
 export const datadelete= (data: any) => {
   return request.get('databasequestion/delete', data)
 }
+// 题库试题批量删除
+export const databdeleteall= (data: any) => {
+  return request.post('databasequestion/deleteall', data)
+}
+// 根据id下载单个题库试题列表
+// 导出防止乱码{responseType: 'blob'}
+export const exportExcel= (data: any) => {
+  return request.get('databasequestion/exportExcel', data,{responseType: 'blob'})
+}
+// 题库试题添加
+export const dataadd= (data: any) => {
+  return request.post('databasequestion/add', data)
+}
 // 获取老师信息
 export const teachelistr= (data: any) => {
   return request.get('teacher/list', data)

@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-drawer :model-value="props.table"
-               title="试题添加"
+               :title="'试题'+props.title"
                direction="rtl"
                size="50%"
                :before-close="handleClose">
@@ -18,14 +18,14 @@
         <el-form-item label="题干"
                       size="normal">
           <div style="border: 1px solid #ccc">
-              <Toolbar style="border-bottom: 1px solid #ccc"
+            <Toolbar style="border-bottom: 1px solid #ccc"
                      :editor="editorRef"
                      :defaultConfig="toolbarConfig"
-                     mode="small"/> 
-           <Editor v-model="form.title"
+                     mode="small" />
+            <Editor v-model="form.title"
                     :defaultConfig="editorConfig"
                     mode="small"
-                    @onCreated="handleCreated" /> 
+                    @onCreated="handleCreated" />
           </div>
         </el-form-item>
         <!-- 选择题 -->
@@ -57,7 +57,8 @@
                         v-if="form.type == '单选题'">
             <el-radio-group v-model="form.answer">
               <el-radio :label="data.letter[index]"
-                        v-for="(item, index) in form.answers">
+                        v-for="(item, index) in form.answers"
+                        :key="index">
                 {{ data.letter[index] }}
               </el-radio>
 
@@ -67,7 +68,8 @@
           <el-form-item label="正确答案"
                         size="normal"
                         v-if="form.type == '多选题'">
-            <el-checkbox-group v-model="form.answer">
+            <el-checkbox-group v-model="check"
+                               @change="changeCheckbox">
               <el-checkbox :label="data.letter[index]"
                            v-for="(item, index) in form.answers"
                            :key="index" />
@@ -92,7 +94,8 @@
                         size="normal"
                         v-show="data.leng.length > 0"
                         v-if="form.type == '填空题'">
-            <div v-for="(item, index) in data.leng">
+            <div v-for="(item, index) in data.leng"
+                 :key="index">
               <el-input size="normal"
                         autosize
                         clearable
@@ -108,7 +111,7 @@
                       size="normal"
                       autosize
                       clearable
-                      v-model="form.explains"
+                      v-model="form.scores"
                       style="width: 350px;"></el-input>
           </el-form-item>
         </div>
@@ -124,7 +127,8 @@
         <el-button type="primary"
                    @click="onClick(form)">保存</el-button>
         <el-button type="primary"
-                   plain>保存并继续</el-button>
+                   plain
+                   @click="clickup">保存并继续</el-button>
         <el-button @click="cancelForm">Cancel</el-button>
 
       </div>
@@ -133,30 +137,46 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, shallowRef, onBeforeUnmount, onMounted } from "vue";
+import {
+  ref,
+  reactive,
+  shallowRef,
+  onBeforeUnmount,
+  onMounted,
+  toRefs,
+  watch,
+} from "vue";
 import { ElDrawer, ElMessage, ElMessageBox } from "element-plus";
-import '@wangeditor/editor/dist/css/style.css';
+import "@wangeditor/editor/dist/css/style.css";
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 import { CirclePlus, CircleClose } from "@element-plus/icons-vue";
 
-const props = defineProps(["table"]);
+// const props = defineProps(['table'])
+// console.log(props.databaseid);
+
+const props = defineProps(["table", "updArr", "title", "databaseid"]);
 // console.log(props);
+
 const emit = defineEmits(["Drawerclose", "adds", "DrawerCancel"]);
-const checkList = ref([]);
-const radio = ref(3);
-let radio1 = ref("");
+
 const formLabelWidth = "80px";
 // 编辑器实例，必须用 shallowRef
 const editorRef = shallowRef();
 const toolbarConfig = {};
 const editorConfig = { placeholder: "请输入内容..." };
-const form = reactive({
-  type: "单选题", //题类型
-  title: "", //题干
-  scores: 0, //分数
-  answer: "" || [], //正确答案的值 单选是''多选是[]'
-  explains: "", //简答题
+let check = ref([]); //复选框正确答案的值
+let form: any = reactive({
+  id: 0,
+  testid: 0,
+  title: "",
+  type: "单选题",
+  scores: "",
+  answer: "",
+  tags: "",
+  explains: "",
+  databaseid: props.databaseid, //题库id添加
   answers: [
+    //选项数据
     {
       id: 0,
       answerno: "A",
@@ -167,22 +187,27 @@ const form = reactive({
       id: 0,
       answerno: "B",
       questionid: 0,
-      content: " ",
+      content: "",
     },
     {
       id: 0,
       answerno: "C",
       questionid: 0,
-      content: " ",
+      content: "",
     },
     {
       id: 0,
       answerno: "D",
       questionid: 0,
-      content: "  ",
+      content: "",
     },
   ],
 });
+// 监听types变化，重置表单
+watch(form.type, (newVal) => {
+  form.value.type = newVal;
+});
+const { answer } = toRefs(form);
 const data = reactive({
   letter: [
     //选项的名
@@ -225,9 +250,11 @@ onBeforeUnmount(() => {
 const handleCreated = (editor: any) => {
   editorRef.value = editor; // 记录 editor 实例，重要！
 };
+
 // 多选框内容改变
 const changeCheckbox = (e: any) => {
-  form.answer = e;
+  // console.log(e);
+  form.answer = e.join("|");
 };
 // 点击+添加选项
 const addOptions = () => {
@@ -275,7 +302,21 @@ const onClick = (val: any) => {
   //
   emit("adds", false, val);
 };
-
+// 修改回显数据
+if (props.title == "修改") {
+  let list: any = JSON.parse(props.updArr);
+  // console.log(list);
+  form = { ...list };
+  check = list.answer.split("|");
+  console.log(form);
+}
+onMounted(() => {
+  if (props.title == "修改") {
+    data.leng = form.answer;
+  }
+});
+// 保存并继续
+const clickup = () => {};
 const handleClose = (done: any) => {
   // console.log(done);
   emit("Drawerclose", false);
