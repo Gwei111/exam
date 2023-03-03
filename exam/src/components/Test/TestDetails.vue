@@ -14,6 +14,10 @@
           <span>添加时间</span>
           <p>{{model.addtime}}</p>
         </div>
+        <div style="margin-left:700px">
+          <el-button id="derive"
+                     @click="execl">导出execl</el-button>
+        </div>
       </div>
       <div v-for="item,index in model.questions"
            :key="index">
@@ -56,28 +60,29 @@
         </span>
       </template>
     </el-dialog>
+
   </div>
 
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, toRefs, defineEmits } from "vue";
+import { ref, reactive, toRefs, defineEmits, warn } from "vue";
 import { ElMessageBox } from "element-plus";
-import { getSubjects } from "../../api/Test/Test";
+import { getSubjects, execls } from "../../api/Test/Test";
 const dialogVisible = ref(false);
 const emits = defineEmits(["update:modelValue"]);
-const prop = defineProps({
-  Detailsid: Number,
+const props = defineProps({
+  testDetails: Number,
   subjectsID: Number,
 });
 const data: any = reactive({
   model: {},
   Detailsdialog: true,
-  id: prop.Detailsid,
-  sid: prop.subjectsID,
+  id: props.testDetails,
+  sid: props.subjectsID,
   arr: ["错误", "正确"],
 });
-// console.log(data.sid);
+console.log(data.sid);
 
 const { Detailsdialog, id, model, sid } = toRefs(data);
 const handleClose = () => {
@@ -94,6 +99,22 @@ const getPSubjects = async () => {
   }
 };
 getPSubjects();
+
+const execl = async () => {
+  let res = await execls({ id: data.sid });
+  console.log(res);
+
+  let blob = new Blob([res], { type: "application/vnd.ms-excel" });
+  let url = URL.createObjectURL(blob);
+
+  let a = document.createElement("a");
+  a.href = url;
+  a.style.display = "none";
+  document.body.appendChild(a);
+  a.setAttribute("download", model.title);
+  a.click();
+  document.body.removeChild(a);
+};
 </script>
 
 <style scoped lang="less">
@@ -263,5 +284,8 @@ getPSubjects();
   height: 20px;
   background-color: #fcf8f8;
   border: 1px solid #dfdfde;
+}
+#derive {
+  // margin-left: 730px;
 }
 </style>

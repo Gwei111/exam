@@ -7,8 +7,10 @@
         >
       </template>
       <div>
-        <el-button>添加试题</el-button>
-        <el-button type="primary">批量添加试题</el-button>
+        <el-button @click="addOne">添加试题</el-button>
+        <el-button type="primary" @click="Updatadialog = true"
+          >批量添加试题</el-button
+        >
       </div>
     </el-page-header>
     <div class="wen">
@@ -18,91 +20,238 @@
       <el-form-item label="创建人:" class="chuan">
         <el-input v-model="data.admin" />
       </el-form-item>
-      <el-select v-model="data.type" class="m-2" placeholder="请选择" size="large" clearable >
-    <el-option
-      v-for="item in options"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value"
-    />
+      <el-select
+        v-model="data.type"
+        class="m-2"
+        placeholder="请选择"
+        size="large"
+        clearable
+      >
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
       </el-select>
       <el-button type="primary" @click="supes()">查询</el-button>
-      <el-button type="danger" :disabled="show">批量删除</el-button>
+      <el-button type="danger" :disabled="show" @click="depls()"
+        >批量删除</el-button
+      >
+      <el-button plain @click="addall">导出excel</el-button>
     </div>
     <div>
-      <el-table ref="multipleTableRef" :data="lits" style="width: 100%">
+      <el-table
+        ref="multipleTableRef"
+        :data="lits"
+        style="width: 100%"
+        @selection-change="handleSelectionChange"
+      >
         <el-table-column type="selection" width="55" />
         <el-table-column label="题目名称" width="520">
           <template #default="scope">
-            <span v-html="scope.row.title"></span> </template
-        ></el-table-column>
+            <span
+              @click="dra(scope.row)"
+              v-html="scope.row.title"
+              class="butle"
+            ></span>
+          </template>
+        </el-table-column>
         <el-table-column property="type" label="题量类型" width="220" />
         <el-table-column property="addtime" label="创建时间" width="220" />
         <el-table-column property="admin" label="创建人" width="220" />
         <el-table-column label="操作">
           <template #default="scope">
-            <el-button link type="primary" size="small" > 编辑 </el-button>
-            <el-button link type="primary" size="small" @click="del(scope.row.id)"> 删除 </el-button>
+            <el-button link type="primary" size="small"> 编辑 </el-button>
+            <el-button
+              link
+              type="primary"
+              size="small"
+              @click="del(scope.row.id)"
+            >
+              删除
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
+    <!-- 分页 -->
+    <Qfenye :counts="total" @getChildData="getChildData"></Qfenye>
+    <!-- 批量导入试题 -->
+    <UploadFiles
+      v-if="Updatadialog"
+      v-model="Updatadialog"
+      @updataFile="updataFile"
+      :UrL="url"
+    ></UploadFiles>
+    <!-- 点击添加试题抽屉组件 -->
+    <Drawers
+      :table="table"
+      v-if="table == true"
+      @Drawerclose="Drawerclose"
+      @adds="DrawerClick"
+      :databaseid="databaseid"
+    ></Drawers>
+
+    <!-- <Questdrawer :drawer="drawer" v-if="drawer == true" :lisvue="lisvue"></Questdrawer> -->
+    <Questdrawer v-if="drawer" :drawer="drawer" @drawerShow="drawerShow" :lisvue="lisvue"></Questdrawer>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue';
-import { databasequestion, datadelete } from '../../api/department';
+import { reactive, ref, onMounted, toRaw } from 'vue';
+import {
+  databasequestion,
+  datadelete,
+  databdeleteall,
+  exportExcel,
+  dataadd,
+} from '../../api/department';
+import { dataaddlist } from '../../api/Test/Test';
 import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router';
-import { ElMessage } from 'element-plus'
-const show = ref(true);
+import { ElMessage, ElMessageBox } from 'element-plus';
+import Qfenye from '../../components/FenYe/FenYe.vue';
+import UploadFiles from '../../components/uploadFiles.vue'; //批量导入试题
+import Drawers from '../../components/exam/drawer.vue'; // 点击添加试题
+import Questdrawer from '../../components/questdrawer.vue'; // 详情抽屉
 const route = useRoute();
 const router = useRouter();
 let databaseid = route.query.databaseid;
-const data = reactive({
-  databaseid: databaseid, //题库id
-  psize: 20,
-  page: 1,
-  name: '',
-  key:'', //关键字
-  admin:'', //创建人
-  type:'' //类型
-});
 onMounted(() => {
   list();
 });
+const data = reactive({
+  databaseid: route.query.databaseid, //题库id
+  psize: '',
+  page: '',
+  name: '',
+  key: '', //关键字
+  admin: '', //创建人
+  type: '', //类型
+  questions: '',
+  answers: [],
+});
+// 详情抽屉\
+// 数据
+const lisvue=ref()
+const drawer = ref(false);
+const dra:any=(i:any)=>{
+  lisvue.value=i
+  drawer.value = true
+}
+const drawerShow = (val:any) =>{
+  drawer.value = val
+}
+const lits: any = ref([]);
+const table = ref(false);
+// const subjectsID=ref()
+// 点击添加试题
+const addOne = () => {
+  table.value = true;
+};
+// 点击
+const Drawerclose = (val: any) => {
+  //隐藏抽屉
+  table.value = val;
+};
+const lit = ref();
+const DrawerClick = async (bool: any, val: any) => {
+  // console.log(bool);
+  table.value = bool;
+  console.log(val);
+  let res: any = await dataadd(val);
+  console.log(res);
+  list();
+};
+const show = ref(true);
+
+//批量导入试题
+const Updatadialog = ref(false);
+// 文件上传
+const url = ref('http://estate.eshareedu.cn/exam/api/test/upload');
+const updataFile = async (e: any) => {
+  // 把文件里的所有数据赋值给questions.value
+  data.questions = e;
+  const res: any = await dataaddlist({
+    databaseid: databaseid,
+    list: e,
+  });
+  list();
+  // console.log(res, "文件上传")
+};
+//导出excel
+const addall = async () => {
+  let res: any = await exportExcel({ id: data.databaseid });
+  let blob = new Blob([res], { type: 'application/vnd.ms-excel' });
+  let url = URL.createObjectURL(blob);
+  let a = document.createElement('a');
+  a.href = url;
+  a.style.display = 'none';
+  document.body.appendChild(a);
+  a.setAttribute('download', top.title);
+  a.click();
+  document.body.removeChild(a);
+};
 // 列表
 const top: any = ref({});
-const lits: any = ref([]);
+const total = ref();
 const list = async () => {
   let res = await databasequestion(data);
-  // console.log(res);
   top.value = res.data.database;
   lits.value = res.data.list;
-  // console.log(lits.value);
+  total.value = res.data.counts;
 };
 // 返回
 const goBack = () => {
   router.push('/databaselist');
 };
 // 删除
-const del=async(id:any)=>{;
-  let res:any=await datadelete({id:id})
+const del = async (id: any) => {
+  let res: any = await datadelete({ id: id });
   console.log(res);
-  if(res.errCode===10000){
+  if (res.errCode === 10000) {
     ElMessage({
-    message: '删除成功',
-    type: 'success',
-  })
-  list()
+      message: '删除成功',
+      type: 'success',
+    });
+    list();
   }
-  
-}
+};
+let lids: any = ref('');
+const handleSelectionChange = (val: any) => {
+  lids.value = val.map((item: any) => item.id);
+  show.value = false;
+};
+// 批量删除
+const depls = () => {
+  ElMessageBox.confirm('此操作将永久删除选中的文件, 是否继续?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  })
+    .then(async () => {
+      let ids = lids.value;
+      let res: any = await databdeleteall({ ids: ids });
+      if (res.errCode === 10000) {
+        ElMessage({
+          type: 'success',
+          message: '删除成功',
+        });
+        list();
+      }
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: '删除失败',
+      });
+    });
+};
 // 查询
-const supes=()=>{
-  list()
-}
+const supes = () => {
+  list();
+};
 // 类型
 const options = [
   {
@@ -125,7 +274,13 @@ const options = [
     value: '问答题',
     label: '问答题',
   },
-]
+];
+// 分页
+const getChildData = (val: any) => {
+  data.psize = val.psize;
+  data.page = val.page;
+  list();
+};
 </script>
 
 <style scoped>
@@ -145,8 +300,18 @@ const options = [
 .el-button--primary {
   margin-left: 13px;
 }
-:deep(.el-input__wrapper){
+:deep(.el-input__wrapper) {
   height: 31px;
   margin-left: 12px;
+}
+.butle {
+  color: #409eff;
+}
+:deep(.el-pagination) {
+  margin-left: 320px;
+  margin-top: 20px;
+}
+:deep(.el-pagination__editor) {
+  width: 102px;
 }
 </style>

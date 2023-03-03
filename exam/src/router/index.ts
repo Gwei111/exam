@@ -35,6 +35,12 @@ const routes: Array<RouteRecordRaw> = [
         meta: { title: '阅卷', isAuth: true },
       },
       {
+        path: "/examinationA",
+        name: 'examinationA',
+        component: () => import('../components/Exams/examinationA.vue'),
+        meta: { title: '阅卷', isAuth: true },
+      },
+      {
         path: '/subjects',
         name: 'subjects',
         component: () => import('../views/Test/TestList.vue'),
@@ -87,6 +93,12 @@ const routes: Array<RouteRecordRaw> = [
         name: 'Role',
         component: () => import('../views/Role/Role.vue'),
         meta: { title: '角色', isAuth: true },
+      },
+      {
+        path: '/stutest',
+        name: 'Stutest',
+        component: () => import('../views/Stutest/stutest.vue'),
+        meta: { title: '学生端', isAuth: true },
       },
     ]
   },

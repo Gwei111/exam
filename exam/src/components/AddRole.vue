@@ -173,7 +173,7 @@ const getaddRole = async () => {
         const res: any = await roleAdd({
             name: props.upname,
             id: props.upid,
-            menus: []
+            menus:props.upmenus
         })
         console.log(res);
         if (res.errCode == 10000) {
