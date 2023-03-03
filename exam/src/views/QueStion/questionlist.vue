@@ -62,7 +62,7 @@
         <el-table-column property="admin" label="创建人" width="220" />
         <el-table-column label="操作">
           <template #default="scope">
-            <el-button link type="primary" size="small"> 编辑 </el-button>
+            <el-button link type="primary" size="small" @click="compile(scope.row)"> 编辑 </el-button>
             <el-button
               link
               type="primary"
@@ -91,9 +91,9 @@
       @Drawerclose="Drawerclose"
       @adds="DrawerClick"
       :databaseid="databaseid"
+      :dictionary="tableData.questionsData"
+      :title="title"
     ></Drawers>
-
-    <!-- <Questdrawer :drawer="drawer" v-if="drawer == true" :lisvue="lisvue"></Questdrawer> -->
     <Questdrawer v-if="drawer" :drawer="drawer" @drawerShow="drawerShow" :lisvue="lisvue"></Questdrawer>
   </div>
 </template>
@@ -121,6 +121,7 @@ let databaseid = route.query.databaseid;
 onMounted(() => {
   list();
 });
+const title="编辑"
 const data = reactive({
   databaseid: route.query.databaseid, //题库id
   psize: '',
@@ -129,10 +130,11 @@ const data = reactive({
   key: '', //关键字
   admin: '', //创建人
   type: '', //类型
-  questions: '',
-  answers: [],
 });
-// 详情抽屉\
+const updatte=reactive({
+  questions: '',
+})
+// 详情抽屉
 // 数据
 const lisvue=ref()
 const drawer = ref(false);
@@ -140,12 +142,19 @@ const dra:any=(i:any)=>{
   lisvue.value=i
   drawer.value = true
 }
+const table = ref(false);
+// 编辑
+const tableData = reactive({
+  questionsData:''
+})
+const compile=(val:any)=>{
+  tableData.questionsData=val
+  table.value = true;
+}
 const drawerShow = (val:any) =>{
-  drawer.value = val
+  drawer.value = val.title
 }
 const lits: any = ref([]);
-const table = ref(false);
-// const subjectsID=ref()
 // 点击添加试题
 const addOne = () => {
   table.value = true;
@@ -154,14 +163,16 @@ const addOne = () => {
 const Drawerclose = (val: any) => {
   //隐藏抽屉
   table.value = val;
+  tableData.questionsData=''
 };
 const lit = ref();
+// 抽屉组件
 const DrawerClick = async (bool: any, val: any) => {
-  // console.log(bool);
+  // 隐藏抽屉
   table.value = bool;
-  console.log(val);
+  // 添加试题
   let res: any = await dataadd(val);
-  console.log(res);
+  console.log('添加试题',res);
   list();
 };
 const show = ref(true);
@@ -172,13 +183,16 @@ const Updatadialog = ref(false);
 const url = ref('http://estate.eshareedu.cn/exam/api/test/upload');
 const updataFile = async (e: any) => {
   // 把文件里的所有数据赋值给questions.value
-  data.questions = e;
+  updatte.questions = e;
   const res: any = await dataaddlist({
     databaseid: databaseid,
     list: e,
   });
   list();
-  // console.log(res, "文件上传")
+  console.log(data);
+  
+  console.log(res, "文件上传")
+  list();
 };
 //导出excel
 const addall = async () => {

@@ -95,14 +95,10 @@ import { ElDrawer, ElMessage, ElMessageBox } from 'element-plus'
 import '@wangeditor/editor/dist/css/style.css';
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import { CirclePlus, CircleClose } from '@element-plus/icons-vue';
-
-
-// const props = defineProps(['table'])
-// console.log(props.databaseid);
-
-const props = defineProps(['table','updArr','title','databaseid'])
-// console.log(props);
-
+// 题库的编辑dictionary,题库的id(databaseid)
+const props = defineProps(['table','updArr','title','databaseid','dictionary'])
+  console.log(props.dictionary);
+  
 const emit = defineEmits(['Drawerclose', 'adds', 'DrawerCancel'])
 
 const formLabelWidth = '80px'
@@ -114,10 +110,10 @@ let check=ref([])//复选框正确答案的值
 let form:any = reactive({
     id: 0,
     testid: 0,
-    title: '',
+    title:'',
     type: '单选题',
     scores: '',
-    answer: '',
+    answer:'',
     tags: '',
     explains: '',
     databaseid:props.databaseid, //题库id添加
@@ -153,7 +149,7 @@ let form:any = reactive({
 watch(form.type, (newVal) => {
   form.value.type = newVal;
 });
-const{answer}=toRefs(form)
+const answer=toRefs(form)
 const data = reactive({
     letter: [ //选项的名
         'A',
@@ -191,11 +187,9 @@ onBeforeUnmount(() => {
     if (editor == null) return;
     editor.destroy();
 });
-
 const handleCreated = (editor: any) => {
     editorRef.value = editor // 记录 editor 实例，重要！
 }
-
 // 多选框内容改变
 const changeCheckbox = (e: any) => {
     // console.log(e);
@@ -210,7 +204,6 @@ const addOptions = () => {
         content: ''
     })
     console.log(form.answers);
-
 }
 // 点击X删除选项
 const delOptions = (val: any) => {
@@ -255,12 +248,22 @@ if(props.title=='修改'){
     form={...list}
     check=list.answer.split('|')
     console.log(form);
-    
 }
 onMounted(() => {
     if(props.title=='修改'){
         data.leng=form.answer
     }
+    // 修改回显数据题库编辑
+    if(props.dictionary.id){
+      form.title = props.dictionary.title
+      form.type = props.dictionary.type
+      form.scores = props.dictionary.scores
+      form.answers = props.dictionary.answers
+      form.answer = props.dictionary.answer
+      form.tags = props.dictionary.tags
+      form.explains = props.dictionary.explains
+      form.id = props.dictionary.id
+  }
 })
 // 保存并继续
 const clickup=()=>{
