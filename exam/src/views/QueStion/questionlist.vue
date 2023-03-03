@@ -113,7 +113,7 @@ import { useRouter } from 'vue-router';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import Qfenye from '../../components/FenYe/FenYe.vue';
 import UploadFiles from '../../components/uploadFiles.vue'; //批量导入试题
-import Drawers from '../../components/exam/drawer.vue'; // 点击添加试题
+import Drawers from '../../components/exam/drawer2.vue'; // 点击添加试题
 import Questdrawer from '../../components/questdrawer.vue'; // 详情抽屉
 const route = useRoute();
 const router = useRouter();

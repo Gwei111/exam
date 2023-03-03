@@ -259,6 +259,17 @@ onMounted(() => {
     if(props.title=='修改'){
         data.leng=form.answer
     }
+    // 修改回显数据题库编辑  
+    if(props.dictionary.id){
+      form.title = props.dictionary.title
+      form.type = props.dictionary.type
+      form.scores = props.dictionary.scores
+      form.answers = props.dictionary.answers
+      form.answer = props.dictionary.answer
+      form.tags = props.dictionary.tags
+      form.explains = props.dictionary.explains
+      form.id = props.dictionary.id
+  }
 })
 // 保存并继续
 const clickup = () => { };
