@@ -123,12 +123,12 @@ onMounted(() => {
 });
 const title="编辑"
 const data = reactive({
-  databaseid: route.query.databaseid, //题库id
+  databaseid: route.query.databaseid, //题库id名
   psize: '',
   page: '',
   name: '',
   key: '', //关键字
-  admin: '', //创建人
+  admin: '',  //创建人
   type: '', //类型
 });
 const updatte=reactive({
