@@ -20,11 +20,11 @@
         <el-cascader v-model="date.depid"
                      :options="options.arr"
                      @change="handleChange"
-                     :props="props22"/>
+                     :props="props22" />
       </el-form-item>
       <el-form-item>
         <div class="btn">
-          <el-button @click="cancel">取消</el-button>
+          <el-button @click="cencellA">取消</el-button>
           <el-button type="primary"
                      @click="submit">确定</el-button>
         </div>
@@ -35,17 +35,24 @@
 
 <script setup lang="ts">
 import { ElMessage, ElMessageBox } from "element-plus";
-import { reactive, ref, defineEmits, toRaw ,defineProps } from "vue";
+import {
+  reactive,
+  ref,
+  defineEmits,
+  toRaw,
+  defineProps,
+  watchEffect,
+} from "vue";
 import { departmentlist } from "../api/department";
 import { Add } from "../api/Class/list";
 import { useRouter } from "vue-router";
-import type { FormInstance, FormRules } from 'element-plus';
-
+import type { FormInstance, FormRules } from "element-plus";
+// 子传父
 const router = useRouter();
-const emits = defineEmits(["close"]);
+const emits = defineEmits(["close", "cencell"]);
 const formSize = ref("default");
 const dialogVisible = ref(false);
-const props :any= defineProps({
+const props: any = defineProps({
   // 父传子   子页面来接值
   upAata: {
     type: Array,
@@ -55,9 +62,8 @@ const props :any= defineProps({
 console.log(props.upAata.id);
 const ruleForm = reactive({
   name: "",
-  id:" ",
+  id: " ",
   depid: "",
-
 });
 const rules = reactive<FormRules>({
   name: [
@@ -65,23 +71,12 @@ const rules = reactive<FormRules>({
     { min: 5, max: 15, message: "最少五位，最多十五位", trigger: "blur" },
   ],
 });
-
-// 取消按钮
-const cancel = () => {
-  dialogVisible.value = false;
-};
-
 // 添加接口
 const submit = async () => {
   // if (父组件传过来当前行里面的数据，取里面的id不等于0时走修改接口) {
   // }else{走添加接口}
-  if(ruleForm.name===""){
-    ElMessage({
-      message:"请填写班级名称",
-      type:"error"
-    })
-  }else if (props.upAata.id) {
-    let res:any = await Add({
+  if (props.upAata.id) {
+    let res: any = await Add({
       id: props.upAata.id,
       name: ruleForm.name,
       depid: ruleForm.region,
@@ -93,12 +88,12 @@ const submit = async () => {
         type: "success",
       });
     }
-    props.upAata.id = "id";
+    props.upAata.id = "";
     ruleForm.name = "";
     ruleForm.region = "";
   } else {
-    ruleForm.depid=date.depid
-    let res:any = await Add(ruleForm);
+    ruleForm.depid = date.depid;
+    let res: any = await Add(ruleForm);
     if (res.errCode === 10000) {
       emits("close", false);
       ElMessage({
@@ -110,7 +105,6 @@ const submit = async () => {
     ruleForm.name = "";
     ruleForm.region = "";
   }
- 
 };
 const options: any = reactive({ arr: [] });
 // 部门列表
@@ -131,9 +125,17 @@ const partmentlist = async () => {
   options.arr = res.data.list;
   console.log(options.arr);
 };
-partmentlist()
+partmentlist();
 const handleChange = (val: any) => {
   date.depid = val[toRaw(val).length - 1];
+};
+watchEffect(() => {
+  // 回显
+  ruleForm.name = props.upAata.name;
+});
+// 子传父
+const cencellA = () => {
+  emits("cencell", false);
 };
 </script>
 

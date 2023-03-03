@@ -43,3 +43,11 @@ export const testDetails = (data: any) => {
   export const studentlist = (params: any) => {
     return request.get('student/list', params)
   }
+// 考试分析 
+export const testAnalyse = (params: any) => {
+  return request.get('test/analyse', params)
+}
+// 获取学员列表 
+export const studentTest = (params: any) => {
+  return request.get('student/test', params)
+}

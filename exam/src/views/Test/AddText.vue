@@ -22,10 +22,11 @@
         <div class="munse"
              v-if="data.RadioArr.length>0">
           <span style="margin-left:15px">单选题{{data.RadioArr.length}}道</span>
-          <p style="margin-left:10px">每题<el-input @input="ipt($event,'单选题')"
+          <p style="margin-left:10px;padding-top:10px">每题<el-input @input="ipt($event,'单选题')"
                       v-model="data.RadioVal"
                       style="width:40px;margin:0 5px 0 5px"></el-input>分</p>
         </div>
+
         <!-- 多选题 -->
         <div class="munse2"
              v-if="data.multipleArr.length>0">
@@ -68,7 +69,7 @@
             <div class="cro">
               总分:{{grossScore}}&emsp;&emsp;
               已添加{{questions.length}}题&emsp;&emsp;
-              <el-button @click="questions=[]">清空
+              <el-button @click="questions=[],data.multipleArr=[],data.RadioArr=[],data.judgeArr=[],data.gapFillingArr=[],data.questionsArr=[]">清空
               </el-button>
             </div>
           </div>
@@ -100,9 +101,17 @@
           </div>
           <div class="btns"
                style="padding:10px">
-            <el-button @click="addOne">添加题目</el-button>
-            <el-button @click="Updatadialog=true">批量导入</el-button>
-            <el-button @click="impA"> 从题库中导出</el-button>
+            <div>
+              <el-button @click="addOne">添加题目</el-button>
+              <el-button @click="Updatadialog=true">批量导入</el-button>
+              <el-button @click="impA"> 从题库中导出</el-button>
+            </div>
+            <!-- 抽屉组件 -->
+            <Drawers :table="table"
+                     v-if="table == true"
+                     @Drawerclose="Drawerclose"
+                     @adds="DrawerClick"
+                     @DrawerCancel="DrawerCancel"></Drawers>
             <el-dialog v-model="dialogVisible"
                        title="题库列表"
                        width="80%">
@@ -110,12 +119,7 @@
             </el-dialog>
           </div>
         </div>
-        <!-- 抽屉组件 -->
-        <Drawers :table="table"
-                 v-if="table == true"
-                 @Drawerclose="Drawerclose"
-                 @adds="DrawerClick"
-                 @DrawerCancel="DrawerCancel"></Drawers>
+ 
         <!-- 文件上传，模块 -->
         <UploadFiles v-if="Updatadialog"
                      v-model="Updatadialog"
@@ -140,7 +144,8 @@
                    title="题库添加"
                    width="50%"
                    :before-close="handleClose">
-          <CreaTi @isadd="isadd"></CreaTi>
+          <CreaTi @isadd="isadd"
+                  @can="can"></CreaTi>
         </el-dialog>
       </div>
     </div>
@@ -165,13 +170,20 @@
     <div class="di">
       <el-button type="primary"
                  @click="Submit">提交</el-button>
-      <el-button>取消</el-button>
+      <el-button @click="cancel">取消</el-button>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import { ElMessage } from "element-plus";
-import { ref, reactive, watchEffect, onMounted, toRefs } from "vue";
+import {
+  ref,
+  reactive,
+  watchEffect,
+  defineEmits,
+  onMounted,
+  toRefs,
+} from "vue";
 import { useRouter, useRoute } from "vue-router";
 import impData from "../../components/Test/impData.vue";
 import Forth from "../../components/Test/Forth.vue";
@@ -180,6 +192,8 @@ import Drawers from "../../components/exam/drawer.vue";
 import CreaTi from "../../components/CreaTi.vue";
 import { AddSub, SubUa, QueList, databasequestion } from "../../api/Test/Test";
 const Updatadialog = ref(false);
+// 子传父
+const emit = defineEmits(["canle"]);
 // 总分
 const input = ref("");
 const grossScore = ref("");
@@ -215,7 +229,41 @@ const data: any = reactive({
   questionsVal: "", //问答值
   markteachers: "", //可见老师
 });
-const { questions } = toRefs(numberValidateForm);
+const form: any = reactive({
+  //请求添加接口添加的数据
+  params: {
+    id: 0, //当前考试的id
+    title: "", //标题
+    info: "", //说明
+    admin: "ldq", //登录的用户名
+    begintime: "", //开始时间
+    endtime: "", //结束时间
+    limittime: "", // 限制时长
+    scores: 100, //总分
+    state: null,
+    pastscores: 60, // 通过分数
+    qorder: 0, //防作弊试题打乱
+    aorder: 0, //防作弊试题打乱-单选多选判断题
+    answershow: 1, //交卷后的显示别: 1 ~5
+    isshow: 1, //题库是否被他人使用（全部可见1，全部不可见2，部分可见3）
+    databaseid: 20, //当前考试的基础id
+    limits: [], // 可见老师
+    markteachers: [], // 阅卷老师
+    students: [], // 考生范围
+    questions: [], // 试题添加数据
+  },
+  isChoce: false, //单选题
+  ischeck: false, ////多选题
+  iskong: false, //填空题
+  isqust: false, //问答题
+  isJudge: false, //判断题
+  numChoce: 0, //单选题数量
+  numCheck: 0, //多选题数量
+  numKong: 0, //填空题数量
+  numQuest: 0, //问答题数量
+  numJudge: 0, //判断题数量
+});
+const { questions, params } = toRefs(numberValidateForm, form);
 //穿梭框获取到的值
 const valuessss = (val: any) => {
   numberValidateForm.limits = val;
@@ -253,7 +301,7 @@ onMounted(() => {
   huixian();
 });
 const id = route.query.id;
-console.log(id);
+// console.log(id);
 const Submit = async (id: any) => {
   if (numberValidateForm.title == "") {
     ElMessage({
@@ -282,7 +330,7 @@ const Submit = async (id: any) => {
   }
 };
 const limitss = (e: any) => {
-  console.log(e, "dfghj");
+  // console.log(e, "dfghj");
   console.log(numberValidateForm.limits);
 };
 // 总分
@@ -366,6 +414,11 @@ const xuan = () => {
 const sub = (e: any) => {
   dialogVisible1.value = false;
 };
+
+const can = (e: any) => {
+  console.log(e);
+  dialogVisible2.value = false;
+};
 // 文件上传
 const url = ref("http://estate.eshareedu.cn/exam/api/test/upload");
 const updataFile = async (e: any) => {
@@ -375,7 +428,7 @@ const updataFile = async (e: any) => {
     databaseid: route.query.id,
     list: e,
   });
-  console.log(res, "wenjianshangchuan");
+  // console.log(res, "wenjianshangchuan");
 
   if (res.errCode === 10000) {
     data.multipleArr = questions.value
@@ -410,14 +463,35 @@ const DrawerCancel = (val: any) => {
 const Drawerclose = (val: any) => {
   table.value = val;
 };
+
 // 点击确定
 const DrawerClick = (bool: any, val: any) => {
   table.value = bool;
-  params.value.questions.push(val);
-  console.log(params.value.questions, 2222);
+  numberValidateForm.questions.push(val);
+  console.log(numberValidateForm.questions, 2222);
+  // 左侧小框
+  data.multipleArr = questions.value
+    .map((item: any) => item)
+    .filter((items: any) => items.type == "多选题");
+  data.judgeArr = questions.value
+    .map((item: any) => item)
+    .filter((items: any) => items.type == "判断题");
+  data.gapFillingArr = questions.value
+    .map((item: any) => item)
+    .filter((items: any) => items.type == "填空题");
+  data.RadioArr = questions.value
+    .map((item: any) => item)
+    .filter((items: any) => items.type == "单选题");
+  data.questionsArr = questions.value
+    .map((item: any) => item)
+    .filter((items: any) => items.type == "问答题");
 };
 const isadd = (val: any) => {
   dialogVisible2.value = val;
+};
+// 取消按钮
+const cancel = () => {
+  router.push("/subjects");
 };
 </script>
 

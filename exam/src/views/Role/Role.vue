@@ -6,8 +6,6 @@
     </div>
     <!-- 添加弹出框 -->
     <AddRole :dislogShow="dislogShow" :item="item" @click="click" :upid="upid" :upname="upname" :upmenus="upmenus"></AddRole>
-
-
     <div class="main">
       <el-table :data="tableData" :model="data">
         <el-table-column prop="name" label="名称"/>
@@ -32,6 +30,7 @@ import { roleList, roleAdd, roleDelete, menuList } from '../../api/role';
 import AddRole from '../../components/AddRole.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import FenYe from "../../components/FenYe/FenYe.vue"
+import { studentAdd } from '../../api/student';
 
 onMounted(() => {
   getRoleList()
@@ -40,13 +39,15 @@ onMounted(() => {
 const tableData = ref([])
 const data = reactive({
   page:1,
-  psize:10
+  psize:10,
+  name:'',
+  menus:[]
 
 })
 const counts = ref(0);
 const getRoleList = async () => {
   const res: any = await roleList(data)
-  console.log(res.data.counts);
+  // console.log(res.data.counts);
   if (res.errCode == 10000) {
     tableData.value = res.data.list
     counts.value=res.data.counts
@@ -77,7 +78,7 @@ const click = (e:boolean)=>{
 let upid = ref(0)
 let upname = ref('')
 let upmenus = ref([])
-const update = (row:any)=>{
+const update = async(row:any)=>{
   // console.log(id);
   upid=row.id
   upname.value = row.name
@@ -86,6 +87,12 @@ const update = (row:any)=>{
   
   dislogShow.value = true
   getRoleList()
+  // const res = await roleAdd({
+  //   name:data.name,
+  //   menus:data.menus
+  // })
+  // console.log(res);
+  
 }
 
 const item = ref(0)

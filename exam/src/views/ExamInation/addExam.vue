@@ -86,7 +86,7 @@
                                             </div>
                                             <div class="getright">
                                                 <EditPen
-                                                    style="width: 1em; height: 1em; margin-right: 8px; color: #299aff; font-size: 20px;" @click="edit(item)" />
+                                                    style="width: 1em; height: 1em; margin-right: 8px; color: #299aff; font-size: 20px;" @click="edit(item,index)" />
                                                 <el-icon
                                                     style="width: 1em; height: 1em; margin-right: 8px; color: #299aff; font-size: 20px;">
                                                     <Delete @click="del(index)" />
@@ -394,8 +394,8 @@ const DrawerCancel = (val: any) => {
 }
 // 编辑
 let updArr:any=ref([])
-const edit=(val:any)=>{
-    // console.log(val);
+const edit=(val:any,index:any)=>{
+    console.log(val,index);
     title.value='修改'
     table.value=true//弹出框
     updArr.value=JSON.stringify(val)
@@ -546,13 +546,16 @@ const onSubmit = async () => {
 }
 // 编辑
 const onEdit=async()=>{
-    // params.value.id=complie.value
-    // params.value.checkone=checkone.value
-    // params.value.checktwo=checktwo.value
-    // console.log(params.value);
-    
-    let res:any=await testAdd(params.value)
+    params.value.id=complie.value
+    params.value.checkone=checkone.value
+    params.value.checktwo=checktwo.value
+    console.log(params.value);
+    let res:any=await testAdd({...params.value,id:params.value.id})
     console.log(res);
+    if(res.errcode=='10000'){
+        ElMessage.success('修改成功')
+        router.push('/test')
+    }
     
 }
 watchEffect(() => {

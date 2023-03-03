@@ -1,7 +1,8 @@
 <template>
   <div class="head">
     <span>试卷管理</span>
-    <el-button type="primary" @click="add">创建试卷</el-button>
+    <el-button type="primary"
+               @click="add">创建试卷</el-button>
   </div>
 
   <div class="ip">
@@ -15,8 +16,8 @@
                   autocomplete="off" />
       </el-form-item>&emsp;
       <el-form-item label="创建人"
-                    prop="age">
-        <el-input v-model.number="numberValidateForm.age"
+                    prop="admin">
+        <el-input v-model.number="numberValidateForm.admin"
                   placeholder="创建人"
                   type="text"
                   autocomplete="off" />
@@ -54,14 +55,16 @@
       <el-table-column prop="multiples"
                        label="问答  " />
       <el-table-column prop="scores"
-      width="70"
+                       width="70"
                        label="总分" />
       <el-table-column prop="admin"
                        label="创建人" />
-      <el-table-column label="操作" width="150px">
+      <el-table-column label="操作"
+                       width="150px">
         <template #default="scope">
           <el-button type="primary"
-                     link @click="upd(scope.row.id)">编辑</el-button>&emsp;&nbsp;|
+                     link
+                     @click="upd(scope.row.id)">编辑</el-button>&emsp;&nbsp;|
           <el-button type="primary"
                      link
                      @click="del(scope.row.id)">删除</el-button>
@@ -69,8 +72,8 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-<FenYe @getChildData="getChildData"
-:counts="counts"></FenYe>
+    <FenYe @getChildData="getChildData"
+           :counts="counts"></FenYe>
     <!-- 点击试卷名称弹出框 -->
     <TestDetails v-model="Detailsdialog"
                  v-if="Detailsdialog"
@@ -80,33 +83,30 @@
 
 <script setup lang="ts">
 const checked1 = ref(false);
-// 抽屉
-// import Drawer from "../../components/Test/Drawer.vue" 
 import { reactive, ref } from "vue";
 import { FormInstance, ElMessage, ElMessageBox } from "element-plus";
 import { Text_List, Text_del } from "../../api/Test/Test";
 import TestDetails from "../../components/Test/TestDetails.vue";
-import FenYe from "../../components/FenYe/FenYe.vue"
-import {useRouter} from "vue-router"
-const router=useRouter()
- const counts = ref(0);
+import FenYe from "../../components/FenYe/FenYe.vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
+const counts = ref(0);
 const formRef = ref<FormInstance>();
 const Detailsdialog = ref(false);
 const numberValidateForm = reactive({
   key: "",
-  page:"1",
-  psize:"10"
+  page: "1",
+  psize: "10",
+  admin: "",
 });
 // 试卷页面列表展示
 const tableData = ref([]);
 const subjectsID = ref();
 const GetText_List = async () => {
   let res = await Text_List(numberValidateForm);
-  console.log(res);
   if (res.errCode === 10000) {
-    tableData.value=res.data.list
-    counts.value=res.data.counts
-    // console.log(tableData);
+    tableData.value = res.data.list;
+    counts.value = res.data.counts;
   }
 };
 GetText_List();
@@ -116,20 +116,17 @@ const search = () => {
 };
 //  点击试卷名称详情
 const testDetails = (id) => {
-  // console.log(id);
   subjectsID.value = id;
   Detailsdialog.value = true;
 };
 // 分页
 const getChildData = (val: any) => {
-  // console.log(111, val)
   numberValidateForm.page = val.page;
   numberValidateForm.psize = val.psize;
   GetText_List();
 };
 // 删除
 const del = async (id: number) => {
-  console.log(id);
   ElMessageBox.confirm("您确定要删除这条数据吗?", "删除", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
@@ -156,20 +153,17 @@ const del = async (id: number) => {
     });
 };
 // 添加跳转
-const add=()=>{
-  router.push("/AddText")
-  
-}
-const upd=(id:any)=>{
-router.push({
-  path:"/AddText",
-  query:{
-    id,
-  }
-})
-}
-
-
+const add = () => {
+  router.push("/AddText");
+};
+const upd = (id: any) => {
+  router.push({
+    path: "/AddText",
+    query: {
+      id,
+    },
+  });
+};
 </script>
 
 <style scoped>
