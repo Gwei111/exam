@@ -111,7 +111,7 @@
                       size="normal"
                       autosize
                       clearable
-                      v-model="form.scores"
+                      v-model="form.explains"
                       style="width: 350px;"></el-input>
           </el-form-item>
         </div>
@@ -155,7 +155,7 @@ import { CirclePlus, CircleClose } from "@element-plus/icons-vue";
 // console.log(props.databaseid);
 
 const props = defineProps(["table", "updArr", "title", "databaseid"]);
-// console.log(props);
+// console.log(props.title);
 
 const emit = defineEmits(["Drawerclose", "adds", "DrawerCancel"]);
 
@@ -305,7 +305,6 @@ const onClick = (val: any) => {
 // 修改回显数据
 if (props.title == "修改") {
   let list: any = JSON.parse(props.updArr);
-  // console.log(list);
   form = { ...list };
   check = list.answer.split("|");
   console.log(form);

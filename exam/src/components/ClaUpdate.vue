@@ -16,8 +16,8 @@
       </el-form-item>
 
       <el-form-item label="部门："
-                    prop="region">
-        <el-cascader v-model="date.depid"
+                    prop="depid">
+        <el-cascader v-model="ruleForm.depid"
                      :options="options.arr"
                      @change="handleChange"
                      :props="props22" />
@@ -59,15 +59,16 @@ const props: any = defineProps({
     default: () => [],
   },
 });
-console.log(props.upAata.id);
+console.log(props.upAata.depid);
 const ruleForm = reactive({
   name: "",
   id: " ",
   depid: "",
+  region:""
 });
 const rules = reactive<FormRules>({
   name: [
-    { required: true, message: "请输入班级名称", trigger: "blur" },
+    { required: true, message: "请输入班级名称", trig/ger: "blur" },
     { min: 5, max: 15, message: "最少五位，最多十五位", trigger: "blur" },
   ],
 });
@@ -123,7 +124,7 @@ const props22 = ref({
 const partmentlist = async () => {
   let res: any = await departmentlist(date);
   options.arr = res.data.list;
-  console.log(options.arr);
+  // console.log(options.arr);
 };
 partmentlist();
 const handleChange = (val: any) => {
@@ -132,7 +133,10 @@ const handleChange = (val: any) => {
 watchEffect(() => {
   // 回显
   ruleForm.name = props.upAata.name;
+  ruleForm.depid=props.upAata.depid
 });
+console.log(props.upAata.depid);
+
 // 子传父
 const cencellA = () => {
   emits("cencell", false);
