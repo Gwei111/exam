@@ -4,8 +4,9 @@
              @click="drawer = true">
     open
   </el-button>
-  <Drower :drawer='drawer' @Drawerclose="Drawerclose"
-          v-if="drawer==true"> </Drower>
+  <Drower :drawer='drawer'
+          @Drawerclose="Drawerclose"
+          v-if="drawer==true"></Drower>
   <div id="head">
     <span class="cla_he">班级页面</span>
     <el-button @click="clasAdd"
@@ -22,7 +23,7 @@
         <el-input placeholder="请输入关键字"
                   v-model="numberValidateForm.key"
                   type="text" />
-      </el-form-item>&emsp;  
+      </el-form-item>&emsp;
       <div class="m-4">
         <p>部门</p>&emsp;
         <el-cascader v-model="date.depid"
@@ -179,6 +180,7 @@ const dialogVisible = ref(false);
 // 添加修改
 const textss = ref(true);
 const clasAdd = () => {
+  upAata.value=''
   textss.value = true;
   dialogVisible.value = true;
 };
@@ -228,10 +230,9 @@ const cencell = () => {
   dialogVisible.value = false;
 };
 
-const Drawerclose=(val)=>{
-console.log(val); 
-
-}
+const Drawerclose = (val) => {
+  console.log(val);
+};
 </script>
 
 <style scoped>
