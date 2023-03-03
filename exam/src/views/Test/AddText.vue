@@ -19,6 +19,7 @@
 
       <div class="dada">
         <span id="neirong">内容时间：</span>
+        <!-- 单选题 -->
         <div class="munse"
              v-if="data.RadioArr.length>0">
           <span style="margin-left:15px">单选题{{data.RadioArr.length}}道</span>
@@ -59,7 +60,6 @@
                       v-model="data.questionsVal"
                       style="width:40px;margin:0 5px 0 5px"></el-input>分</p>
         </div>
-
       </div>
       <div class="cen_cen">
         <div class="tabse">
@@ -82,12 +82,20 @@
                 <el-input v-model="item.scores"
                           style="width:50px; height:30px" />
               </span>
+              <!-- 单个删除 -->
+              <span style="margin-left:700px;">
+                <EditPen style="width: 1em; height: 1em; margin-right: 18px; color: #299aff; font-size: 20px;"
+                         @click="edit(item)" />
+                <Delete style="width: 1em; height: 1em; color: #299aff; margin-right: 8px;font-size:16px"
+                        @click="Del(index),data.multipleArr=[],data.RadioArr=[],data.judgeArr=[],data.gapFillingArr=[],data.questionsArr=[]" />
+              </span>
               <div style="margin-left:20px;font-size:14px"
                    v-html="item.title"></div>
               <div v-for="(items,index) in item.answers"
                    :key="index">
                 <div id="tom"
-                     style="margin-left:20px; margin-top:10px"
+                     v-if="item.type=='多选题'||item.type=='单选题'"
+                     style="margin-left:20px;margin-top:10px"
                      :class="item.answer.includes(items.answerno) ? 'yuanF' : ''">
                   &nbsp;<div class="yuan"></div>
                   &emsp;<span id="ei">{{items.answerno}}：{{items.content}}</span>
@@ -111,7 +119,9 @@
                      v-if="table == true"
                      @Drawerclose="Drawerclose"
                      @adds="DrawerClick"
-                     @DrawerCancel="DrawerCancel"></Drawers>
+                     :title="title"
+                     @DrawerCancel="DrawerCancel"
+                     :updArr='updArr'></Drawers>
             <el-dialog v-model="dialogVisible"
                        title="题库列表"
                        width="80%">
@@ -119,7 +129,7 @@
             </el-dialog>
           </div>
         </div>
- 
+
         <!-- 文件上传，模块 -->
         <UploadFiles v-if="Updatadialog"
                      v-model="Updatadialog"
@@ -185,6 +195,7 @@ import {
   toRefs,
 } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import { EditPen, Delete, CircleClose } from "@element-plus/icons-vue";
 import impData from "../../components/Test/impData.vue";
 import Forth from "../../components/Test/Forth.vue";
 import UploadFiles from "../../components/uploadFiles.vue";
@@ -193,6 +204,7 @@ import CreaTi from "../../components/CreaTi.vue";
 import { AddSub, SubUa, QueList, databasequestion } from "../../api/Test/Test";
 const Updatadialog = ref(false);
 // 子传父
+let title = ref("");
 const emit = defineEmits(["canle"]);
 // 总分
 const input = ref("");
@@ -263,7 +275,8 @@ const form: any = reactive({
   numQuest: 0, //问答题数量
   numJudge: 0, //判断题数量
 });
-const { questions, params } = toRefs(numberValidateForm, form);
+const { questions } = toRefs(numberValidateForm);
+const { params } = toRefs(form);
 //穿梭框获取到的值
 const valuessss = (val: any) => {
   numberValidateForm.limits = val;
@@ -428,8 +441,6 @@ const updataFile = async (e: any) => {
     databaseid: route.query.id,
     list: e,
   });
-  // console.log(res, "wenjianshangchuan");
-
   if (res.errCode === 10000) {
     data.multipleArr = questions.value
       .map((item: any) => item)
@@ -447,15 +458,14 @@ const updataFile = async (e: any) => {
       .map((item: any) => item)
       .filter((items: any) => items.type == "问答题");
   }
-  console.log(res);
 };
 // 抽屉
 const table = ref(false);
 // 点击添加单个试题
 const addOne = () => {
+  title.value = "添加";
   table.value = true;
 };
-// 点击
 // 点击完成
 const DrawerCancel = (val: any) => {
   table.value = val;
@@ -492,6 +502,19 @@ const isadd = (val: any) => {
 // 取消按钮
 const cancel = () => {
   router.push("/subjects");
+};
+// 单挑图标删除
+const Del = (index) => {
+  numberValidateForm.questions.splice(index, 1);
+};
+
+// 单挑修改
+let updArr: any = ref([]);
+const edit = (val: any) => {
+  title.value = "修改";
+  table.value = true; //弹出框
+  updArr.value = JSON.stringify(val);
+
 };
 </script>
 

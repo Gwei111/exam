@@ -27,15 +27,15 @@
              v-html="item.title.replaceAll('[]','__')"></p>
         </div>
         <!-- 单选题 -->
-        <div v-for="items in item.answers"
-             :key="items.id"
-             :class="item.answer.includes(items.answerno) ? 'bgcolor' : ''"
-             style="display: flex;margin-top:5px;padding: 10px;">
-          <div :class="item.type==='单选题' ? 'radio' : 'check'">
-          </div>
-          <div style="padding-left:10px">
-            <span>{{items.answerno}}</span>
-            <span style="padding-left:10px">{{items.content}}</span>
+        <div v-if="item.type=='多选题'||item.type=='单选题'">
+          <div v-for="items in item.answers"
+               :key="items.id"
+               :class="item.answer.includes(items.answerno) ? 'bgcolor' : ''"
+               style="display: flex;margin-top:5px;padding: 10px;">
+            <div>
+              <span>{{items.answerno}}：</span>
+              <span>{{items.content}}</span>
+            </div>
           </div>
         </div>
         <!-- 填空 -->
@@ -45,7 +45,9 @@
         </div>
         <div v-if="item.type=='填空题' || item.type=='问答题'"
              class="analy">
-          <span style="color:#ccd5df;padding-left: 20px;">答案解析</span><span style="color:#abb8c6;padding-left: 20px;">{{item.explains}}</span>
+          <div id="boxxx">
+            <span style="color:#ccd5df;padding-left: 20px;">答案解析</span><span style="color:#abb8c6;;padding-left: 20px;">{{item.explains}}</span>
+          </div>
         </div>
 
       </div>
@@ -181,7 +183,7 @@ const execl = async () => {
     }
 
     .analysis {
-      background-color: #f5faff;
+      background-color: #f6f9ff;
       padding: 10px;
       color: #9dadbc;
     }
@@ -287,5 +289,13 @@ const execl = async () => {
 }
 #derive {
   // margin-left: 730px;
+}
+#boxxx {
+  display: flex;
+  align-items: center;
+  width: 90%;
+  height: 40px;
+  background-color: #f6f9ff;
+  margin-left: 10px;
 }
 </style>

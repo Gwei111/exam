@@ -39,7 +39,7 @@
           <!-- 单选题 -->
           <el-form-item label="正确答案" size="normal" v-if="form.type == '单选题'">
             <el-radio-group v-model="form.answer">
-              <el-radio :label="data.letter[index]" v-for="(item, index) in form.answers">
+              <el-radio :label="data.letter[index]" v-for="(item, index) in form.answers" :key="index">
                 {{ data.letter[index] }}
               </el-radio>
 
@@ -65,7 +65,7 @@
         {{ data.leng.length }}
         <div v-if="form.type == '填空题' || form.type == '简答题'">
           <el-form-item label="正确答案" size="normal" v-show="data.leng.length > 0" v-if="form.type == '填空题'">
-            <div v-for="(item, index) in data.leng">
+            <div v-for="(item, index) in data.leng" :key="index">
               <el-input size="normal" autosize clearable v-model="data.leng[index]" style="width: 350px;"
                 v-show="form.type == '填空题'"></el-input>
             </div>

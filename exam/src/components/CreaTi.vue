@@ -7,12 +7,8 @@
                class="demo-ruleForm">
         <div class="box">
           <el-form-item label="题库名称："
-                        prop="numberValidateForm.title"
-                        :rules="[
-        { required: true, message: '请输入题库名称' },
-        { type: 'string', message: '请输入题库名称' },
-      ]">
-            <el-input v-model.number="numberValidateForm.age"
+                        prop="numberValidateForm.title">
+            <el-input v-model="numberValidateForm.title"
                       type="text"
                       autocomplete="off" />
           </el-form-item>
@@ -79,24 +75,23 @@ const numberValidateForm = reactive({
 
 const submits = async () => {
   if (numberValidateForm.title === "") {
-    ElMessage({
-      message: "请填土题库名称",
+    return ElMessage({
+      message: "请填写题库名称",
       type: "error",
     });
-  } else {
-    let res = await ShuttleAdd(numberValidateForm);
-    console.log(res);
-    if (res.errCode === 10000) {
-      ElMessage({
-        message: "添加成功",
-        type: "success",
-      });
-      // 子传父
-      emit("isadd", false);
-   
-    }
+  }
+  let res = await ShuttleAdd(numberValidateForm);
+  console.log(res);
+  if (res.errCode === 10000) {
+    ElMessage({
+      message: "添加成功",
+      type: "success",
+    });
+    // 子传父
+    emit("isadd", false);
   }
 };
+
 const isshow = (val: any) => {
   dialogVisible1.value = val;
 };
@@ -107,7 +102,6 @@ const valuessss = (val: any) => {
 };
 const limitss = (e: any) => {
   console.log(e, "dfghj");
-  console.log(numberValidateForm.limits);
 };
 // 子传父
 const sub = (e: any) => {
@@ -115,7 +109,7 @@ const sub = (e: any) => {
 };
 // 取消
 const quxiao = () => {
-   emit("can", false);
+  emit("can", false);
 };
 </script>
 
