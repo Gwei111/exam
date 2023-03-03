@@ -4,17 +4,29 @@
     <div class="top"><div>
       {{ lisvue.type}}
     </div>
-    <div class="fen">分值&nbsp;:&nbsp;&nbsp;{{ lisvue.scores}}</div></div>
-    <div v-html="lisvue.title" class="tile"> </div>
-    <div v-for="item in lisvue.answers" class="zo" :class="lisvue.answer!=item.answerno?'dan' : 'suers' ">
-      <div class="yuan">&nbsp;&nbsp;</div>  <div class="xia">    {{ item.answerno }}&nbsp; :&nbsp;&nbsp;{{ item.content }}</div>
+    <div class="fen">分值&nbsp;:&nbsp;&nbsp;{{ lisvue.scores}}</div> </div>
+    <div v-html="lisvue.title" class="tile"></div>
+    <!-- 单选题多选题 -->
+    <div v-if="lisvue.type=='单选题'||lisvue.type=='多选题'" v-for="item in lisvue.answers" class="zo" :class="lisvue.answer.includes(item.answerno)?'suers' : 'dan' ">
+      <div class="yuan">&nbsp;&nbsp;</div><div class="xia">{{ item.answerno }}&nbsp; :&nbsp;&nbsp;{{ item.content }}</div>
+    </div>
+    <div v-if="lisvue.type=='判断题'" class="zo1" >
+     <div>正确答案</div> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{  lisvue.answer}}
+    </div>
+    <div v-if="lisvue.type=='填空题'"  >
+     <div class="zo1"><div>正确答案</div> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{  lisvue.answer}}</div>
+    <div class="zo2"><div>答案解析</div> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{lisvue.explains}}</div>
+    </div>
+    <div v-if="lisvue.type=='问答题'"  >
+     <div class="zo1"><div>正确答案</div> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{  lisvue.answer}}</div>
+    <div class="zo2"><div>答案解析</div> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{lisvue.explains}}</div>
     </div>
   </el-drawer>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref ,defineProps,reactive,defineExpose} from 'vue'
+import { ref ,defineProps,reactive} from 'vue'
 const emit = defineEmits(['drawerShow'])
 const props = withDefaults(
   defineProps<{
@@ -52,6 +64,26 @@ const change=()=>{
 .zo{
   display: flex;
   margin-top: 10px;
+}
+.zo1{
+  height: 40px;
+  line-height: 40px;
+  padding-left: 10px;
+  display: flex;
+  color:#84d5b1;
+  margin-top: 10px;
+  font-size: 14px;
+  background-color: #f0faf6;
+}
+.zo2{
+  height: 40px;
+  line-height: 40px;
+  padding-left: 10px;
+  margin-top: 20px;
+  display: flex;
+  color:#a0adbd;
+  font-size: 14px;
+  background-color: #f6faff;
 }
 .xia{
   line-height: 30px;

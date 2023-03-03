@@ -10,10 +10,11 @@
         <el-radio-group v-model="data.isshow" class="ml-4">
           <el-radio :label="1">允许所有老师使用</el-radio>
           <el-radio :label="2">不允许任何老师使用</el-radio>
-          <div @click="dialogVisible1=true">
+          <div @click="dialogVisible1=true" class="yu">
             <el-radio :label="3" >允许部分老师使用</el-radio>
           </div>
         </el-radio-group>
+        <div class="yuan" v-if="numberValidateForm.limits.length>0">  {{numberValidateForm.limits.length}}</div>
       </div>
     </el-form-item>
   </el-form>
@@ -24,7 +25,7 @@
     </div>
   </el-form-item>
   <el-dialog v-model="dialogVisible1" v-if="dialogVisible1">
-      <Forth  @isshow="isshow"></Forth>
+      <Forth  @isshow="isshow" @valuesss="valuessss"></Forth>
   </el-dialog>
 </template>
 
@@ -43,20 +44,24 @@ const props: any = defineProps({
     default: () => {},
   },
 });
+const numberValidateForm = reactive({
+limits: [],
+});
 // 穿梭框
 const dialogVisible1 = ref(false);
 const isshow=(val:any)=>{
   dialogVisible1.value=false
 }
+//穿梭框获取到的值
+const valuessss = (val: any) => {
+ numberValidateForm.limits = val;
+};
 const data: any = reactive({
   id:props.upAata.id,
   title:'',
   isshow: 1,
   limits: [],
 });
-// const datt:any=reactive({
-//   title: props.upAata.title,
-// })
 watch((props.upAata.title ), (newVal) =>{
     data.title = props.upAata.title
 },{deep:true,immediate:true})
@@ -105,7 +110,6 @@ const rules = reactive<FormRules>({
   title: [{ required: true, message: '请输入题库名称', trigger: 'blur' }],
 });
 onUpdated(() => {
-  console.log(123);
 });
 </script>
 
@@ -123,5 +127,20 @@ onUpdated(() => {
 }
 .btn {
   margin-left: 530px;
+}
+.yuan{
+  width: 18px;
+  height: 18px;
+  background-color: #409eff;
+  border-radius: 30px;
+  position: relative;
+  left: 130px;
+  top: -50px;
+  line-height: 18px;
+  text-align: center;
+  color: aliceblue;
+}
+.yu{
+  margin-top: 10px;
 }
 </style>

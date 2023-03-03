@@ -173,7 +173,7 @@ const getaddRole = async () => {
         const res: any = await roleAdd({
             name: props.upname,
             id: props.upid,
-            menus: []
+            menus:props.upmenus
         })
         console.log(res);
         if (res.errCode == 10000) {
@@ -194,7 +194,7 @@ const getaddRole = async () => {
 </script>
 
 <style scoped lang="less">
-/deep/.el-form-item__content {
+:deep(.el-form-item__content) {
     display: inline-block !important
 }
 

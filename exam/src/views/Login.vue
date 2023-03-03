@@ -238,15 +238,15 @@ let loginClick = async () => {
   }
 }
 
-/deep/ .el-input__wrapper {
+:deep( .el-input__wrapper) {
   background-color: #dddcdc;
 }
 
-/deep/ .el-form-item.is-error .el-input__wrapper {
+:deep(.el-form-item.is-error .el-input__wrapper){
   box-shadow: 0 0 0 0;
 }
 
-/deep/ .el-form-item--feedback .el-input__validateIcon {
+:deep( .el-form-item--feedback .el-input__validateIcon) {
   display: none;
 }
 </style>

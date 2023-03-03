@@ -140,7 +140,7 @@
             <el-divider direction="vertical" />
             <span @click="dialogyueTeacher=true">阅卷老师</span>
             <el-divider direction="vertical" />
-            <span>分析</span>
+            <span @click='getAnalyse(scope.row)'>分析</span>
             <el-divider direction="vertical" />
             <span @click="upd(scope.row.id,scope.row)">编辑</span>
             <el-divider direction="vertical" />
@@ -188,11 +188,12 @@ import { ElMessageBox } from "element-plus";
 import TestDetails from "../../components/exam/testDetails.vue";
 import Students from "../../components/test/studentList.vue";
 import moment from "moment";
-import Pages from "../../components/FenYe/FenYe.vue";
-import Teacher from "../../components/test/teacherList.vue";
-
-let getid = ref(0);
-let title = ref("");
+import Pages from '../../components/FenYe/FenYe.vue'
+import Teacher from '../../components/test/teacherList.vue'
+import TascherList from '../../components/test/teacherList.vue'
+import { Message } from '@element-plus/icons-vue'
+let getid = ref(0)
+let title = ref('')
 const data: any = reactive({
   stateVal: "", //状态
   times: "", //时间
@@ -396,8 +397,36 @@ const teacherClose = (val: any) => {
 };
 // 老师点击取消
 const teacherCancel = (val: any) => {
-  dialogTeacher.value = val;
-};
+  dialogTeacher.value = val
+}
+
+// 阅卷老师弹框
+const dialogyueTeacher=ref(false)
+
+// 点击编辑 
+const upd=(id:any,val:any)=>{
+  // console.log(id,val);
+  if(val.studentcounts==0){
+    router.push({path:'/testadd',query:{id:id}})
+  }else{
+    ElMessage({
+      message:'本场有学生参加考试，不可编辑',
+      type:'error'
+    })
+  }
+}
+// 分析
+const getAnalyse=(val:any)=>{
+  console.log(val);
+  if(val.studentcounts==0){
+    ElMessage.error('没有学生考试')
+  }else if(val.isread==1){
+    ElMessage.error('本场考试还未判完卷')
+  }else{
+     router.push({path:'./ Analyse',query:{id:val.id}})
+  }
+ 
+}
 </script>
 
 <style scoped lang="less">
