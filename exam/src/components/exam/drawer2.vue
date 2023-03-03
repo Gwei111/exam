@@ -39,7 +39,7 @@
           <!-- 单选题 -->
           <el-form-item label="正确答案" size="normal" v-if="form.type == '单选题'">
             <el-radio-group v-model="form.answer">
-              <el-radio :label="data.letter[index]" v-for="(item, index) in form.answers" :key="index">
+              <el-radio :label="data.letter[index]" v-for="(item, index) in form.answers">
                 {{ data.letter[index] }}
               </el-radio>
 
@@ -65,7 +65,7 @@
         {{ data.leng.length }}
         <div v-if="form.type == '填空题' || form.type == '简答题'">
           <el-form-item label="正确答案" size="normal" v-show="data.leng.length > 0" v-if="form.type == '填空题'">
-            <div v-for="(item, index) in data.leng" :key="index">
+            <div v-for="(item, index) in data.leng">
               <el-input size="normal" autosize clearable v-model="data.leng[index]" style="width: 350px;"
                 v-show="form.type == '填空题'"></el-input>
             </div>
@@ -259,6 +259,17 @@ onMounted(() => {
     if(props.title=='修改'){
         data.leng=form.answer
     }
+    // 修改回显数据题库编辑  
+    if(props.dictionary.id){
+      form.title = props.dictionary.title
+      form.type = props.dictionary.type
+      form.scores = props.dictionary.scores
+      form.answers = props.dictionary.answers
+      form.answer = props.dictionary.answer
+      form.tags = props.dictionary.tags
+      form.explains = props.dictionary.explains
+      form.id = props.dictionary.id
+  }
 })
 // 保存并继续
 const clickup = () => { };
