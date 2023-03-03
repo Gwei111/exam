@@ -834,7 +834,7 @@ watchEffect(() => {
     }
 }
 
-/deep/.box .contet[data-v-f73ea39c] .el-form-item__content {
+:deep(.box .contet[data-v-f73ea39c] .el-form-item__content) {
     display: flex;
 }
 </style>

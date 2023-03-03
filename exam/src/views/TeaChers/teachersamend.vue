@@ -59,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive ,onMounted,toRaw,defineExpose} from 'vue';
+import { ref, reactive ,onMounted,toRaw} from 'vue';
 import {departmentlist,teacheradd} from '../../api/department'
 import {roleList} from '../../api/role'
 import { ElMessage } from 'element-plus'

@@ -18,8 +18,8 @@
        >
        <el-form-item label="姓名">{{ ruleForm.name }}</el-form-item>
   
-        <el-form-item label="密码" prop="pass">
-            <el-input v-model="ruleForm.pass" />
+        <el-form-item label="密码" prop="asspass">
+            <el-input v-model="ruleForm.asspass" />
         </el-form-item>
         <el-form-item label="确认密码" prop="checkPass">
             <el-input v-model="ruleForm.oldpass" />
@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive ,onMounted,toRaw,defineExpose,defineProps} from 'vue';
+import { ref, reactive ,onMounted,toRaw} from 'vue';
 import {teacheradd} from '../../api/department'
 import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus';
@@ -67,6 +67,7 @@ const ruleForm = reactive({
   oldpass:props.etsid.pass,
   pass:'',
   name:'',
+  asspass:''
   // oldpass:"",
   // checkPass: '',
   // tel:'',
@@ -76,7 +77,7 @@ const ruleForm = reactive({
 });
 const ruleFormRef: any = ref<FormInstance>();
 const rules = reactive<FormRules>({
- pass: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+  asspass: [{ required: true, message: '请输入密码', trigger: 'blur' }],
  checkPass: [{ required: true, message: '请再次输入密码', trigger: 'blur' }],
 });
 // 暴露在外面

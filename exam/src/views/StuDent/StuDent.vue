@@ -358,11 +358,11 @@ const batchAdd = () => {
   color: rgb(160 207 255);
 }
 
-/deep/.el-input__inner {
+:deep(.el-input__inner ){
   font-size: 12px !important
 }
 
-/deep/.el-button>span {
+:deep(.el-button>span) {
   font-size: 12px !important
 }
 </style>

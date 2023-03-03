@@ -155,26 +155,23 @@ const del = (id: any) => {
   cursor: pointer;
   // float: right;
 }
-// /deep/.el-table_1_column_2 {
-//   float: right!important;
-// }
 
 .main .font:hover {
   color: rgb(160 207 255);
 }
 
-/deep/.el-table tr{
+:deep(.el-table tr){
   // background-color: red;
   display: flex;
   width: 90vw;
   justify-content: space-between;
   border-bottom:var(--el-table-border)
 }
-/deep/.el-table tr:hover {
+:deep(.el-table tr:hover) {
 background-color: var(--el-fill-color-light);
 }
 /* 添加角色 */
-/deep/.el-button>span{
+:deep(.el-button>span){
   font-size: 12px!important
 }
 

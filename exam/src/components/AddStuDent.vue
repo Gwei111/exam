@@ -215,7 +215,7 @@ const submit = (formEl: FormInstance | undefined) => {
 </script>
 
 <style scoped lang="less">
-/deep/.el-form-item__content {
+:deep(.el-form-item__content) {
     display: inline-block !important
 }
 

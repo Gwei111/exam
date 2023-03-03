@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref ,defineProps,reactive,defineExpose} from 'vue'
+import { ref ,defineProps,reactive} from 'vue'
 const emit = defineEmits(['drawerShow'])
 const props = withDefaults(
   defineProps<{

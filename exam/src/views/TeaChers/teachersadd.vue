@@ -24,7 +24,7 @@
           </el-form-item>
           <el-form-item label="部门" prop="depid">
             <el-cascader
-              placeholder="请选择角色"
+              placeholder="请选择部门"
               v-model="ruleForm.depid"
               :options="departmentData.cascader"
               :props="departmentData.props"
@@ -65,7 +65,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive ,onMounted,toRaw} from 'vue';
+import { ref, reactive ,onMounted,toRaw,} from 'vue';
 import { ElMessage } from 'element-plus'
 import {departmentlist,teacheradd} from '../../api/department'
 import {roleList} from '../../api/role'

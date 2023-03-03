@@ -192,7 +192,7 @@ margin-left: 15px;
   }
 }
 
-/deep/.el-aside {
+:deep(.el-aside){
   height: 100vh;
   width: var(--el-aside-width);
   padding: 8px 10px;
