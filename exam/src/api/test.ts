@@ -51,3 +51,7 @@ export const testAnalyse = (params: any) => {
 export const studentTest = (params: any) => {
   return request.get('student/test', params)
 }
+// 学生考试结果 
+export const getForResult= (params: any) => {
+  return request.get('test/getForResult', params)
+}
