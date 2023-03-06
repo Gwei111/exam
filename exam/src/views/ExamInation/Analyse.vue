@@ -84,7 +84,7 @@
             </el-tabs>
         </div>
         <!-- 试题详情 -->
-        <Studetails :table="table" ></Studetails>
+        <Studetails :table="table" @close="handleClose" :forResultItem="forResultItem" :ForResultList="ForResultList"></Studetails>
     </div>
 </template>
 
@@ -94,7 +94,7 @@ import { useRoute } from 'vue-router';
 import * as echarts from 'echarts';
 import type { TabsPaneContext } from 'element-plus'
 import router from '../../router';
-import { testAnalyse, studentTest, departmentList, classList } from '../../api/test'
+import { testAnalyse, studentTest, departmentList, classList ,getForResult} from '../../api/test'
 import Studetails from '../../components/exam/examDetails.vue'
 const Route = useRoute()
 // 将时间戳格式化时分秒
@@ -217,6 +217,7 @@ const onSubmit = () => {
 const cake = ref() // 使用ref创建虚拟DOM引用，使用时用main.value  饼状
 const postzi = ref()// 使用ref创建虚拟DOM引用，使用时用main.value   柱状
 onMounted(
+
     () => {
         init()
         info1()
@@ -295,15 +296,29 @@ const activeName = ref('first')
 
 // 试题详情
 const table = ref(false)
-const handleClick = (val:any) => {
-    console.log(val);
-    
+let ForResultList=ref([])
+let forResultItem=ref('')
+const handleClick = async(val:any) => {
+    // console.log(val);
     table.value=true
+    let res:any=await getForResult({testid:Route.query.id,studentid:val.id})
+    // console.log(res);
+    if(res.errCode==10000){
+        ForResultList.value=res.data
+        forResultItem.value=val
+    }
+    
 }
 const goBack = () => {
     router.push('/test')
 }
-
+const handleClose=()=>{
+    table.value=false
+}
+// // 获取学生考试结果
+// const getForResultList=()=>{
+//     let res:any=await 
+// }
 </script>
 
 <style lang="less" scoped>

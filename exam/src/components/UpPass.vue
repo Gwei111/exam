@@ -5,10 +5,10 @@
                 <el-input v-model="form.name" autocomplete="off" disabled />
             </el-form-item>
             <el-form-item label="新密码" :label-width="formLabelWidth" prop="oldpass">
-                <el-input v-model="form.oldpass" autocomplete="off" />
+                <el-input v-model="form.oldpass" autocomplete="off" show-password />
             </el-form-item>
             <el-form-item label="确认密码" :label-width="formLabelWidth" prop="pass">
-                <el-input v-model="form.pass" autocomplete="off" />
+                <el-input v-model="form.pass" autocomplete="off" show-password/>
             </el-form-item>
         </el-form>
         <template #footer>

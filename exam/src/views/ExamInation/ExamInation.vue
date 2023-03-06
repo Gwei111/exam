@@ -423,7 +423,7 @@ const getAnalyse=(val:any)=>{
   }else if(val.isread==1){
     ElMessage.error('本场考试还未判完卷')
   }else{
-     router.push({path:'./ Analyse',query:{id:val.id}})
+     router.push({path:'./Analyse',query:{id:val.id}})
   }
  
 }

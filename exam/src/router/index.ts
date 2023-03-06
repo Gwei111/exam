@@ -98,7 +98,12 @@ const routes: Array<RouteRecordRaw> = [
         path: '/stutest',
         name: 'Stutest',
         component: () => import('../views/Stutest/stutest.vue'),
-        meta: { title: '学生端', isAuth: true },
+        meta: { title: '学生端考试列表', isAuth: true },
+      },{
+        path: '/set',
+        name: 'Set',
+        component: () => import("../views/Set/set.vue"),
+        meta: { title: '学生端设置', isAuth: true },
       },
     ]
   },
