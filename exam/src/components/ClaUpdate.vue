@@ -68,7 +68,7 @@ const ruleForm = reactive({
 });
 const rules = reactive<FormRules>({
   name: [
-    { required: true, message: "请输入班级名称", trig/ger: "blur" },
+    { required: true, message: "请输入班级名称",trigger: "blur" },
     { min: 5, max: 15, message: "最少五位，最多十五位", trigger: "blur" },
   ],
 });
