@@ -55,3 +55,19 @@ export const studentTest = (params: any) => {
 export const getForResult= (params: any) => {
   return request.get('test/getForResult', params)
 }
+// 获取考试信息 
+export const testGet= (params: any) => {
+  return request.get('test/get', params)
+}
+// 获得考试结果 
+export const testResult= (params: any) => {
+  return request.get('test/getForResult', params)
+}
+// 开始考试 
+export const testStart= (params: any) => {
+  return request.get('test/start', params)
+}
+// 学生答题 /
+export const stuAdd = (data: any) => {
+  return request.post('studentanswer/add', data)
+}

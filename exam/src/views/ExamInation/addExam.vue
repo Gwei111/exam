@@ -28,7 +28,6 @@
           <el-form label-width="100px"
                    :model="formLabelAlign">
             <el-form-item label="考试内容">
-              <!-- {{ params.questions.type, 111 }} -->
               <div class="frombox"
                    style=" width: 1025px;">
                 <div class="title">
@@ -49,7 +48,7 @@
                       <el-input placeholder=""
                                 size="small"
                                 clearable
-                                style="width:50px;"></el-input>分
+                                style="width:50px;" v-model="params.questions.scores"></el-input>分
                     </p>
                   </div>
                   <div class="dan"
@@ -59,7 +58,7 @@
                       <el-input placeholder=""
                                 size="small"
                                 clearable
-                                style="width:50px;"></el-input>分
+                                style="width:50px;" v-model="params.questions.scores"></el-input>分
                     </p>
                   </div>
                   <div class="dan"
@@ -69,7 +68,7 @@
                       <el-input placeholder=""
                                 size="small"
                                 clearable
-                                style="width:50px;"></el-input>分
+                                style="width:50px;" v-model="params.questions.scores"></el-input>分
                     </p>
                   </div>
                   <div class="dan"
@@ -79,7 +78,7 @@
                       <el-input placeholder=""
                                 size="small"
                                 clearable
-                                style="width:50px;"></el-input>分
+                                style="width:50px;" v-model="params.questions.scores"></el-input>分
                     </p>
                   </div>
                   <div class="dan"
@@ -89,7 +88,7 @@
                       <el-input placeholder=""
                                 size="small"
                                 clearable
-                                style="width:50px;"></el-input>分
+                                style="width:50px;" v-model="params.questions.scores"></el-input>分
                     </p>
                   </div>
                 </div>
@@ -305,7 +304,7 @@
     <!-- 可见老师 -->
     <el-dialog title="可见老师"
                v-model="dialogTeacher"
-               v-if="dialogTeacher"
+               v-if="dialogTeacher==true"
                width="50%">
       <Forth v-model="dialogTeacher"
              @limitss="limitss"

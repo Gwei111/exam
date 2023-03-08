@@ -105,9 +105,27 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("../views/Set/set.vue"),
         meta: { title: '学生端设置', isAuth: true },
       },
+     
     ]
   },
-
+  {
+    path: '/examprepare',
+    name: 'examprepare',
+    component: () => import("../views/Stutest/examprepare.vue"),
+    meta: { title: '学生端开始考试', isAuth: true },
+  },
+  {
+    path: '/examresults',
+    name: 'examresults',
+    component: () => import("../views/Stutest/examresults.vue"),
+    meta: { title: '学生端考试结果', isAuth: true },
+  },
+  {
+    path: '/stuExam',
+    name: 'stuExam',
+    component: () => import("../views/Stutest/stuexam.vue"),
+    meta: { title: '学生端考试', isAuth: true },
+  },
 ]
 
 const router = createRouter({

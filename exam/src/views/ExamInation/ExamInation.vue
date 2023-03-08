@@ -2,92 +2,60 @@
   <div class="box">
     <div class="topbox">
       <h3>考试管理</h3>
-      <el-button type="primary"
-                 @click="router.push('./testadd')">创建考试</el-button>
+      <el-button type="primary" @click="router.push('./testadd')">创建考试</el-button>
     </div>
     <div class="top">
-      <el-form :inline="true"
-               :model="query"
-               class="demo-form-inline">
+      <el-form :inline="true" :model="query" class="demo-form-inline">
         <el-form-item label="关键字">
-          <el-input v-model="query.key"
-                    placeholder="考试名称" />
+          <el-input v-model="query.key" placeholder="考试名称" />
         </el-form-item>
         <el-form-item label="创建人">
-          <el-input v-model="query.admin"
-                    placeholder="创建人" />
+          <el-input v-model="query.admin" placeholder="创建人" />
         </el-form-item>
         <!-- 我创建的 -->
         <el-form-item>
-          <el-checkbox label="我创建的"
-                       name="ismy" />
+          <el-checkbox label="我创建的" name="ismy" />
         </el-form-item>
-        <el-form-item label="开放时间"
-                      prop="resource">
-          <el-radio-group v-model="timeRadio"
-                          @change="changeRadio">
+        <el-form-item label="开放时间" prop="resource">
+          <el-radio-group v-model="timeRadio" @change="changeRadio">
             <el-radio label="永久开放" />
             <el-radio label="部分时段" />
           </el-radio-group>
-          <el-date-picker v-model="times"
-                          type="daterange"
-                          unlink-panels
-                          range-separator="To"
-                          start-placeholder="Start date"
-                          end-placeholder="End date"
-                          :shortcuts="shortcuts"
-                          :size="size" />
+          <el-date-picker v-model="times" type="daterange" unlink-panels range-separator="To"
+            start-placeholder="开始时间" end-placeholder="结束时间" :shortcuts="shortcuts" :size="size" />
         </el-form-item>
         <el-form-item label="状态">
-          <el-select v-model="stateVal"
-                     clearable
-                     placeholder="选择状态"
-                     style="width: 100px"
-                     @change="changeState">
-            <el-option v-for="item in options"
-                       :key="item.value"
-                       :label="item.label"
-                       :value="item.value" />
+          <el-select v-model="stateVal" clearable placeholder="选择状态" style="width: 100px" @change="changeState">
+            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary"
-                     @click="Search">查询</el-button>
+          <el-button type="primary" @click="Search">查询</el-button>
         </el-form-item>
         <div v-show="block !== 0">
           <el-form-item>
-            <el-button type="danger"
-                       @click="delAll">批量删除</el-button>
+            <el-button type="danger" @click="delAll">批量删除</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary"
-                       @click="issue">发布考试</el-button>
+            <el-button type="primary" @click="issue">发布考试</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="success"
-                       @click="noissue">取消发布</el-button>
+            <el-button type="success" @click="noissue">取消发布</el-button>
           </el-form-item>
         </div>
       </el-form>
     </div>
     <div class="list">
-      <el-table ref="multipleTableRef"
-                :data="tableData"
-                style="width: 100%, "
-                @selection-change="handleSelectionChange">
-        <el-table-column type="selection"
-                         width="100" />
-        <el-table-column label="考试名称"
-                         width="100"
-                         prop="title">
+      <el-table ref="multipleTableRef" :data="tableData" style="width: 100%, " @selection-change="handleSelectionChange">
+        <el-table-column type="selection" width="100" />
+        <el-table-column label="考试名称" width="180" prop="title">
           <template #default="scope">
             <span @click="getDetails(scope.row.id, scope.row.title)" v-html="scope.row.title">
 
             </span>
           </template>
         </el-table-column>
-        <el-table-column label="状态"
-                         width="100">
+        <el-table-column label="状态" width="180">
           <template #default="scope">
             <span :class="
               scope.row.state == 0 || scope.row.state == 1 ? 'blues' : 'reds'">
@@ -96,21 +64,11 @@
           </template>
         </el-table-column>
 
-        <el-table-column property="scores"
-                         label="总分"
-                         width="100" />
-        <el-table-column property="pastscores"
-                         label="通过分数"
-                         width="100" />
-        <el-table-column property="studentcounts"
-                         label="考试人数"
-                         width="100" />
-        <el-table-column property="pastnum"
-                         label="通过人数"
-                         width="100" />
-        <el-table-column property="name"
-                         label="开放时间"
-                         width="100">
+        <el-table-column property="scores" label="总分" width="180" />
+        <el-table-column property="pastscores" label="通过分数" width="180" />
+        <el-table-column property="studentcounts" label="考试人数" width="180" />
+        <el-table-column property="pastnum" label="通过人数" width="100" />
+        <el-table-column property="name" label="开放时间" width="100">
           <template #default="scope">
             <p v-if="scope.row.begindate == null">不限</p>
             <p v-else>
@@ -119,12 +77,8 @@
             </p>
           </template>
         </el-table-column>
-        <el-table-column property="admin"
-                         label="创建人"
-                         width="180" />
-        <el-table-column property="addtime"
-                         label="更新时间"
-                         width="180">
+        <el-table-column property="admin" label="创建人" width="180" />
+        <el-table-column property="addtime" label="更新时间" width="180">
           <template #default="scope">
             <p>
               {{ moment(scope.row.addtime).format('YYYY-MM-DD hh:mm:ss') }}
@@ -132,43 +86,44 @@
           </template>
         </el-table-column>
         <el-table-column label="操作">
-          <template #default="scope"
-                    class="action">
+          <template #default="scope" class="action">
             <span @click="getstudent(scope.row.id)">学生</span>
             <el-divider direction="vertical" />
             <span @click="getTeacher(scope.row.id)">可见</span>
             <el-divider direction="vertical" />
-            <span @click="dialogyueTeacher=true">阅卷老师</span>
+            <span @click="dialogyueTeacher = true">阅卷老师</span>
             <el-divider direction="vertical" />
             <span @click='getAnalyse(scope.row)'>分析</span>
             <el-divider direction="vertical" />
-            <span @click="upd(scope.row.id,scope.row)">编辑</span>
+            <span @click="upd(scope.row.id, scope.row)">编辑</span>
             <el-divider direction="vertical" />
-            <span class="red"
-                  @click="handleDelete(scope.row.id)">删除</span>
+            <span class="red" @click="handleDelete(scope.row.id)">删除</span>
           </template>
         </el-table-column>
       </el-table>
       <!-- 分页 -->
-      <Pages @getChildData="getChildData"
-             :counts="totals"></Pages>
+      <div style="width: 600px; margin: 0 auto;">
+        <Pages @getChildData="getChildData" :counts="totals"></Pages>
+      </div>
       <!-- 考试详情 -->
-      <TestDetails :dialogVisible="dialogVisible"
-                   v-if="dialogVisible == true"
-                   @closedetailsList="closedetailsList"
-                   :getid="getid"
-                   :title="title"></TestDetails>
+      <TestDetails :dialogVisible="dialogVisible" v-if="dialogVisible == true" @closedetailsList="closedetailsList"
+        :getid="getid" :title="title"></TestDetails>
       <!-- 学生列表 -->
-      <Students :dialogstudent="dialogstudent"
-                v-if="dialogstudent==true"
-                @studentCancel="studentCancel"
-                @studentConfirm="studentConfirm"
-                @studentClose="studentClose"></Students>
+      <el-dialog title="可见学生" v-model="dialogstudent" width="50%">
+        <Students :dialogstudent="dialogstudent" v-if="dialogstudent == true" @studentCancel="studentCancel"
+          @studentConfirm="studentConfirm" @studentClose="studentClose"></Students>
+      </el-dialog>
+
       <!-- 可见老师 -->
-      <Teacher :dialogTeacher="dialogTeacher"
-               v-if="dialogTeacher==true"
-               @teacherConfirm="teacherConfirm"
-               @teacherClose="teacherClose"></Teacher>
+      <el-dialog title="可见老师" v-model="dialogTeacher" width="50%">
+        <Teacher :dialogTeacher="dialogTeacher" v-if="dialogTeacher == true" @teacherConfirm="teacherConfirm"
+          @teacherClose="teacherClose"></Teacher>
+      </el-dialog>
+      <!-- 阅卷老师 -->
+      <el-dialog title="阅卷老师" v-model="dialogyueTeacher" width="50%" >
+        <TascherList :dialogyueTeacher="dialogyueTeacher" v-if="dialogyueTeacher==true" @teacherCancel="teacherCancel"  @teacherConfirm="teacherConfirm"></TascherList>
+      </el-dialog>
+
     </div>
   </div>
 </template>
@@ -190,7 +145,7 @@ import Students from "../../components/test/studentList.vue";
 import moment from "moment";
 import Pages from '../../components/FenYe/FenYe.vue'
 import Teacher from '../../components/test/teacherList.vue'
-import TascherList from '../../components/test/teacherList.vue'
+import TascherList from '../../components/test/teacherList.vue'//阅卷老师
 import { Message } from '@element-plus/icons-vue'
 let getid = ref(0)
 let title = ref('')
@@ -401,31 +356,31 @@ const teacherCancel = (val: any) => {
 }
 
 // 阅卷老师弹框
-const dialogyueTeacher=ref(false)
+const dialogyueTeacher = ref(false)
 
 // 点击编辑 
-const upd=(id:any,val:any)=>{
+const upd = (id: any, val: any) => {
   // console.log(id,val);
-  if(val.studentcounts==0){
-    router.push({path:'/testadd',query:{id:id}})
-  }else{
+  if (val.studentcounts == 0) {
+    router.push({ path: '/testadd', query: { id: id } })
+  } else {
     ElMessage({
-      message:'本场有学生参加考试，不可编辑',
-      type:'error'
+      message: '本场有学生参加考试，不可编辑',
+      type: 'error'
     })
   }
 }
 // 分析
-const getAnalyse=(val:any)=>{
+const getAnalyse = (val: any) => {
   console.log(val);
-  if(val.studentcounts==0){
+  if (val.studentcounts == 0) {
     ElMessage.error('没有学生考试')
-  }else if(val.isread==1){
+  } else if (val.isread == 1) {
     ElMessage.error('本场考试还未判完卷')
-  }else{
-     router.push({path:'./Analyse',query:{id:val.id}})
+  } else {
+    router.push({ path: './Analyse', query: { id: val.id } })
   }
- 
+
 }
 </script>
 

@@ -8,8 +8,8 @@
                         <el-input v-model="query.key" placeholder="请输入关键字" />
                     </el-form-item>
                     <el-form-item label="状态" style="width: 140px;">
-                        <el-select placeholder="请选择">
-                            <el-option v-for="item in data.result" :key="item" :value="item">{{ item }}</el-option>
+                        <el-select placeholder="请选择" v-model="query.result">
+                            <el-option v-for="item in result" :key="item.value" :value="item.value">{{ item.label }}</el-option>
                         </el-select>
                     </el-form-item>
                 </el-form>
@@ -18,7 +18,7 @@
         </div>
         <div class="main">
             <ul>
-                <li v-for="item in list" :key="item.id" class="li">
+                <li v-for="item in list" :key="item.id" class="li" @click="getExam(item.id,item.result)">
                     <div class="liTop">
                         <img v-if="item.result == '未通过'" src="../../assets/images/didNotPass.dc717b15.jpg" alt="" srcset="">
                         <img v-if="item.result == '未考试'" src="../../assets/images/notInvolved.69f5f7c2.jpg" alt="" srcset="">
@@ -35,7 +35,7 @@
                 </li>
                
             </ul>
-                    <!-- <el-empty :image-size="200" v-if="list.length<0" /> -->
+                    <el-empty :image-size="200" v-if="list.length<0" />
         </div>
         <div class="foot">
             <FenYe :counts="counts" @getChildData="getChildData" />
@@ -47,6 +47,7 @@
 import { reactive, onMounted, ref,toRefs } from 'vue';
 import { testList } from '../../api/test'
 import FenYe from "../../components/FenYe/FenYe.vue"
+import router from '../../router';
 
 onMounted(() => {
     getList()
@@ -59,13 +60,36 @@ const data: any = reactive({
     enddate: '',
     state: "",
     isread: "",
-    result: ['所有', '未考试', '待阅卷', '已通过', '未通过'],
+  
     query: {
         page: 1,
         psize: 12,
         key: '',
+        result:''
     }
 })
+const result = [
+  {
+    value: "",
+    label: "所有",
+  },
+  {
+    value: "未考试",
+    label: "未考试",
+  },
+  {
+    value: "待阅卷",
+    label: "待阅卷",
+  },
+  {
+    value: "已通过",
+    label: "已通过",
+  },
+  {
+    value: "未通过",
+    label: "未通过",
+  },
+];
 const {query} = toRefs(data)
 const counts = ref(0);
 const list: any = ref([])
@@ -78,19 +102,27 @@ const getList = async () => {
 
 // 分页
 const getChildData = (val: any) => {
-    //   console.log(111, val)
-    //   data.page= val.page;
-    //   data.psize = val.psize;
     query.value.page = val.page
     query.value.psize = val.psize
     // console.log(data.psize, data.page, 1234);
 
     getList();
 };
+
 // 查询
 const search = () => {
     getList()
 
+}
+// 跳转考试
+const getExam=(id:number,val:any)=>{
+    // console.log(id,val);
+    if(val=='未考试'){
+        router.push({path:'/examprepare',query:{id}})
+    }else{
+        router.push({path:'/examresults',query:{id}})
+    }
+    
 }
 </script>
 
