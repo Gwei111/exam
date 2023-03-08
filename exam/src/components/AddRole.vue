@@ -1,5 +1,5 @@
 <template>
-    <div class="box">
+    <div class="box" style="padding-bottom: 20px;">
         <el-form ref="ruleFormRef" :model="tableData" :rules="rules" label-width="120px" class="demo-ruleForm"
             :size="formSize" status-icon>
             <el-form-item label="角色名称" prop="name">
@@ -8,20 +8,24 @@
         </el-form>
 
         <!-- 复选框 -->
-        <div>
-            <span>权限</span>
-        </div>
-        <div style="margin-left: 50px;" v-for="(item, index) in info" :key="item.id">
-            <!-- 父类复选框 -->
-            <el-checkbox v-model="item.checkAll" :indeterminate="item.isIndeterminate"
-                @change="handleCheckAllChange($event, index)">{{ item.name }}</el-checkbox>
-            <!-- 子类复选框 -->
-            <el-checkbox-group style="margin-left: 40px;" v-model="item.checkedCities"
-                @change="handleCheckedCitiesChange($event, index)">
-                <el-checkbox v-for="city in item.children" :key="city.id" :label="city.id">{{
-                    city.name
-                }}</el-checkbox>
-            </el-checkbox-group>
+        <div class="menus">
+            <div>
+                <span>权限</span>
+            </div>
+            <el-scrollbar height="350px">
+                <div style="margin-left: 50px;" v-for="(item, index) in info" :key="item.id">
+                    <!-- 父类复选框 -->
+                    <el-checkbox v-model="item.checkAll" :indeterminate="item.isIndeterminate"
+                        @change="handleCheckAllChange($event, index)">{{ item.name }}</el-checkbox>
+                    <!-- 子类复选框 -->
+                    <el-checkbox-group style="margin-left: 40px;" v-model="item.checkedCities"
+                        @change="handleCheckedCitiesChange($event, index)">
+                        <el-checkbox v-for="city in item.children" :key="city.id" :label="city.id">{{
+                            city.name
+                        }}</el-checkbox>
+                    </el-checkbox-group>
+                </div>
+            </el-scrollbar>
         </div>
         <!-- 取消与添加修改按钮 -->
         <span class="dialog-footer">
@@ -158,9 +162,7 @@ const emit = defineEmits(['clickChild', 'click']);
 </script>
   
 <style lang="less" scoped>
-/deep/.box {
-    padding: 20px !important
-}
+
 
 .el-input {
     width: 280px;
@@ -168,7 +170,12 @@ const emit = defineEmits(['clickChild', 'click']);
 
 .dialog-footer {
     float: right;
-    margin-bottom: 50px;
+    height: 200px;
 }
+
+/deep/.menus {
+    margin-left: 50px;
+}
+
 </style>
   
