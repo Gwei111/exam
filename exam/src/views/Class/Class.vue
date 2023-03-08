@@ -108,7 +108,7 @@ interface User {
   name: string;
   address: string;
 }
-const tableData: User[] = ref([]);
+const tableData: User = ref([]);
 const multipleTableRef = ref<InstanceType<typeof ElTable>>();
 const multipleSelection = ref<User[]>([]);
 const drawer = ref(false);
@@ -230,9 +230,10 @@ const cencell = () => {
   dialogVisible.value = false;
 };
 
-const Drawerclose = (val) => {
-  console.log(val);
-};
+const Drawerclose=(val:any)=>{
+console.log(val); 
+
+}
 </script>
 
 <style scoped>

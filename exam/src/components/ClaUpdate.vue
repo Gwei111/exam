@@ -59,19 +59,19 @@ const props: any = defineProps({
     default: () => [],
   },
 });
-// console.log(props.upAata.depid);
+console.log(props.upAata.depid);
 const ruleForm = reactive({
   name: "",
   id: " ",
   depid: "",
-  region: "",
+  region:""
 });
-// const rules = reactive<FormRules>({
-//   name: [
-//     { required: true, message: "请输入班级名称", trig/ger: "blur" },
-//     { min: 5, max: 15, message: "最少五位，最多十五位", trigger: "blur" },
-//   ],
-// });
+const rules = reactive<FormRules>({
+  name: [
+    { required: true, message: "请输入班级名称",trigger: "blur" },
+    { min: 5, max: 15, message: "最少五位，最多十五位", trigger: "blur" },
+  ],
+});
 // 添加接口
 const submit = async () => {
   // if (父组件传过来当前行里面的数据，取里面的id不等于0时走修改接口) {
@@ -88,10 +88,10 @@ const submit = async () => {
         message: "修改成功,请返回列表查看",
         type: "success",
       });
-      props.upAata.id = "";
-      ruleForm.name = "";
-      ruleForm.region = "";
     }
+    props.upAata.id = "";
+    ruleForm.name = "";
+    ruleForm.region = "";
   } else {
     ruleForm.depid = date.depid;
     let res: any = await Add(ruleForm);
@@ -133,7 +133,7 @@ const handleChange = (val: any) => {
 watchEffect(() => {
   // 回显
   ruleForm.name = props.upAata.name;
-  ruleForm.depid = props.upAata.depid;
+  ruleForm.depid=props.upAata.depid
 });
 console.log(props.upAata.depid);
 
