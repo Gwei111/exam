@@ -22,7 +22,7 @@
             <!-- 创建试题库模块 -->
             <el-dialog v-model="dialogVisible1"
                        v-if="dialogVisible1"
-                       :title="可见老师"
+                       title="可见老师"
                        width="50%"
                        :before-close="handleClose">
               <Forth v-model="dialogVisible1"
@@ -49,9 +49,11 @@
 </template>
 <script setup lang="ts">
 import Forth from "../components/Test/Forth.vue";
-import { ref, defineEmits } from "vue";
+import { ref, defineEmits,reactive } from "vue";
 import { ShuttleAdd } from "../api/Test/Test";
 import { ElMessage, ElMessageBox } from "element-plus";
+import type { FormInstance } from "element-plus";
+
 // 子传父
 const emit = defineEmits(["isadd", "can"]);
 const dialogVisible1 = ref(false);
@@ -63,8 +65,6 @@ const handleClose = (done: () => void) => {
     })
     .catch(() => {});
 };
-import { reactive, ref } from "vue";
-import type { FormInstance } from "element-plus";
 const formRef = ref<FormInstance>();
 const numberValidateForm = reactive({
   id: 0,
@@ -80,7 +80,7 @@ const submits = async () => {
       type: "error",
     });
   }
-  let res = await ShuttleAdd(numberValidateForm);
+  let res:any = await ShuttleAdd(numberValidateForm);
   console.log(res);
   if (res.errCode === 10000) {
     ElMessage({

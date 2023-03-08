@@ -65,8 +65,7 @@
                                 </el-table-column>
                                 <el-table-column prop="name" label="用时" width="180">
                                     <template #default="scope">
-                                        <span>{{ toHHmmss(dateStrChangeTimeTamp(scope.row.stuEndTime) -
-                                            dateStrChangeTimeTamp(scope.row.stuBeginTime)) }}</span>
+                                        <span>{{moment(scope.row.stuEndTime).diff(scope.row.stuBeginTime, 'minute') }}</span>
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="stuBeginTime" label="考试时间" width="180" />
@@ -89,6 +88,7 @@
 </template>
 
 <script setup lang="ts">
+import moment from 'moment'
 import { onMounted, reactive, ref, toRefs } from "vue";
 import { useRoute } from 'vue-router';
 import * as echarts from 'echarts';
@@ -97,22 +97,7 @@ import router from '../../router';
 import { testAnalyse, studentTest, departmentList, classList ,getForResult} from '../../api/test'
 import Studetails from '../../components/exam/examDetails.vue'
 const Route = useRoute()
-// 将时间戳格式化时分秒
-const toHHmmss: any = (data: any) => {
-    var s;
-    var hours: any = parseInt((data % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    var minutes = parseInt((data % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = (data % (1000 * 60)) / 1000;
-    s = (hours < 10 ? ('0' + hours) : hours) + '小时' + (minutes < 10 ? ('0' + minutes) : minutes) + '分钟' + (seconds < 10 ? ('0' + seconds) : seconds) + "秒";
-    return s;
-}
-// 将时间格式化为时间戳
-const dateStrChangeTimeTamp = (dateStr: any) => {
-    dateStr = dateStr.substring(0, 19);
-    dateStr = dateStr.replace(/-/g, '/');
-    var timeTamp = new Date(dateStr).getTime();
-    return timeTamp
-}
+
 // console.log(Route);
 onMounted(() => {
     init()

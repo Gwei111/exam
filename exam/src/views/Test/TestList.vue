@@ -82,13 +82,13 @@
 </template>
 
 <script setup lang="ts">
-const checked1 = ref(false);
 import { reactive, ref } from "vue";
 import { FormInstance, ElMessage, ElMessageBox } from "element-plus";
 import { Text_List, Text_del } from "../../api/Test/Test";
 import TestDetails from "../../components/Test/TestDetails.vue";
 import FenYe from "../../components/FenYe/FenYe.vue";
 import { useRouter } from "vue-router";
+const checked1 = ref(false);
 const router = useRouter();
 const counts = ref(0);
 const formRef = ref<FormInstance>();
@@ -103,7 +103,7 @@ const numberValidateForm = reactive({
 const tableData = ref([]);
 const subjectsID = ref();
 const GetText_List = async () => {
-  let res = await Text_List(numberValidateForm);
+  let res:any = await Text_List(numberValidateForm);
   if (res.errCode === 10000) {
     tableData.value = res.data.list;
     counts.value = res.data.counts;
@@ -115,7 +115,7 @@ const search = () => {
   GetText_List();
 };
 //  点击试卷名称详情
-const testDetails = (id) => {
+const testDetails = (id:any) => {
   subjectsID.value = id;
   Detailsdialog.value = true;
 };

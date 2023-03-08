@@ -69,7 +69,7 @@ const multipleSelection = ref<User[]>([]);
 const handleSelectionChange = (val: User[]) => {
   multipleSelection.value = val;
 };
-const tableData: User[] = ref([]);
+const tableData:any = ref([]);
 const numberValidateForm = reactive({
   key:"",
   page: "1",
@@ -82,7 +82,7 @@ const serch=()=>{
 const counts = ref(0);
 // 请求数据列表接口
 const GetQueList = async () => {
-  let res = await QueList(numberValidateForm);
+  let res:any = await QueList(numberValidateForm);
   console.log(res);
   if (res.errCode === 10000) {
     tableData.value=res.data.list

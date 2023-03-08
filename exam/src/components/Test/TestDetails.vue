@@ -93,7 +93,7 @@ const handleClose = () => {
 
 // 请求详情数据
 const getPSubjects = async () => {
-  let res = await getSubjects({ id: sid.value });
+  let res:any = await getSubjects({ id: sid.value });
   // console.log(res);
   if (res.errCode === 10000) {
     model.value = res.data;
@@ -103,7 +103,7 @@ const getPSubjects = async () => {
 getPSubjects();
 
 const execl = async () => {
-  let res = await execls({ id: data.sid });
+  let res:any = await execls({ id: data.sid });
   console.log(res);
 
   let blob = new Blob([res], { type: "application/vnd.ms-excel" });
@@ -113,7 +113,7 @@ const execl = async () => {
   a.href = url;
   a.style.display = "none";
   document.body.appendChild(a);
-  a.setAttribute("download", model.title);
+  a.setAttribute("download", model.value.title);
   a.click();
   document.body.removeChild(a);
 };
@@ -287,9 +287,7 @@ const execl = async () => {
   background-color: #fcf8f8;
   border: 1px solid #dfdfde;
 }
-#derive {
-  // margin-left: 730px;
-}
+
 #boxxx {
   display: flex;
   align-items: center;

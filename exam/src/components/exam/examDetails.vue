@@ -5,9 +5,8 @@
             <div class="top">
                 <p>得分：{{ forResultItem.scores }} </p>
                 <p>总分：{{ forResultItem.scores }}</p>
-                <p>通过分数：{{ forResultItem.pastscores }}</p>
-                <p v-if="forResultItem.stuEndTime">考试用时:{{ toHHmmss(dateStrChangeTimeTamp(forResultItem.stuEndTime)
-                    - dateStrChangeTimeTamp(forResultItem.stuBeginTime)) }}</p>
+                <p>通过分数：{{ forResultItem.pastscores }}</p> 
+                <p v-if="forResultItem.stuEndTime">考试用时:{{moment(forResultItem.stuEndTime).diff(forResultItem.stuBeginTime, 'minute') }}</p>
                 <p>交卷时间:{{ forResultItem.stuEndTime }}</p>
             </div>
             <div class="questionBox" v-for="(item, index) in ForResultList.questions" :key="index">
@@ -67,6 +66,7 @@
 </template>
 
 <script setup lang="ts">
+import moment from 'moment'
 import { reactive, ref, toRefs, onMounted } from 'vue'
 import { ElDrawer, ElMessageBox } from 'element-plus'
 // import { emit } from 'process';
@@ -83,22 +83,7 @@ onMounted(() => {
     forResultItem.value = props.forResultItem
     ForResultList.value = props.ForResultList
 })
-// 将时间戳格式化时分秒
-const toHHmmss: any = (data: any) => {
-    var s;
-    var hours: any = parseInt((data % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    var minutes = parseInt((data % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = (data % (1000 * 60)) / 1000;
-    s = (hours < 10 ? ('0' + hours) : hours) + '小时' + (minutes < 10 ? ('0' + minutes) : minutes) + '分钟' + (seconds < 10 ? ('0' + seconds) : seconds) + "秒";
-    return s;
-}
-// 将时间格式化为时间戳
-const dateStrChangeTimeTamp = (dateStr: any) => {
-    dateStr = dateStr.substring(0, 19);
-    dateStr = dateStr.replace(/-/g, '/');
-    var timeTamp = new Date(dateStr).getTime();
-    return timeTamp
-}
+
 const handleClose = () => {
     emit('close', false)
 }

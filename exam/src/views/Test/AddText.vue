@@ -153,7 +153,7 @@
         <el-dialog v-model="dialogVisible2"
                    title="题库添加"
                    width="50%"
-                   :before-close="handleClose">
+                   >
           <CreaTi @isadd="isadd"
                   @can="can"></CreaTi>
         </el-dialog>
@@ -168,9 +168,9 @@
       <el-button @click="xuan"> +选择 </el-button>
       <div class="qqqq"><span>{{numberValidateForm.limits.length}}</span></div>
       <el-dialog v-model="dialogVisible1"
-                 :title="可见老师"
+                 title="可见老师"
                  width="50%"
-                 :before-close="handleClose">
+                 >
         <Forth v-model="dialogVisible1"
                @sub="sub"
                @limitss="limitss"
@@ -208,11 +208,11 @@ let title = ref("");
 const emit = defineEmits(["canle"]);
 // 总分
 const input = ref("");
-const grossScore = ref("");
+const grossScore:any = ref("");
 const router = useRouter();
 const route = useRoute();
 const value = ref("");
-const numberValidateForm = reactive({
+const numberValidateForm:any = reactive({
   id: 0,
   title: "",
   singles: null,
@@ -283,7 +283,7 @@ const valuessss = (val: any) => {
 };
 // 修改数据回显
 const huixian = async (id: any) => {
-  let res = await SubUa({ id: route.query.id });
+  let res:any = await SubUa({ id: route.query.id });
   // console.log(res,"修改成功");
   if (res.errCode === 10000) {
     numberValidateForm.id = res.data.id;
@@ -311,7 +311,7 @@ const huixian = async (id: any) => {
 };
 // 页面加载前回显数据
 onMounted(() => {
-  huixian();
+  huixian(id);
 });
 const id = route.query.id;
 // console.log(id);
@@ -323,7 +323,7 @@ const Submit = async (id: any) => {
     });
   } else if (id) {
     console.log(id, "tryuioj");
-    let res = await AddSub(numberValidateForm);
+    let res:any = await AddSub(numberValidateForm);
     if (res.errCode === 10000) {
       ElMessage({
         message: "成功",
@@ -332,7 +332,7 @@ const Submit = async (id: any) => {
       router.push("/subjects");
     }
   } else {
-    let res = await AddSub(numberValidateForm);
+    let res:any = await AddSub(numberValidateForm);
     if (res.errCode === 10000) {
       ElMessage({
         message: "成功",
@@ -368,7 +368,7 @@ sum();
 const ipt = (e: any, type: string) => {
   //  console.log(item,123233333333);
   // console.log(e, 1231231231);
-  console.log(item.scores);
+  // console.log(item.scores);
 
   if (type == "多选题") {
     questions.value.map((item: any) => {
@@ -403,9 +403,9 @@ const ipt = (e: any, type: string) => {
   }
 };
 // 存入试题库
-const options = reactive([]);
+const options:any = reactive([]);
 const GetQueList = async () => {
-  let res = await QueList();
+  let res:any = await QueList({});
   console.log(res);
   if (res.errCode === 10000) {
     options.push(...res.data.list);
@@ -504,7 +504,7 @@ const cancel = () => {
   router.push("/subjects");
 };
 // 单挑图标删除
-const Del = (index) => {
+const Del = (index:any) => {
   numberValidateForm.questions.splice(index, 1);
 };
 
