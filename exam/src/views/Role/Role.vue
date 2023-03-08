@@ -2,16 +2,18 @@
   <div class="box">
     <div class="top">
       <p>角色管理</p>
-      <p><el-button type="primary" @click="add">添加角色</el-button></p>
+      <p><el-button type="primary" @click="addrole">添加角色</el-button></p>
     </div>
     <!-- 添加弹出框 -->
-    <AddRole :dislogShow="dislogShow" :item="item" @click="click" :upid="upid" :upname="upname" :upmenus="upmenus"></AddRole>
+    <el-dialog v-model="dialogVisible" :title="isAdd === true ? '添加角色' : '修改角色'" width="45%" :modal="false">
+    <AddRole @clickChild="clickChild" @click="click" v-if="dialogVisible==true" :item="item" :isAdd="isAdd" :name="name"></AddRole>
+    </el-dialog>
     <div class="main">
       <el-table :data="tableData" :model="data">
         <el-table-column prop="name" label="名称"/>
         <el-table-column label="操作" class="right">
           <template #default="scope">
-            <span class="font right" @click="update(scope.row)">编辑 &nbsp; &nbsp;</span>
+            <span class="font right" @click="update(scope.row.id, scope.row)">编辑 &nbsp; &nbsp;</span>
             <span class="font right" @click="del(scope.row.id)">删除 </span> 
           </template>
         </el-table-column>
@@ -64,39 +66,40 @@ const getChildData = (val: any) => {
 };
 
 // 添加
-let dislogShow = ref(false)
+const dialogVisible=ref(false)
+const isAdd=ref(false)//添加修改的标题
+const item=ref(0)
+const name=ref("")
 
-const add = ()=>{
-  dislogShow.value = true
+// 点击添加出弹框
+const addrole = ()=>{
+  isAdd.value=true
+  dialogVisible.value=true
 }
-const click = (e:boolean)=>{
-  dislogShow.value=true
-  getRoleList()
 
-}
-// 修改
-let upid = ref(0)
-let upname = ref('')
-let upmenus = ref([])
-const update = async(row:any)=>{
-  // console.log(id);
-  upid=row.id
-  upname.value = row.name
-  upmenus.value = row.menus
+// 点击修改出弹窗
+const update = (id: any, row: any) => {
+  console.log(id);
   console.log(row);
-  
-  dislogShow.value = true
-  getRoleList()
-  // const res = await roleAdd({
-  //   name:data.name,
-  //   menus:data.menus
-  // })
-  // console.log(res);
-  
+  name.value=row.name
+  item.value = id
+  isAdd.value=false 
+  dialogVisible.value=true
+};
+
+// 点击取消按钮关闭弹窗
+const clickChild=(val:boolean)=>{
+  dialogVisible.value=val
+  item.value = 0;
+  getRoleList();
 }
 
-const item = ref(0)
-
+// 添加或修改关闭弹窗
+const click=(e:boolean)=>{
+  dialogVisible.value=e
+  item.value = 0;
+  getRoleList();
+}
 
 // 点击删除
 const del = (id: any) => {

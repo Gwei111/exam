@@ -12,6 +12,10 @@ export const studentAdd = (data: any) => {
 export const studentDelete = (data: any) => {
   return request.get('student/delete', data)
 }
+// 上传学生信息
+export const studentUpload = (data: any) => {
+  return request.post('student/upload', data)
+}
 // 学生修改密码
 export const studentChangepass = (data: any) => {
   return request.post('student/changepass', data)

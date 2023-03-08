@@ -10,7 +10,7 @@
                 </div>
                 <div class="right">
                     <div class="content">
-                        <div class="one">下载 <span class="tem">学生模板</span>，批量导入试题</div>
+                        <div class="one">下载 <span class="tem" @click="download">学生模板</span>，批量导入试题</div>
                         <div class="two">注:从其他Excel或Word复制试题时请使用选择性粘贴 Word:右键一选择性粘贴-文本， Excel:右键一选择性粘贴一只勾选 “值”</div>
                         <div class="three">上传填写好的试题表</div>
                     </div>
@@ -37,6 +37,7 @@
 import { ref, toRaw,reactive,toRefs } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { genFileId } from 'element-plus'
+import { downLoad } from '../utils/download'
 import type { UploadProps, UploadUserFile, UploadInstance, UploadRawFile } from 'element-plus'
 import { studentAdd } from '../api/student';
 
@@ -57,6 +58,10 @@ let data = ref([])
 
 const upload = ref<UploadInstance>()
 const token = sessionStorage.getItem('token')
+// 学生模板下载
+const download = () => {
+    downLoad('http://estate.eshareedu.cn/exam/upload/student.xlsx')
+}
 // 文件上传
 const addFile = async (file: any) => {
     console.log(file)

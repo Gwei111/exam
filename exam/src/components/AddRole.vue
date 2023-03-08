@@ -1,204 +1,174 @@
-<!-- 添加角色 -->
 <template>
-    <el-dialog v-model="centerDialogVisible" :title="id ? '修改' : '添加'" style="padding-bottom: 20px;">
-        <el-form :model="tableData"  ref="ruleFormRef" :rules="rules" status-icon >
-            <el-form-item label="角色名称" :label-width="formLabelWidth" prop="name">
-                <el-input style="width: 200px;" v-model="tableData.name" autocomplete="off" />
-            </el-form-item>
-            <el-form-item label="权限" :label-width="formLabelWidth">
-            </el-form-item>
-            <el-scrollbar height="300px">
-
-                <el-form-item :label-width="formLabelWidth" v-for="(item, index) in menuDate.list" :key="item.id">
-                    <!-- 权限多选框 -->
-                    <div>
-                        <el-checkbox v-model="item.checked" :indeterminate="item.isIndeterminate"
-                            @change="handleCheckAllChange(index)">
-                            {{ item.name }}</el-checkbox>
-                    </div>
-
-                    <div class="boxall" style="margin-left: 90px;">
-                        <el-checkbox-group v-model="item.checkedids" @change="handleCheckedCitiesChange(index)">
-                            <el-checkbox v-for="itemSon in item.children" :key="itemSon.id" :label="itemSon.id">
-                                {{ itemSon.name }}
-                            </el-checkbox>
-                        </el-checkbox-group>
-                    </div>
-
-                </el-form-item>
-            </el-scrollbar>
-
-            <el-form-item style="float: right;padding-top: 10px;">
-                <div>
-                    <span class="dialog-footer">
-                        <el-button @click="centerDialogVisible = false">取消</el-button>
-                        <el-button type="primary" @click="getaddRole">
-                            确定
-                        </el-button>
-                    </span>
-                </div>
+    <div class="box">
+        <el-form ref="ruleFormRef" :model="tableData" :rules="rules" label-width="120px" class="demo-ruleForm"
+            :size="formSize" status-icon>
+            <el-form-item label="角色名称" prop="name">
+                <el-input v-model="tableData.name" />
             </el-form-item>
         </el-form>
-    </el-dialog>
-    <!-- 添加角色结束 -->
+
+        <!-- 复选框 -->
+        <div>
+            <span>权限</span>
+        </div>
+        <div style="margin-left: 50px;" v-for="(item, index) in info" :key="item.id">
+            <!-- 父类复选框 -->
+            <el-checkbox v-model="item.checkAll" :indeterminate="item.isIndeterminate"
+                @change="handleCheckAllChange($event, index)">{{ item.name }}</el-checkbox>
+            <!-- 子类复选框 -->
+            <el-checkbox-group style="margin-left: 40px;" v-model="item.checkedCities"
+                @change="handleCheckedCitiesChange($event, index)">
+                <el-checkbox v-for="city in item.children" :key="city.id" :label="city.id">{{
+                    city.name
+                }}</el-checkbox>
+            </el-checkbox-group>
+        </div>
+        <!-- 取消与添加修改按钮 -->
+        <span class="dialog-footer">
+            <el-button @click="colf">取消</el-button>
+            <el-button type="primary" @click="roleAdmin()">{{
+                isAdd === true ? '添加' : '修改'
+            }}</el-button>
+        </span>
+    </div>
 </template>
+  
+<script lang="ts" setup>
+import { reactive, ref, toRefs, watchEffect } from 'vue';
+import type { FormInstance, FormRules } from 'element-plus';
+import { ElMessage } from 'element-plus';
+import { menuList, roleAdd } from '../api/role'
 
-<script setup lang="ts">
-import { reactive, ref, onMounted, watch, toRefs, markRaw, toRaw } from 'vue'
-import { roleAdd, menuList } from '../api/role';
-import { ElMessage, ElMessageBox } from 'element-plus'
-import type { FormInstance, FormRules } from 'element-plus'
-
-
-onMounted(() => {
-    getMenuList()
-})
-// 传
-const props = defineProps({
-    dislogShow: Boolean,
-    item: Number,
-    upid: Number,
-    upname: String,
-    upmenus: Array
-})
-watch([
-    props
-], () => {
-    centerDialogVisible.value = props.dislogShow
-    id.value = props.upid
-    name.value = props.upname
-    menus.value = props.upmenus
-})
-
-
-// 添加
-const centerDialogVisible = ref(false)
-const emit = defineEmits(['click'])
-const formLabelWidth = '140px'
-
-const menuDate = reactive<any>({
-    list: []
-})
-
-
-// 权限列表
-// const menuDate = ref<any>([])
-const tableData: any = reactive({
-    id: 0,
-    name: '',
-    menus: [],
-    roleid: 0,
-    info: []
-})
-const { name, roleid, id, menus, info } = toRefs(tableData)
-const getMenuList = async () => {
-    const res: any = await menuList({ roleid: tableData.id })
-    // console.log(res.data.list);
-    if (res.errCode == 10000) {
-        menuDate.list = res.data.list
-        tableData.id = props.item
-        menus.value = props.upmenus
-    }
-}
-// 添加多选框
-const handleCheckAllChange = (index: number) => {
-    let ids: Array<number> = [];
-    if (!menuDate.list[index].checkedids || menuDate.list[index].checkedids.length == 0) {
-        ids = menuDate.list[index].children.map((item: any) => item.id);
-    }
-    menuDate.list[index].checkedids = ids;
-    // console.log(ids);
-
-}
-const handleCheckedCitiesChange = (index: number) => {
-    console.log(menuDate.list[index].checkedids);
-    let len1 = menuDate.list[index].checkedids.length;
-    let len2 = menuDate.list[index].children.length;
-    menuDate.list[index].isIndeterminate = false;
-    if (len1 == len2) {
-        menuDate.list[index].checked = true;
-    }
-    else if (len1 > 0) {
-        menuDate.list[index].isIndeterminate = true;
-    }
-    else {
-
-        menuDate.list[index].checked = false;
-    }
-}
-
-// 表单校验
-const ruleFormRef = ref<FormInstance>()
+const formSize = ref('default');
+const ruleFormRef = ref<FormInstance>();
 
 const rules = reactive<FormRules>({
-    name:[
-    { required: true, message: '角色名不能为空', trigger: 'blur' },
-    ]
-})
-// 点击确定
-const getaddRole = async () => {
-    centerDialogVisible.value = false
-    if (id.value == 0) {
-        // 获取id
-        tableData.menus = toRaw(menuDate.list)
-        // console.log(menus);
-        let tomenus: Array<any> = []
-        tableData.menus.forEach((item: any) => {
-            if (item.checkedids) {
-                item.checkedids.forEach((item1: any) => {
-                    tomenus.push({ id: item1 })
-                })
-            }
-        })
-        console.log(111111111, tomenus);
-        // 接口
-        const res: any = await roleAdd({
-            name: tableData.name,
-            menus: tomenus
-        })
-        console.log(res);
-        if (res.errCode == 10000) {
-            ElMessage({
-                type: 'success',
-                message: '添加成功',
-            })
-            emit('click', false)
-        } else {
-            ElMessage({
-                type: 'error',
-                message: res.errMsg,
-            })
-        }
+    name: [{ required: true, message: '请输入角色名称', trigger: 'blur' }],
+});
+
+const tableData: any = reactive({
+    id: 0,
+    menus: [],
+    info: [],
+    name: '',
+    roleid: 0,
+});
+const { info, roleid, name, menus, id } = toRefs(tableData);
+
+// 获取获取权限功能列表接口
+const getList = async () => {
+    const res = await menuList({ roleid: tableData.id })
+    console.log(123123123123123, res);
+    info.value = res.data.list
+    tableData.id = props.item;
+    if (tableData.id != 0) {
+        let data = info.value.map((item: any) => {
+            item.checkedCities = [];
+            item.children.forEach((item1: any) => {
+                if (item1.checked != 0) {
+                    item.checkedCities.push(item1.id);
+                }
+                if (item.checkedCities.length === item.children.length) {
+                    item.checkAll = true;
+                }
+            });
+        });
+    }
+}
+// getList()
+
+// 复选框
+const checkAll = ref(false);
+const isIndeterminate = ref(false);//子类复选框是否选中
+
+const handleCheckAllChange = (val: boolean, index: number) => {
+    console.log(123123, val, index);//选中的状态和id
+    console.log(info.value);//选中返回的内容
+    if (val) {
+        let ids = info.value[index].children.map((item: any) => item.id)
+        info.value[index].checkedCities = ids
     } else {
-        const res: any = await roleAdd({
-            name: props.upname,
-            id: props.upid,
-            menus:props.upmenus
-        })
-        console.log(res);
-        if (res.errCode == 10000) {
-            ElMessage({
-                type: 'success',
-                message: '修改成功',
-            })
-            emit('click', false)
+        info.value[index].checkedCities = []
+    }
+};
+const handleCheckedCitiesChange = (value: string[], index: number) => {
+    const checkedCount = value.length;
+    console.log(value, 123, index);
+    info.value[index].checkAll = checkedCount === info.value[index].children.length
+    if (checkedCount > 0 && !info.value[index].checkAll) {
+        info.value[index].isIndeterminate = true
+    } else {
+        info.value[index].isIndeterminate = false
+    }
+};
+
+// 确定调接口
+const props = defineProps(['isAdd', 'item', 'name']);
+console.log(props);
+id.value = props.item
+
+
+// 取消按钮
+const colf = () => {
+    emit('clickChild', false);
+};
+
+// 添加修改
+const roleAdmin = async () => {
+    let data = info.value.map((item: any) => {
+        if (item.checkedCities) {
+            tableData.menus = [...tableData.menus, ...item.checkedCities];
+        }
+    });
+    tableData.menus = tableData.menus.map((item1: any) => {
+        return {
+            id: item1,
+        };
+    });
+    const res: any = await roleAdd(tableData)
+    console.log(res);
+    if (res.errCode === 10000) {
+        if (id.value === 0) {
+            ElMessage.success('添加成功');
+            emit('click', false);
         } else {
-            ElMessage({
-                type: 'error',
-                message: res.errMsg,
-            })
+            tableData.id = props.item;
+            const res: any = await roleAdd(tableData);
+            console.log(res, 7826);
+            ElMessage.success('修改成功');
+            emit('click', false);
         }
     }
-
 }
+
+// 回显
+watchEffect(() => {
+    if (props.isAdd) {
+        (name.value = ''), getList();
+    } else {
+        tableData.name = props.name;
+        console.log(props.name);
+        // (name.value = ''), props.item.name;
+        getList();
+    }
+    console.log(1010, props.item);
+});
+
+const emit = defineEmits(['clickChild', 'click']);
 </script>
-
-<style scoped lang="less">
-:deep(.el-form-item__content) {
-    display: inline-block !important
+  
+<style lang="less" scoped>
+/deep/.box {
+    padding: 20px !important
 }
 
-.boxall {
-    margin: 0 60px;
+.el-input {
+    width: 280px;
+}
+
+.dialog-footer {
+    float: right;
+    margin-bottom: 50px;
 }
 </style>
+  
