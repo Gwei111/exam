@@ -50,11 +50,13 @@ const show=ref(false)
 const addshow=ref(false)
 // 添加一级节点的显示隐藏
 const add=()=>{
+  all.name=''
+  all.id=''
   addshow.value=true
   show.value=false
 } 
 // 添加一级节点
-const addone=async()=>{
+const addone=async()=>{  
 let res:any=await departmentadd(all)
 console.log(res);
 if(res.errCode===10000){
@@ -69,7 +71,7 @@ if(res.errCode===10000){
 const addlist=async()=>{
   ruleForm.id=0;
   ruleForm.pid=all.id
-  // 这里要id不是pid
+  //这里要id不是pid
 let res:any=await departmentadd(ruleForm)
 if(res.errCode===10000){
   ruleForm.name=''
