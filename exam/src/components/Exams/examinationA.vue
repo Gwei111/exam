@@ -1,7 +1,5 @@
 <template>
   <div class="boxx">
-    <!-- <span @click="hui">←返回</span>&emsp;|&emsp;
-    <span>问答题（带阅卷）</span> -->
     <el-page-header @back="hui">
     <template #content>
       <span class="text-large font-600 mr-3"> {{ data.title }} </span>
@@ -25,15 +23,14 @@
 
     </div>&emsp;
     <span style="margin-top:5px;color:gray">状态：</span>
-    <el-select v-model="value"
+    <el-select v-model="numberValidateForm.state"
                class="m-2"
                placeholder="全部">
       <el-option v-for="item in slect"
                  :key="item.value"
                  :label="item.label"
-                 :value="item.value" />
+                 :value="item.label" />
     </el-select>&emsp;
-    <!--  -->
     <div class="m-4">
       <span>部门</span>&nbsp;
       <el-cascader v-model="date.depid"
@@ -43,15 +40,15 @@
                    :props="propsAAA" />
     </div>&nbsp;
     <span style="margin-top:5px;color:gray;"> 班级：</span>
-    <el-select v-model="value"
+    <el-select v-model="value1"
                disabled
-               placeholder="Select">
+               placeholder="请选择">
       <el-option v-for="item in options"
                  :key="item.value"
                  :label="item.label"
                  :value="item.value" />
     </el-select>&emsp;
-    <el-button type="primary">查询</el-button>
+    <el-button type="primary" @click="chai">查询</el-button>
   </div>
   <el-table :data="tableData"
             style="width: 100%">
@@ -72,7 +69,12 @@
                      width="180" />
     <el-table-column prop="name"
                      label="操作"
-                     width="180" />
+                     width="180">
+                     <template #default="scope">
+            <el-button link type="primary" size="small"> 阅卷 </el-button>
+          </template>
+    </el-table-column>
+
   </el-table>
   <!-- 使用分页组件 -->
   <FenYe :counts="counts"
@@ -99,11 +101,15 @@ data.id=route.query.id
 data.title=route.query.name
 const numberValidateForm:any = reactive({
   testid: route.query.id,
+  state:''
 });
-
+// 查询
+const chai=()=>{
+  GetStuDentList();
+}
 
 const value = ref("");
-
+const value1 = ref("");
 
 const options: any = reactive({ arr: [] });
 interface User {
@@ -132,12 +138,15 @@ const partmentlist = async () => {
   // console.log(options.arr);
 };
 partmentlist()
+// 列表
 const tableData:any = ref([]);
+const counts=ref()
 const GetStuDentList = async () => {
   let res :any= await StuDentList(numberValidateForm);
   console.log(res);
   if (res.errCode === 10000) {
     tableData.value = res.data.list;
+    counts.value=res.data.counts
   }
 };
 GetStuDentList();

@@ -127,7 +127,6 @@ const htmlEncodeByRegExp=(val:any)=>{
     val=val.replace(/</g,'&lt;');
     val=val.replace(/>/g,'&gt;');
     val=val.replace(/\n/g,'<br>');
-    console.log(val);
 		return val;
 	}
 const title="编辑"
