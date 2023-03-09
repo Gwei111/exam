@@ -1,7 +1,12 @@
 <template>
   <div class="boxx">
-    <span @click="hui">←返回</span>&emsp;|&emsp;
-    <span>问答题（带阅卷）</span>
+    <!-- <span @click="hui">←返回</span>&emsp;|&emsp;
+    <span>问答题（带阅卷）</span> -->
+    <el-page-header @back="hui">
+    <template #content>
+      <span class="text-large font-600 mr-3"> {{ data.title }} </span>
+    </template>
+  </el-page-header>
   </div>
   <div class="cen_inp">
     <div class="sel">
@@ -50,22 +55,19 @@
   </div>
   <el-table :data="tableData"
             style="width: 100%">
-    <el-table-column prop="date"
+    <el-table-column prop="name"
                      label="姓名"
                      width="180" />
-    <el-table-column prop="name"
+    <el-table-column prop="depname"
                      label="班级名称"
                      width="180" />
-    <el-table-column prop="name"
+    <el-table-column prop="scores"
                      label="分数"
                      width="180" />
-    <el-table-column prop="name"
+    <el-table-column prop="readtime"
                      label="考试时间"
                      width="180" />
-    <el-table-column prop="name"
-                     label="班级名称"
-                     width="180" />
-    <el-table-column prop="name"
+    <el-table-column prop="state"
                      label="状态"
                      width="180" />
     <el-table-column prop="name"
@@ -80,16 +82,25 @@
 <script setup lang="ts">
 import { reactive, ref,toRaw } from "vue";
 import type { FormInstance } from "element-plus";
-import { StuDentList ,GetList} from "../../api/ExamPapers/Exam";
+import { StuDentList ,GetList,List} from "../../api/ExamPapers/Exam";
 // 导入分页组件
 import FenYe from "../../components/FenYe/FenYe.vue"
 import {useRouter} from "vue-router"
+import {useRoute} from 'vue-router';
 const router=useRouter()
+const route = useRoute();
 const formRef = ref<FormInstance>();
 
+const data:any=reactive({
+  id:'',
+  title:''
+})
+data.id=route.query.id
+data.title=route.query.name
 const numberValidateForm:any = reactive({
-  testid: "",
+  testid: route.query.id,
 });
+
 
 const value = ref("");
 
@@ -118,10 +129,10 @@ const propsAAA = ref({
 const partmentlist = async () => {
   let res: any = await GetList(date);
   options.arr = res.data.list;
-  console.log(options.arr);
+  // console.log(options.arr);
 };
 partmentlist()
-const tableData:any = reactive([]);
+const tableData:any = ref([]);
 const GetStuDentList = async () => {
   let res:any = await StuDentList(numberValidateForm);
   console.log(res);
@@ -135,7 +146,7 @@ GetStuDentList();
 const getChildData = (val: any) => {
   numberValidateForm.page = val.page;
   numberValidateForm.psize = val.psize;
-  partmentlist();
+  GetStuDentList();
 };
 
 const slect = [

@@ -33,11 +33,11 @@
     <el-table-column prop="studentcounts"
                      label="考试人数"
                      width="180" />
-    <el-table-column prop="isread"
+    <el-table-column 
                      label="未判人数"
-                     width="180">
+                     width="180" >
                      <template #default="scope">
-                              
+                      <span  class="hon"> {{scope.row.incomplete}}</span>
                      </template>
     </el-table-column>
     <el-table-column prop="addtime"
@@ -46,11 +46,10 @@
     <el-table-column label="操作"
                      width="180">
       <template #default="scope">
-   
-        <el-button link
+     <el-button link
                    type="primary"
-                   @click="questions(scope.row.id)">
-                     {{scope.row.state==1?"阅卷" :"查看"}}</el-button>
+                   @click="questions(scope.row)">
+                     {{scope.row.incomplete==0?"查看" :"阅卷"}}</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -86,11 +85,12 @@ const GetList = async () => {
 };
 GetList();
 // 点击阅卷跳转
-const questions = (id: any) => {
-  console.log(id);
-
-  router.push({ path: "/examinationA", query: { id: id } });
-};
+const questions = (val: any) => {
+  console.log(val);
+  router.push({ path: "/examinationA", query: { id:val.id,name:val.title} });
+  // router.push({ name: "examinationA", state:{params: id }});
+  console.log({ path: "/examinationA", query: { name:val.title,id:val.id } });
+};  
 // 分页
 const getChildData = (val: any) => {
   numberValidateForm.page = val.page;
@@ -104,5 +104,7 @@ const seach = () => {
 </script>
 
 <style scoped>
+
 @import url("../../assets/css/Exam/ExamPapers");
+
 </style>
