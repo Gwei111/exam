@@ -20,7 +20,6 @@
                     autocomplete="off" />
         </el-form-item>
       </el-form>
-
     </div>&emsp;
     <span style="margin-top:5px;color:gray">状态：</span>
     <el-select v-model="numberValidateForm.state"
@@ -140,7 +139,7 @@ const partmentlist = async () => {
 partmentlist()
 // 列表
 const tableData:any = ref([]);
-const counts:any=ref()
+const counts=ref()
 const GetStuDentList = async () => {
   let res :any= await StuDentList(numberValidateForm);
   console.log(res);
@@ -169,14 +168,11 @@ const slect = [
   },
 ]
 const hui=()=>{
-  router.push("/exam")
+  router.push("/subjects")
 }
 
 </script>
 
 <style scoped>
 @import url("../../assets/css/Exam/EXam2.css");
-h4{
-  font-weight: normal;
-}
 </style>
