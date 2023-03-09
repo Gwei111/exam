@@ -188,6 +188,9 @@ const updata=(val:any)=>{
   display: flex;
   justify-content: space-between;
 }
+h3{
+  font-weight: normal;
+}
 :deep(.el-button--primary){
   margin-left: 1215px;
 }

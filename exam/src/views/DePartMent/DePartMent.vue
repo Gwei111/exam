@@ -1,6 +1,6 @@
 <template>
   <div class="top">
-    部门管理  
+    <h3>部门管理</h3>
     <div class="left">
       <el-button type="primary" class="but" @click="add()">添加一级节点</el-button>
       <div class="thre">
@@ -175,6 +175,9 @@ const rules = reactive<FormRules>({
 <style scoped>
 .dan{
   font-size: 14px;
+}
+h3{
+  font-weight: normal;
 }
 .top{
   display: flex;

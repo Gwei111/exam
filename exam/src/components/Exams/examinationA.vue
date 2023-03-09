@@ -4,7 +4,7 @@
     <span>问答题（带阅卷）</span> -->
     <el-page-header @back="hui">
     <template #content>
-      <span class="text-large font-600 mr-3"> {{ data.title }} </span>
+      <h4> {{ data.title }} </h4>
     </template>
   </el-page-header>
   </div>
@@ -168,4 +168,7 @@ const hui=()=>{
 
 <style scoped>
 @import url("../../assets/css/Exam/EXam2.css");
+h4{
+  font-weight: normal;
+}
 </style>

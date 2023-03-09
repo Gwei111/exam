@@ -199,7 +199,11 @@ const isShows=()=>{
 .top {
   display: flex;
   margin-top: 15px;
+  
 }
+h3{
+    font-weight: normal;
+  }
 :deep(.el-form-item__label) {
   margin-left: 20px;
 }

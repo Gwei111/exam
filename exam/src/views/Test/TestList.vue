@@ -1,6 +1,6 @@
 <template>
   <div class="head">
-    <span>试卷管理</span>
+    <h3>试卷管理</h3>
     <el-button type="primary"
                @click="add">创建试卷</el-button>
   </div>
@@ -168,4 +168,7 @@ const upd = (id: any) => {
 
 <style scoped>
 @import url("../../assets/css/Test/Test.css");
+h3{
+  font-weight: normal;
+}
 </style>
