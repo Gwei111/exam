@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
   <div>123456564321
     <el-form ref="ruleFormRef"
              :model="ruleForm"
@@ -162,4 +162,4 @@ const value = ref([])
 };
 </script>
 <style scoped>
-</style> -->
+</style>

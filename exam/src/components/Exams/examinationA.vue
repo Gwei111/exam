@@ -80,7 +80,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref,toRaw } from "vue";
+import { reactive, ref ,toRaw} from "vue";
 import type { FormInstance } from "element-plus";
 import { StuDentList ,GetList,List} from "../../api/ExamPapers/Exam";
 // 导入分页组件
@@ -104,7 +104,7 @@ const numberValidateForm:any = reactive({
 
 const value = ref("");
 
-const counts:any = ref(0)
+
 const options: any = reactive({ arr: [] });
 interface User {
   date: string;
@@ -134,7 +134,7 @@ const partmentlist = async () => {
 partmentlist()
 const tableData:any = ref([]);
 const GetStuDentList = async () => {
-  let res:any = await StuDentList(numberValidateForm);
+  let res :any= await StuDentList(numberValidateForm);
   console.log(res);
   if (res.errCode === 10000) {
     tableData.value = res.data.list;
@@ -160,7 +160,7 @@ const slect = [
   },
 ]
 const hui=()=>{
-  router.push("/exam")
+  router.push("/subjects")
 }
 
 </script>

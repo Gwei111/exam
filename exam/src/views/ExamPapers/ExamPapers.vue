@@ -67,14 +67,14 @@ import { List } from "../../api/ExamPapers/Exam";
 import { useRouter } from "vue-router";
 const router = useRouter();
 const formRef = ref<FormInstance>();
-const numberValidateForm:any = reactive({
+const numberValidateForm = reactive({
   isread: "1",
   key: "",
 });
 const tableData = ref([]);
 const counts = ref(0);
 const GetList = async () => {
-  let res:any = await List(numberValidateForm);
+  let res = await List(numberValidateForm);
   console.log(res);
   if (res.errCode === 10000) {
     tableData.value = res.data.list;
