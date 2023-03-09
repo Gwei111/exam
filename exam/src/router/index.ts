@@ -126,6 +126,12 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("../views/Stutest/stuexam.vue"),
     meta: { title: '学生端考试', isAuth: true },
   },
+  {
+    path: '/examwrong',
+    name: 'examwrong',
+    component: () => import("../views/Stutest/examwrong.vue"),
+    meta: { title: '学生端查看试题', isAuth: true },
+  },
 ]
 
 const router = createRouter({

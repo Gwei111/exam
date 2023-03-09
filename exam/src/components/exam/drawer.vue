@@ -62,15 +62,14 @@
           </el-form-item>
         </div>
         <!-- 填空题 -->
-        {{ data.leng.length }}
         <div v-if="form.type == '填空题' || form.type == '简答题'">
           <el-form-item label="正确答案" size="normal" v-show="data.leng.length > 0" v-if="form.type == '填空题'">
             <div v-for="(item, index) in data.leng" :key="index">
-              <el-input size="normal" autosize clearable v-model="data.leng[index]" style="width: 350px;"
-                v-show="form.type == '填空题'"></el-input>
+              <el-input size="normal" autosize clearable  style="width: 350px;"
+               ></el-input><br/>
             </div>
           </el-form-item>
-          <el-form-item label="解析" size="normal">
+          <el-form-item label="解析" size="normal" >
             <el-input placeholder="" type="textarea" size="normal" autosize clearable v-model="form.explains"
               style="width: 350px;"></el-input>
           </el-form-item>
@@ -151,8 +150,8 @@ let form:any = reactive({
 watch(form.type, (newVal) => {
   form.value.type = newVal;
 });
-const  answer  = toRefs(form)
-const data = reactive({
+const  {answer}  = toRefs(form)
+const data:any = reactive({
   letter: [
     //选项的名
     "A",
@@ -199,6 +198,20 @@ const changeCheckbox = (e: any) => {
   // console.log(e);
   form.answer = e.join("|");
 };
+// 填空题
+watch(()=>form.title,(newvalue)=>{
+  // console.log(newvalue);
+  data.leng=[]
+  let res=newvalue.match(/\[\]/g)
+  if(res){
+    let len=res?.length
+    for (let i = 0; i < len; i++) {
+      data.leng.push(form.title)
+      
+    }
+  }
+  
+})
 // 点击+添加选项
 const addOptions = () => {
     form.answers.push({

@@ -71,3 +71,15 @@ export const testStart= (params: any) => {
 export const stuAdd = (data: any) => {
   return request.post('studentanswer/add', data)
 }
+// 
+export const databasequestion_list= (params: any) => {
+  return request.get('databasequestion/list', params)
+}
+// 试卷列表 
+export const subjects_list= (params: any) => {
+  return request.get('subjects/list', params)
+}
+// 单条试卷 /
+export const subjects_get= (params: any) => {
+  return request.get('subjects/get', params)
+}

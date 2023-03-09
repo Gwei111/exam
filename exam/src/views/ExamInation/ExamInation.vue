@@ -7,7 +7,7 @@
     <div class="top">
       <el-form :inline="true" :model="query" class="demo-form-inline">
         <el-form-item label="关键字">
-          <el-input v-model="query.key" placeholder="考试名称" />
+          <el-input v-model="query.key" placeholder="考试名称" size="mini" />
         </el-form-item>
         <el-form-item label="创建人">
           <el-input v-model="query.admin" placeholder="创建人" />
@@ -46,7 +46,7 @@
       </el-form>
     </div>
     <div class="list">
-      <el-table ref="multipleTableRef" :data="tableData" style="width: 100%, "  @selection-change="handleSelectionChange">
+      <el-table ref="multipleTableRef" :data="tableData" style="width: 100%, " size="small" @selection-change="handleSelectionChange">
         <el-table-column type="selection" />
         <el-table-column label="考试名称" prop="title">
           <template #default="scope">
@@ -55,7 +55,7 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column label="状态" width="80px">
+        <el-table-column label="状态" >
           <template #default="scope">
             <span :class="
               scope.row.state == 0 || scope.row.state == 1 ? 'blues' : 'reds'">
@@ -64,11 +64,11 @@
           </template>
         </el-table-column>
 
-        <el-table-column property="scores" label="总分" width="100" align="center"/>
-        <el-table-column property="pastscores" label="通过分数" width="90" align="center"/>
-        <el-table-column property="studentcounts" label="考试人数" width="90" align="center"/>
-        <el-table-column property="pastnum" label="通过人数" width="90" align="center"/>
-        <el-table-column property="name" label="开放时间" width="160" align="center">
+        <el-table-column property="scores" label="总分"  align="center"/>
+        <el-table-column property="pastscores" label="通过分数"  align="center"/>
+        <el-table-column property="studentcounts" label="考试人数"  align="center"/>
+        <el-table-column property="pastnum" label="通过人数"  align="center"/>
+        <el-table-column property="name" label="开放时间"  align="center">
           <template #default="scope">
             <p v-if="scope.row.begindate == null">不限</p>
             <p v-else>
@@ -102,7 +102,7 @@
         </el-table-column>
       </el-table>
       <!-- 分页 -->
-      <div style="width: 600px; margin: 0 auto;">
+      <div style="width: 600px; margin: 30px auto;">
         <Pages @getChildData="getChildData" :counts="totals"></Pages>
       </div>
       <!-- 考试详情 -->

@@ -62,7 +62,10 @@
       </el-table>
     </div>
     <div class="foot">
-      <FenYe :counts="counts" @getChildData="getChildData" />
+      <div class="page" style="width: 600px; margin: 30px auto;">
+        <FenYe :counts="counts" @getChildData="getChildData" />
+
+      </div>
     </div>
   </div>
 </template>
@@ -94,7 +97,7 @@ const count = reactive({
     page: 1,
     ids: 0,
     psize: 10,
-    databaseid:Number(route.query.id),
+    databaseid: Number(route.query.id),
   },
   total: 0,
   centerDialogVisible: false,
@@ -164,8 +167,8 @@ const getdepartmentsList = async () => {
 const getDepid = (val: any) => {
   if (val) {
     state.value.depid = val.at(-1)
-    console.log(state.value.depid );
-    
+    console.log(state.value.depid);
+
   }
   getclassesList()
 
@@ -174,17 +177,17 @@ const getDepid = (val: any) => {
 const depid = ref(0)
 const classlistInfo: any = ref([])
 const getclassesList = async () => {
-  
+
   const res: any = await classesList({ depid: state.value.depid })
   // console.log('班级列表', res.data.list);
   classlistInfo.value = res.data.list
   // console.log(state.value.depid);
 
 }
-const changeclass = async( val:any)=>{
+const changeclass = async (val: any) => {
   console.log(val);
   state.value.classid = val
-  
+
   // depid.value = val
 }
 // 查询
@@ -358,7 +361,7 @@ const batchAdd = () => {
   color: rgb(160 207 255);
 }
 
-:deep(.el-input__inner ){
+:deep(.el-input__inner) {
   font-size: 12px !important
 }
 

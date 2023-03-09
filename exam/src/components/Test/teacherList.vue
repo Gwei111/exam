@@ -1,5 +1,6 @@
 <template>
-    <div class="top">
+    <div style="height: 410px;">
+        <div class="top">
         <div class="topbranch">
             <span>部门</span>
             <el-select v-model="value" class="m-2" placeholder="请选择" size="default" @change="getteacherList">
@@ -14,12 +15,13 @@
 
     </div>
     <div>
-        <span class="dialog-footer">
+        <span class="dialog-footer" style="float: right;">
             <el-button @click="teacherCancel">取消</el-button>
             <el-button type="primary" @click="teacherConfirm">
                 确认
             </el-button>
         </span>
+    </div>
     </div>
 </template>
 
@@ -59,8 +61,6 @@ const getteacherList = async (depid: any) => {
                 label:item.name
             }
         })
-        // console.log(teacherdata);
-        
     }
 }
 

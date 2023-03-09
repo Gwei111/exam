@@ -35,17 +35,24 @@
                 <!-- <div class="line"></div> -->
             </div>
             <div class="btn">
-                <el-button type="primary" @click="getExam">开始考试</el-button>
+                <el-button type="primary" @click="getExam" :disabled="testList.begintime?(minutes<0||!isStart?true:false):false">{{testList.begintime
+                    ?(minutes<0||!isStart)?
+                    !isStart?
+                    `${time}开始考试`:
+                    '不在开放时间内':
+                    '开始考试':
+                    '开始考试'}}</el-button>
             </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref,onMounted } from 'vue'
+import { ref,onMounted,reactive,toRefs } from 'vue'
 import { useRoute } from "vue-router"
 import {testGet} from '../../api/test'
 import router from '../../router';
+import moment from 'moment';
 
 let Route:any=useRoute()
 let testid=Route.query.id
@@ -53,16 +60,43 @@ onMounted(() => {
     console.log(Route.query);
     
 })
-let testList:any=ref([])
+
+const data:any = reactive({
+    testList:{
+        begintime:'',
+        endtime:''
+    },
+    time:'',
+})
+const {testList,time}=toRefs(data)
 let getTestlist=async()=>{
     let res:any=await testGet({id:Route.query.id})
     console.log(res);
     if(res.errCode==10000){
-        testList.value=res.data
+        data.testList=res.data
     }
     
 }
 getTestlist()
+let isStart=ref(false)
+// 计算时间
+let minutes=moment(testList.value.endtime).diff(moment(),'minutes')
+// 倒计时
+let timer=setInterval(() => {
+    let timeing=moment()//获取当前时间
+    let start=moment(new Date(testList.value.begintime))//获取开始考试时间
+    let diff=start.diff(timeing)//时间差
+    time.value=`${moment.duration(diff).hours()}:${moment.duration(diff).minutes()}:${moment.duration(diff).seconds()}`
+    // console.log(time);
+    
+    let awaitTime=Math.floor(diff/1000)
+    if(awaitTime<=0){
+        clearInterval(timer)
+        time.value='00.00'
+        isStart.value=true
+    }
+
+}, 10);
 // 开始考试
 const getExam=()=>{
     router.push({path:'/stuExam',query:{testid}})

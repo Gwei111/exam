@@ -26,11 +26,11 @@
   </div>
   <div>
     <el-table :data="tableData" style="width: 100%" :header-cell-style="{ background: '#fafafa' }">
-      <el-table-column prop="name" label="姓名" width="250" />
-      <el-table-column prop="depname" label="部门" width="250" />
-      <el-table-column prop="tel" label="电话" width="200" />
-      <el-table-column prop="rolename" label="角色" width="250" />
-      <el-table-column prop="username" label="账号" width="150" />
+      <el-table-column prop="name" label="姓名"  />
+      <el-table-column prop="depname" label="部门"  />
+      <el-table-column prop="tel" label="电话"  />
+      <el-table-column prop="rolename" label="角色"  />
+      <el-table-column prop="username" label="账号"/>
       <el-table-column label="操作">
         <template #default="scope">
           <el-button link type="primary" size="small" @click="reset(scope.row)"> 重置密码 </el-button>
@@ -40,8 +40,11 @@
       </el-table-column>
     </el-table>
   </div>
-  <FenYe :counts="counts" @getChildData="getChildData" />
-    <!-- 添加 -->
+  <div class="page" style="width: 600px; margin: 0 auto;">
+    <FenYe :counts="counts" @getChildData="getChildData" />
+
+  </div>
+  <!-- 添加 -->
   <Add ref="dialog" :dialogVisible="dialogVisible"   @iqadd="iqadd" ></Add>
   <!-- 修改 -->
   <Update ref="TeacherEdits"  @isShow="isShow"></Update>
@@ -214,7 +217,7 @@ h3{
   margin-left: 10px;
 }
 :deep(.el-pagination){
-  margin-left: 280px;
+  /* margin-left: 280px; */
     margin-top: 30px
 }
 </style>

@@ -33,7 +33,7 @@
                     <div class="title">
                       <h4>试题列表</h4>
                       <div class="right">
-                        <span>总分:{{ params.scores }}</span>
+                        <span>总分:{{ totalPoints}}</span>
                         <span>已添加: {{params.questions.length}} 题</span>
                         <el-button @click="clear">清空</el-button>
                       </div>
@@ -48,7 +48,7 @@
                           <el-input placeholder=""
                                     size="small"
                                     clearable
-                                    style="width:50px;"></el-input>分
+                                    style="width:50px;" @input="inp($event,'单选题')" v-model="radioinp"></el-input>分
                         </p>
                       </div>
                       <div class="dan"
@@ -58,7 +58,7 @@
                           <el-input placeholder=""
                                     size="small"
                                     clearable
-                                    style="width:50px;"></el-input>分
+                                    style="width:50px;"  @input="inp($event,'多选题')" v-model="checkinp"></el-input>分
                         </p>
                       </div>
                       <div class="dan"
@@ -68,7 +68,7 @@
                           <el-input placeholder=""
                                     size="small"
                                     clearable
-                                    style="width:50px;"></el-input>分
+                                    style="width:50px;"  @input="inp($event,'判断题')"></el-input>分
                         </p>
                       </div>
                       <div class="dan"
@@ -78,7 +78,7 @@
                           <el-input placeholder=""
                                     size="small"
                                     clearable
-                                    style="width:50px;"></el-input>分
+                                    style="width:50px;"  @input="inp($event,'问答题')" v-model="qwdinp"></el-input>分
                         </p>
                       </div>
                       <div class="dan"
@@ -88,7 +88,7 @@
                           <el-input placeholder=""
                                     size="small"
                                     clearable
-                                    style="width:50px;"></el-input>分
+                                    style="width:50px;"  @input="inp($event,'填空题')"></el-input>分
                         </p>
                       </div>
                     </div>
@@ -163,8 +163,8 @@
                     <div class="froncontent">
                       <el-button @click="addOne">添加题目</el-button>
                       <el-button @click="Updatadialog = true">批量导入</el-button>
-                      <el-button>从题库中导入</el-button>
-                      <el-button>选择已有试卷</el-button>
+                      <el-button @click="questdialog=true">从题库中导入</el-button>
+                      <el-button @click="isshow=true">选择已有试卷</el-button>
                     </div>
                   </div>
                 </el-form-item>
@@ -179,7 +179,7 @@
                                :label="item.title"
                                :value="item.id" />
                   </el-select>
-                  <el-button style=" margin-left: 15px">+创建试题库</el-button>
+                  <el-button style=" margin-left: 15px" @click="dialogVisible2=true">+创建试题库</el-button>
                 </el-form-item>
               </el-form>
             </div>
@@ -330,13 +330,25 @@
                        @teacherConfirm="teacherConfirm"></TascherList>
         </el-dialog>
 
+        <!-- 创建试题库 -->
+        <el-dialog v-model="dialogVisible2"
+                   title="题库添加"
+                   width="50%">
+          <CreaTi @isadd="isadd"
+                  @can="can"></CreaTi>
+        </el-dialog>
+
+        <!-- 从题库中导入 -->
+        <QuestDislog :questdialog="questdialog"  @queshandleClose="queshandleClose" @quesConfirm="quesConfirm" @quesCancel="quesCancel"></QuestDislog>
+        <!-- 选择已有试卷 -->
+        <Testpaperlist :isshow="isshow" @paperhandleClose="paperhandleClose" @paperConfirm="paperConfirm" @paperCancel="paperCancel"></Testpaperlist>
       </div>
     </div>
 
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, toRefs, watchEffect, onMounted } from "vue";
+import { reactive, ref, toRefs, watchEffect, onMounted ,computed} from "vue";
 import { EditPen, Delete, CircleClose } from "@element-plus/icons-vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import Drawers from "../../components/exam/drawer.vue";
@@ -345,6 +357,9 @@ import { baseList, testAdd, testDetails } from "../../api/test";
 import Forth from "../../components/test/Forth.vue";
 import TascherList from "../../components/test/teacherList.vue";
 import studentList from "../../components/test/studentList.vue";
+import CreaTi from '../../components/CreaTi.vue'
+import QuestDislog from '../../components/exam/questDialog.vue'
+import Testpaperlist from '../../components/exam/testpaperlist.vue'
 import moment from "moment";
 import router from "../../router";
 // 接收编辑跳转过来的参数
@@ -446,6 +461,52 @@ const Drawerclose = (val: any) => {
   // console.log(val);
   table.value = val;
 };
+// ------------------------input
+const radioinp=ref('')//单选题分值
+const checkinp=ref('')
+const qwdinp=ref('')
+const inp = (e: any, type: string) => {
+  // console.log(e, type); //分数，类型
+  if (type == '多选题') {
+    params.value.questions.map((item: any) => {
+      if (item.type == '多选题') {
+        item.scores = e
+      }
+    })
+  } else if (type == '单选题') {
+    params.value.questions.map((item: any) => {
+      if (item.type == '单选题') {
+        item.scores = e
+      }
+    })
+  } else if (type == '填空题') {
+    params.value.questions.map((item: any) => {
+      if (item.type == '填空题') {
+        item.scores = e
+      }
+    })
+  } else if (type == '判断题') {
+    params.value.questions.map((item: any) => {
+      if (item.type == '判断题') {
+        item.scores = e
+      }
+    })
+  } else {
+    params.value.questions.map((item: any) => {
+      if (item.type == '问答题') {
+        item.scores = e
+      }
+    })
+  }
+}
+// 计算总分
+const totalPoints=computed(()=>{
+  let sum=0
+  for(let i in params.value.questions){
+    sum=sum+Number(params.value.questions[i].scores)
+  }
+  return sum
+})
 // 点击确定
 const DrawerClick = (bool: any, val: any) => {
   console.log(val);
@@ -556,6 +617,28 @@ const deplenght = (val: any) => {
   params.value.markteachers.length = val;
 };
 //
+
+// 差号
+let paperhandleClose = (val:any) => {
+  isshow.value = val
+}
+// 确定按钮
+let paperConfirm = (val:any,data:any)=>{
+  // console.log(data.value.questions);
+  
+  isshow.value = val //关闭弹窗
+
+  params.value.questions=data.value.questions //子组件传过来的数据
+
+
+
+}
+
+// 取消按钮
+let paperCancel = (val:any) => {
+  isshow.value = val
+}
+
 const teacherConfirm = (bool: any, val: any) => {
   console.log(bool, val);
   dialogyueTeacher.value = false;
@@ -563,6 +646,31 @@ const teacherConfirm = (bool: any, val: any) => {
 };
 // 可见学生
 const dialogStudent = ref(false);
+let dialogVisible2=ref(false)
+const isadd = (val: any) => {
+  dialogVisible2.value = val;
+};
+const can = (e: any) => {
+  // console.log(e);
+  dialogVisible2.value = false;
+};
+// 从题库中导入
+const questdialog=ref(false)
+// 题库弹窗点击差号关闭弹窗
+let queshandleClose = (val:any) => {
+  questdialog.value = val
+}
+
+// 点击确定按钮
+let quesConfirm = (val:any) => {
+  questdialog.value = val
+}
+
+// 点击取消按钮
+let quesCancel = (val:any) => {
+  questdialog.value =val
+}
+let isshow=ref(false)
 // 学生穿梭框
 const studentConfirm = (bool: any, val: any) => {
   console.log(bool, val);

@@ -1,9 +1,7 @@
 <template>
-  
   <div id="head">
-    <h3>班级页面</h3>
-    <el-button @click="clasAdd"
-               type="primary">
+    <span class="cla_he">班级页面</span>
+    <el-button @click="clasAdd" type="primary">
       添加班级
     </el-button>
   </div>
@@ -19,41 +17,20 @@
       </el-form-item>&emsp;
       <div class="m-4">
         <p>部门</p>&emsp;
-        <el-cascader v-model="date.depid"
-                     :options="options.arr"
-                     @change="handleChange"
-                     :props="propsAAA" />
+        <el-cascader v-model="date.depid" :options="options.arr" @change="handleChange" :props="propsAAA" />
       </div>
-      &emsp;&emsp;<el-button type="primary"
-                 @click="Search">查询</el-button>
+      &emsp;&emsp;<el-button type="primary" @click="Search">查询</el-button>
     </el-form>
-    <el-button type="danger"
-               @click="delAll"
-               v-show="multipleSelection.length > 0">批量删除</el-button>
-    <el-table ref="multipleTableRef"
-              :data="tableData"
-              style="width: 100%"
-              @selection-change="handleSelectionChange">
-      <el-table-column type="selection"
-                       width="55" />
-      <el-table-column label="班级名称"
-                       property="name"
-                       width="500"
-                       align="center">
+    <el-button type="danger" @click="delAll" v-show="multipleSelection.length > 0">批量删除</el-button>
+    <el-table ref="multipleTableRef" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange">
+      <el-table-column type="selection" />
+      <el-table-column label="班级名称" property="name" align="left">
       </el-table-column>
-      <el-table-column property="depname"
-                       label="部门"
-                       align="center"
-                       width="500" />
-      <el-table-column width="200"
-                       label="操作">
+      <el-table-column property="depname" label="部门" align="center" />
+      <el-table-column align="right" label="操作">
         <template #default="scope">
-          <el-button type="danger"
-                     link
-                     @click="del(scope.row.id)">删除</el-button>
-          <el-button type="success"
-                     link
-                     @click="updata(scope.row)">修改
+          <el-button type="primary" link @click="del(scope.row.id)">删除</el-button>
+          <el-button type="primary" link @click="updata(scope.row)">修改
 
           </el-button>
 
@@ -62,16 +39,14 @@
 
     </el-table>
     <!-- 点击添加弹出框 -->
-    <el-dialog v-model="dialogVisible"
-               :title="textss===true ? '添加' : '修改'"
-               width="40%">
-      <ClaUpdate @close='close'
-                 @cencell='cencell'
-                 :upAata="upAata"></ClaUpdate>
+    <el-dialog v-model="dialogVisible" :title="textss === true ? '添加' : '修改'" width="40%">
+      <ClaUpdate @close='close' @cencell='cencell' :upAata="upAata"></ClaUpdate>
     </el-dialog>
     <!-- 分页 -->
-    <FenYe :counts="counts"
-           @getChildData="getChildData" />
+    <div class="page" style="width: 600px; margin: 30px auto;">
+      <FenYe :counts="counts" @getChildData="getChildData" />
+
+    </div>
   </div>
 </template>
 
@@ -173,7 +148,7 @@ const dialogVisible = ref(false);
 // 添加修改
 const textss = ref(true);
 const clasAdd = () => {
-  upAata.value=''
+  upAata.value = ''
   textss.value = true;
   dialogVisible.value = true;
 };
@@ -223,8 +198,8 @@ const cencell = () => {
   dialogVisible.value = false;
 };
 
-const Drawerclose=(val:any)=>{
-console.log(val); 
+const Drawerclose = (val: any) => {
+  console.log(val);
 
 }
 </script>

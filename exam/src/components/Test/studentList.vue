@@ -1,5 +1,6 @@
-<template>
-    <div class="top">
+<template >
+   <div style="height: 450px;">  
+    <div class="top" >
         <div class="topbranch">
             <span>部门</span>
             <el-select v-model="depval" class="m-2" placeholder="请选择" size="default" @change="changeDep">
@@ -24,13 +25,14 @@
           </div>
     </div>
     <div>
-        <span class="dialog-footer">
+        <span class="dialog-footer" >
             <el-button @click="studentCancel">取消</el-button>
             <el-button type="primary" @click="studentConfirm">
                 确认
             </el-button>
         </span>
     </div>
+   </div>
 </template>
 
 <script setup lang="ts">
@@ -128,5 +130,12 @@ const rightcheckChange=(val:any)=>{//已选
   width: 270px;
   margin-left: 40px;
   margin-top: 25px;
+}
+.dialog-footer{
+    float: right;
+    padding-bottom: 220px;
+}
+/deep/.el-dialog__body{
+    height: 600px;
 }
 </style>

@@ -14,10 +14,10 @@
                         分值：{{ item.scores }}
                     </div>
                 </div>
-                <div class="title">{{ item.title }}</div>
+                <div class="title" v-html="item.type == '填空题' ? rep(item.title,index):item.title"></div>
                 <!-- 问答题 -->
                 <div v-if="item.type == '问答题'">
-                    <el-input type="textarea" rows="4" placeholder="请输入回答" />
+                    <el-input type="textarea" rows="4" placeholder="请输入回答" v-model="item.studentanswer" />
                 </div>
                 <!-- 选择 -->
                 <div class="answerBox" v-for="items, indexs in item.answers">
@@ -97,7 +97,13 @@
 
             </div>
         </div>
-
+        <div class="timeBox" v-if="examInfo.limittime > 0">
+            <el-icon>
+                <AlarmClock />
+            </el-icon>
+            <div class="title">倒计时</div>
+            <div class="time">{{ data.endTime }}</div>
+        </div>
     </div>
 </template>
 
@@ -108,6 +114,7 @@ import { testStart, stuAdd } from '../../api/test'
 import { useRoute } from "vue-router";
 import router from "../../router";
 import { ElMessage } from "element-plus";
+import { AlarmClock } from "@element-plus/icons-vue";
 let Route = useRoute()
 const data: any = reactive({
 
@@ -141,6 +148,7 @@ const data: any = reactive({
         'Z',
     ],
     answered: 0,//未答题数量
+    endTime: '',//倒计时
 })
 const { examInfo, arr, answered } = toRefs(data)
 // 获取考试
@@ -151,6 +159,43 @@ const getexamInfo = async () => {
     // console.log(res);
     if (res.errCode == 10000) {
         data.examInfo = res.data
+        // 处理考试的倒计时
+        if (examInfo.value.limittime > 0) {
+            var timer = setInterval(() => {//实现定时调用的函数
+                //获取当前时间
+                var date = new Date();
+                var now = Number(date);
+                //设置截止时间
+                var end =
+                    Number(new Date(data.examInfo.studentStartTime)) +
+                    examInfo.value.limittime * 60 * 1000;
+                //获取截止时间和当前时间的时间差
+                var leftTime = end - now;
+                //定义变量 d,h,m,s分别保存天数，小时，分钟，秒
+                var d: any, h, m, s;
+                //判断剩余天数，时，分，秒
+                if (leftTime > 0) {
+                    d = Math.floor(leftTime / 1000 / 60 / 60 / 24);
+                    h = Math.floor((leftTime / 1000 / 60 / 60) % 24);
+                    m = Math.floor((leftTime / 1000 / 60) % 60);
+                    s = Math.floor((leftTime / 1000) % 60);
+                    if (String(h).length === 1) {
+                        h = "0" + h;
+                    }
+                    if (String(m).length === 1) {
+                        m = "0" + m;
+                    }
+                    if (String(s).length === 1) {
+                        s = "0" + s;
+                    }
+                    data.endTime = h + ":" + m + ":" + s;
+                } else {
+                    data.endTime = "00:00:00";
+                    clearInterval(timer);//解除计时器的函数
+                    submit();// 到考试时间的时候自动交卷
+                }
+            }, 1000);
+        }
     }
 }
 getexamInfo()
@@ -178,14 +223,22 @@ const getselect = (val: any, index: number, type: string) => {
         }
     }
 }
+
 // 判断题
 const judge = (e: string, index: number) => {
     // console.log(e);
     data.examInfo.questions[index].studentanswer = e
 
 }
+// 填空题替换方法
+const rep = (str: string, index: number) => {
+    return str.replace(
+        /\[\]/g,
+        `<input data-index="${index}" onpaste="return false;" style="margin:0 2px" class="input input${index}" type="text" />`
+    );
+};
 // 提交试卷
-const submit =async () => {
+const submit = async () => {
     const params = data.examInfo.questions.map((item: any) => {
         // console.log(item);
         let correctNum = 0
@@ -211,16 +264,16 @@ const submit =async () => {
             questionid: item.id,
             answer: item.studentanswer == null ? '' : item.studentanswer,
             scores: item.type === '问答题' || item.type == '填空题' ? null : item.type === '单选题' || item.type === '判断题' ? item.studentanswer === item.answer ? item.scores : 0 : !item.studentanswer ? 0 : correctNum === item.answer.split('|').length ? item.scores : 0
-            
+
         }
 
     })
-    const res:any=await stuAdd(params)
+    const res: any = await stuAdd(params)
     // console.log(res);
-    if(res.errCode===10000){
-        router.push({path:'/examresults',query:{id:data.examInfo.id}})
+    if (res.errCode === 10000) {
+        router.push({ path: '/examresults', query: { id: data.examInfo.id } })
     }
-    
+
 }
 watchEffect(() => {
     // 处理未答题数量
@@ -603,6 +656,36 @@ watchEffect(() => {
                 font-size: 12px;
                 margin-top: 10px;
             }
+        }
+    }
+
+    .timeBox {
+        width: 85px;
+        height: 100px;
+        border-radius: 5px;
+        background-color: #e98478;
+        position: fixed;
+        top: 20px;
+        right: 320px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #fff;
+
+        .el-icon {
+            font-size: 28px !important;
+            margin-top: 15px;
+
+        }
+
+        .title {
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .time {
+            font-size: 13px;
+            margin-top: 8px;
         }
     }
 }

@@ -22,7 +22,7 @@
             <!-- 创建试题库模块 -->
             <el-dialog v-model="dialogVisible1"
                        v-if="dialogVisible1"
-                       :title="可见老师"
+                       title="可见老师"
                        width="50%"
                        :before-close="handleClose">
               <Forth v-model="dialogVisible1"

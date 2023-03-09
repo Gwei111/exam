@@ -69,7 +69,7 @@
                 </table>
             </div>
             <div class="btn" v-show="ForResultList.result !== '待阅卷'">
-                <el-button :type="ForResultList.result == '未通过' ? 'danger' : 'success'" class="nopassBtn">查看答卷</el-button>
+                <el-button :type="ForResultList.result == '未通过' ? 'danger' : 'success'" class="nopassBtn" @click="getResult">查看答卷</el-button>
 
             </div>
         </div>
@@ -106,7 +106,7 @@ const getForResult = async () => {
     if (res.errCode == 10000) {
         ForResultList.value = res.data
         res.data.questions.forEach((item: any, index: number) => {
-            console.log(item);
+            // console.log(item);
             if (item.type == '单选题') {
                 data.radioNum = data.radioNum + 1
                 if (item.studentscores > 0) {
@@ -144,6 +144,10 @@ getForResult()
 // 返回
 const goBack = () => {
     router.push('/stutest')
+}
+// 查看答卷
+const getResult=()=>{
+    router.push({path:'/examwrong',query:{id:Route.query.id}})
 }
 </script>
 

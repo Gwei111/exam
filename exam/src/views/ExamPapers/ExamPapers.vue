@@ -23,28 +23,28 @@
             style="width: 100%">
     <el-table-column prop="title"
                      label="试卷名称"
-                     width="180" />
+                      />
     <el-table-column prop="info"
                      label="试卷说明"
-                     width="180" />
+                      />
     <el-table-column prop="subjectnum"
                      label="题量"
-                     width="180" />
+                      />
     <el-table-column prop="studentcounts"
                      label="考试人数"
-                     width="180" />
-    <el-table-column 
+                      />
+    <el-table-column prop="isread"
                      label="未判人数"
-                     width="180" >
+                     >
                      <template #default="scope">
                       <span  class="hon"> {{scope.row.incomplete}}</span>
                      </template>
     </el-table-column>
     <el-table-column prop="addtime"
                      label="开放时间"
-                     width="180" />
+                      />
     <el-table-column label="操作"
-                     width="180">
+                     >
       <template #default="scope">
      <el-button link
                    type="primary"
@@ -54,8 +54,10 @@
     </el-table-column>
   </el-table>
   <!-- 使用分页组件 -->
-  <FenYe :counts="counts"
-         @getChildData="getChildData" />
+  <div class="page" style="width: 600px; margin: 30px auto;">
+    <FenYe :counts="counts" @getChildData="getChildData" />
+
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -70,11 +72,13 @@ const formRef = ref<FormInstance>();
 const numberValidateForm = reactive({
   isread: "1",
   key: "",
+  page:1,
+  psize:10
 });
 const tableData = ref([]);
 const counts = ref(0);
 const GetList = async () => {
-  let res = await List(numberValidateForm);
+  let res:any = await List(numberValidateForm);
   console.log(res);
   if (res.errCode === 10000) {
     tableData.value = res.data.list;

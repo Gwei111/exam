@@ -10,18 +10,20 @@
     </el-dialog>
     <div class="main">
       <el-table :data="tableData" :model="data">
-        <el-table-column prop="name" label="名称"/>
+        <el-table-column prop="name" label="名称" />
         <el-table-column label="操作" class="right">
           <template #default="scope">
             <span class="font right" @click="update(scope.row.id, scope.row)">编辑 &nbsp; &nbsp;</span>
-            <span class="font right" @click="del(scope.row.id)">删除 </span> 
+            <span class="font right" @click="del(scope.row.id)">删除 </span>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <div class="foot">
-      <FenYe :counts="counts"
-           @getChildData="getChildData" />
+      <div class="page" style="width: 600px; margin: 30px auto;">
+        <FenYe :counts="counts" @getChildData="getChildData" />
+
+      </div>
     </div>
   </div>
 </template>
@@ -40,10 +42,10 @@ onMounted(() => {
 // 角色列表
 const tableData = ref([])
 const data = reactive({
-  page:1,
-  psize:10,
-  name:'',
-  menus:[]
+  page: 1,
+  psize: 10,
+  name: '',
+  menus: []
 
 })
 const counts = ref(0);
@@ -52,7 +54,7 @@ const getRoleList = async () => {
   // console.log(res.data.counts);
   if (res.errCode == 10000) {
     tableData.value = res.data.list
-    counts.value=res.data.counts
+    counts.value = res.data.counts
     // menus.value = res.data.list.index
   }
 }
@@ -61,42 +63,42 @@ const getChildData = (val: any) => {
   data.page = val.page;
   data.psize = val.psize;
   // console.log(data.psize, data.page,1234);
-  
- getRoleList();
+
+  getRoleList();
 };
 
 // 添加
-const dialogVisible=ref(false)
-const isAdd=ref(false)//添加修改的标题
-const item=ref(0)
-const name=ref("")
+const dialogVisible = ref(false)
+const isAdd = ref(false)//添加修改的标题
+const item = ref(0)
+const name = ref("")
 
 // 点击添加出弹框
-const addrole = ()=>{
-  isAdd.value=true
-  dialogVisible.value=true
+const addrole = () => {
+  isAdd.value = true
+  dialogVisible.value = true
 }
 
 // 点击修改出弹窗
 const update = (id: any, row: any) => {
   console.log(id);
   console.log(row);
-  name.value=row.name
+  name.value = row.name
   item.value = id
-  isAdd.value=false 
-  dialogVisible.value=true
+  isAdd.value = false
+  dialogVisible.value = true
 };
 
 // 点击取消按钮关闭弹窗
-const clickChild=(val:boolean)=>{
-  dialogVisible.value=val
+const clickChild = (val: boolean) => {
+  dialogVisible.value = val
   item.value = 0;
   getRoleList();
 }
 
 // 添加或修改关闭弹窗
-const click=(e:boolean)=>{
-  dialogVisible.value=e
+const click = (e: boolean) => {
+  dialogVisible.value = e
   item.value = 0;
   getRoleList();
 }
@@ -163,19 +165,20 @@ h3 {
   color: rgb(160 207 255);
 }
 
-:deep(.el-table tr){
+:deep(.el-table tr) {
   // background-color: red;
   display: flex;
   width: 90vw;
   justify-content: space-between;
-  border-bottom:var(--el-table-border)
-}
-:deep(.el-table tr:hover) {
-background-color: var(--el-fill-color-light);
-}
-/* 添加角色 */
-:deep(.el-button>span){
-  font-size: 12px!important
+  border-bottom: var(--el-table-border)
 }
 
+:deep(.el-table tr:hover) {
+  background-color: var(--el-fill-color-light);
+}
+
+/* 添加角色 */
+:deep(.el-button>span) {
+  font-size: 12px !important
+}
 </style>

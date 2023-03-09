@@ -22,20 +22,20 @@
       :data="tableData.arr"
       style="width: 100%"
       @selection-change="handleSelectionChange"
-      :header-cell-style="{ background: '#eee' }"
+      :header-cell-style="{    background:'rgb(250, 250, 250)'}"
     >
-      <el-table-column type="selection" width="55" />
-      <el-table-column property="title" label="题库" width="320">
+      <el-table-column type="selection"  />
+      <el-table-column property="title" label="题库" >
         <template #default="scope">
           <span class="butle" @click="questions(scope.row.id)">
             {{ scope.row.title }}
           </span>
         </template>
       </el-table-column>
-      <el-table-column property="counts" label="题量数目" width="250" />
-      <el-table-column property="addtime" label="创建时间 " width="250" />
-      <el-table-column property="admin" label="创建人" width="250" />
-      <el-table-column label="操作" width="250">
+      <el-table-column property="counts" label="题量数目"  />
+      <el-table-column property="addtime" label="创建时间 "  />
+      <el-table-column property="admin" label="创建人"  />
+      <el-table-column label="操作" >
         <template #default="scope">
           <el-button link type="primary" size="small" @click="questions(scope.row.id)"> 试题 </el-button>
           <el-button link type="primary" size="small" @click="updata(scope.row)"> 编辑 </el-button>
