@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="el-main">
   <el-drawer v-model="props.drawer"  title="试题详情"  :before-close="change">
     <div class="top"><div>
       {{ lisvue.type}}
@@ -44,6 +44,12 @@ const change=()=>{
 </script>
 
 <style scoped>
+.el-main{
+    font-size: 16px;
+}
+:deep(.el-drawer__title){
+  font-size: 20px;
+}
 :deep(.el-drawer__body){
   margin-top: -30px;
 }
@@ -60,6 +66,9 @@ const change=()=>{
 }
 .tile{
   margin-top:10px;
+}
+:deep(#test1){
+  height: 0px;
 }
 .zo{
   display: flex;

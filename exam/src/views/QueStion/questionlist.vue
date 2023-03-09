@@ -52,7 +52,7 @@
           <template #default="scope">
             <span
               @click="dra(scope.row)"
-              v-html="scope.row.title"
+              v-html="htmlEncodeByRegExp(scope.row.title)"
               class="butle"
             ></span>
           </template>
@@ -121,6 +121,15 @@ let databaseid = route.query.databaseid;
 onMounted(() => {
   list();
 });
+// 用浏览器内部转换器实现html编码
+// v-html="htmlEncodeByRegExp(scope.row.title)"
+const htmlEncodeByRegExp=(val:any)=>{
+    val=val.replace(/</g,'&lt;');
+    val=val.replace(/>/g,'&gt;');
+    val=val.replace(/\n/g,'<br>');
+    console.log(val);
+		return val;
+	}
 const title="编辑"
 const data = reactive({
   databaseid: route.query.databaseid, //题库id名
@@ -141,6 +150,9 @@ const drawer = ref(false);
 const dra:any=(i:any)=>{
   lisvue.value=i
   drawer.value = true
+  // var s = '';
+  // i = s.replace(/</g,'&lt;');
+	// i = s.replace(/>/g,'&gt;');
 }
 const table = ref(false);
 // 编辑
@@ -298,6 +310,7 @@ const getChildData = (val: any) => {
 </script>
 
 <style scoped>
+
 .el-page-header {
   display: flex;
   justify-content: space-between;
@@ -307,6 +320,7 @@ const getChildData = (val: any) => {
 }
 .wen {
   display: flex;
+  font-size: 16px;
 }
 .chuan {
   margin-left: 16px;
