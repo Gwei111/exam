@@ -1,6 +1,6 @@
 <template>
   <div>
-    <span class="chuangsub">添加试卷</span>
+    <h3>添加试卷</h3>
     <div class="HeadOne">
       <span class="One">1</span>&emsp;
       <span>基本信息</span>
@@ -520,4 +520,7 @@ const edit = (val: any) => {
 
 <style scoped>
 @import url("../../assets/css/Test/Add.css");
+h3{
+  font-weight: normal;
+}
 </style>

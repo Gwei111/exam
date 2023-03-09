@@ -1,6 +1,6 @@
 <template>
   <div>
-    阅卷
+    <h3>阅卷</h3>
   </div>
   <div class="box"
        style="width:350px;margin-left:-30px;margin-top:10px">
@@ -106,5 +106,7 @@ const seach = () => {
 <style scoped>
 
 @import url("../../assets/css/Exam/ExamPapers");
-
+h3{
+  font-weight: normal;
+}
 </style>

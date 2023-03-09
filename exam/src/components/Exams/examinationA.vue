@@ -2,7 +2,7 @@
   <div class="boxx">
     <el-page-header @back="hui">
     <template #content>
-      <span class="text-large font-600 mr-3"> {{ data.title }} </span>
+      <h4> {{ data.title }} </h4>
     </template>
   </el-page-header>
   </div>
@@ -152,6 +152,7 @@ const GetStuDentList = async () => {
 GetStuDentList();
 
 // 分页
+const counts = ref(0)
 const getChildData = (val: any) => {
   numberValidateForm.page = val.page;
   numberValidateForm.psize = val.psize;
@@ -169,11 +170,14 @@ const slect = [
   },
 ]
 const hui=()=>{
-  router.push("/subjects")
+  router.push("/exam")
 }
 
 </script>
 
 <style scoped>
 @import url("../../assets/css/Exam/EXam2.css");
+h4{
+  font-weight: normal;
+}
 </style>

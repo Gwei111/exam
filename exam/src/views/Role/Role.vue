@@ -1,11 +1,11 @@
 <template>
   <div class="box">
     <div class="top">
-      <p>角色管理</p>
+      <h3>角色管理</h3>
       <p><el-button type="primary" @click="addrole">添加角色</el-button></p>
     </div>
     <!-- 添加弹出框 -->
-    <el-dialog v-model="dialogVisible" :title="isAdd === true ? '添加角色' : '修改角色'" width="45%" :modal="false">
+    <el-dialog v-model="dialogVisible" :title="isAdd ? '添加' : '修改'" style="padding-bottom: 20px;">
     <AddRole @clickChild="clickChild" @click="click" v-if="dialogVisible==true" :item="item" :isAdd="isAdd" :name="name"></AddRole>
     </el-dialog>
     <div class="main">
@@ -137,9 +137,9 @@ const del = (id: any) => {
 </script>
 
 <style scoped lang="less">
-.top p {
-  font-size: 20px;
-}
+h3 {
+    font-weight: normal;
+  }
 
 .top {
   margin-bottom: 1.5%;

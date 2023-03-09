@@ -1,14 +1,7 @@
 <template>
-  <el-button type="primary"
-             style="margin-left: 16px"
-             @click="drawer = true">
-    open
-  </el-button>
-  <Drower :drawer='drawer'
-          @Drawerclose="Drawerclose"
-          v-if="drawer==true"></Drower>
+  
   <div id="head">
-    <span class="cla_he">班级页面</span>
+    <h3>班级页面</h3>
     <el-button @click="clasAdd"
                type="primary">
       添加班级
@@ -19,7 +12,7 @@
              ref="formRef"
              class="demo-ruleForm">
       <el-form-item label="班级姓名"
-                    prop="key">·
+                    prop="key">
         <el-input placeholder="请输入关键字"
                   v-model="numberValidateForm.key"
                   type="text" />
@@ -108,7 +101,7 @@ interface User {
   name: string;
   address: string;
 }
-const tableData: User = ref([]);
+const tableData:any = ref([]);
 const multipleTableRef = ref<InstanceType<typeof ElTable>>();
 const multipleSelection = ref<User[]>([]);
 const drawer = ref(false);
@@ -238,4 +231,7 @@ console.log(val);
 
 <style scoped>
 @import url("../../assets/css/Class/Class.css");
+h3{
+  font-weight: normal;
+}
 </style>

@@ -64,10 +64,10 @@
           </template>
         </el-table-column>
 
-        <el-table-column property="scores" label="总分" width="90" align="center"/>
-        <el-table-column property="pastscores" label="通过分数" width="80" align="center"/>
+        <el-table-column property="scores" label="总分" width="100" align="center"/>
+        <el-table-column property="pastscores" label="通过分数" width="90" align="center"/>
         <el-table-column property="studentcounts" label="考试人数" width="90" align="center"/>
-        <el-table-column property="pastnum" label="通过人数" width="80" align="center"/>
+        <el-table-column property="pastnum" label="通过人数" width="90" align="center"/>
         <el-table-column property="name" label="开放时间" width="160" align="center">
           <template #default="scope">
             <p v-if="scope.row.begindate == null">不限</p>
@@ -386,7 +386,6 @@ const getAnalyse = (val: any) => {
 
 <style scoped lang="less">
 .box {
-  margin: 10px;
   padding: 0;
 
   .topbox {
