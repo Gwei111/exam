@@ -140,7 +140,7 @@ const partmentlist = async () => {
 partmentlist()
 // 列表
 const tableData:any = ref([]);
-const counts=ref()
+const counts:any=ref()
 const GetStuDentList = async () => {
   let res :any= await StuDentList(numberValidateForm);
   console.log(res);
@@ -152,7 +152,6 @@ const GetStuDentList = async () => {
 GetStuDentList();
 
 // 分页
-const counts = ref(0)
 const getChildData = (val: any) => {
   numberValidateForm.page = val.page;
   numberValidateForm.psize = val.psize;
