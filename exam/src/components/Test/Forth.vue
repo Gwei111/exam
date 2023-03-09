@@ -2,7 +2,7 @@
   <div>
     <div class="head">
       <span>部门：</span>
-      <el-select v-model="value"
+      <el-select v-model="id"
                  class="numberValidateForm.multiples"
                  placeholder="请选择"
                  @change="changes">
@@ -33,8 +33,8 @@ import { SeleList, ForList } from "../../api/Test/Test";
 import { ElMessageBox } from "element-plus";
 const emit = defineEmits(["sub", "limitss", "valuesss", "isshow"]);
 const dialogVisible1 = ref(false);
-const value:any = ref([]);
-const options:any = reactive([]);
+const value = ref([]);
+const options = reactive([]);
 const dataa = ref([]);
 
 const numberValidateForm = reactive({
@@ -44,7 +44,7 @@ const numberValidateForm = reactive({
 
 // 请求下拉列表
 const GetSeleList = async () => {
-  let res:any= await SeleList({});
+  let res:any= await SeleList();
   console.log(res);
   if (res.errCode === 10000) {
     options.push(...res.data.list);
@@ -92,7 +92,7 @@ const leafChange = (res: any) => {
 };
 const limitss = ref([]);
 const rightChange = (res: any) => {
-  value.value = value.value.filter((item:any) => !res.includes(item));
+  value.value = value.value.filter((item) => !res.includes(item));
   limitss.value = value.value.length;
   emit("limitss", limitss.value);
 };

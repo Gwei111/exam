@@ -78,7 +78,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref,toRaw } from "vue";
+import { reactive, ref } from "vue";
 import type { FormInstance } from "element-plus";
 import { StuDentList ,GetList} from "../../api/ExamPapers/Exam";
 // 导入分页组件
@@ -87,13 +87,13 @@ import {useRouter} from "vue-router"
 const router=useRouter()
 const formRef = ref<FormInstance>();
 
-const numberValidateForm:any = reactive({
+const numberValidateForm = reactive({
   testid: "",
 });
 
 const value = ref("");
 
-const counts:any = ref(0)
+
 const options: any = reactive({ arr: [] });
 interface User {
   date: string;
@@ -121,9 +121,9 @@ const partmentlist = async () => {
   console.log(options.arr);
 };
 partmentlist()
-const tableData:any = reactive([]);
+const tableData = reactive([]);
 const GetStuDentList = async () => {
-  let res:any = await StuDentList(numberValidateForm);
+  let res = await StuDentList(numberValidateForm);
   console.log(res);
   if (res.errCode === 10000) {
     tableData.value = res.data.list;
@@ -135,7 +135,7 @@ GetStuDentList();
 const getChildData = (val: any) => {
   numberValidateForm.page = val.page;
   numberValidateForm.psize = val.psize;
-  partmentlist();
+  GetStuDentList();
 };
 
 const slect = [
@@ -149,7 +149,7 @@ const slect = [
   },
 ]
 const hui=()=>{
-  router.push("/exam")
+  router.push("/subjects")
 }
 
 </script>
