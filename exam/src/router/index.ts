@@ -133,9 +133,10 @@ const routes: Array<RouteRecordRaw> = [
     meta: { title: '学生端查看试题', isAuth: true },
   },
 ]
+const history = createWebHashHistory()
 
 const router = createRouter({
-  history: createWebHistory(),
+  history,
   routes
 })
 
