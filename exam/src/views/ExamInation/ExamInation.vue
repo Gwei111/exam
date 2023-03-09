@@ -46,16 +46,16 @@
       </el-form>
     </div>
     <div class="list">
-      <el-table ref="multipleTableRef" :data="tableData" style="width: 100%, " @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="100" />
-        <el-table-column label="考试名称" width="180" prop="title">
+      <el-table ref="multipleTableRef" :data="tableData" style="width: 100%, "  @selection-change="handleSelectionChange">
+        <el-table-column type="selection" />
+        <el-table-column label="考试名称" prop="title">
           <template #default="scope">
             <span @click="getDetails(scope.row.id, scope.row.title)" v-html="scope.row.title">
 
             </span>
           </template>
         </el-table-column>
-        <el-table-column label="状态" width="180">
+        <el-table-column label="状态" width="80px">
           <template #default="scope">
             <span :class="
               scope.row.state == 0 || scope.row.state == 1 ? 'blues' : 'reds'">
@@ -64,11 +64,11 @@
           </template>
         </el-table-column>
 
-        <el-table-column property="scores" label="总分" width="180" />
-        <el-table-column property="pastscores" label="通过分数" width="180" />
-        <el-table-column property="studentcounts" label="考试人数" width="180" />
-        <el-table-column property="pastnum" label="通过人数" width="100" />
-        <el-table-column property="name" label="开放时间" width="100">
+        <el-table-column property="scores" label="总分" width="90" align="center"/>
+        <el-table-column property="pastscores" label="通过分数" width="80" align="center"/>
+        <el-table-column property="studentcounts" label="考试人数" width="90" align="center"/>
+        <el-table-column property="pastnum" label="通过人数" width="80" align="center"/>
+        <el-table-column property="name" label="开放时间" width="160" align="center">
           <template #default="scope">
             <p v-if="scope.row.begindate == null">不限</p>
             <p v-else>
@@ -77,8 +77,8 @@
             </p>
           </template>
         </el-table-column>
-        <el-table-column property="admin" label="创建人" width="180" />
-        <el-table-column property="addtime" label="更新时间" width="180">
+        <el-table-column property="admin" label="创建人" align="center"/>
+        <el-table-column property="addtime" label="更新时间" align="center">
           <template #default="scope">
             <p>
               {{ moment(scope.row.addtime).format('YYYY-MM-DD hh:mm:ss') }}
@@ -414,6 +414,7 @@ const getAnalyse = (val: any) => {
 
   .el-table .cell span {
     color: #4290f7;
+    
   }
 
   .el-table .cell .red {
@@ -424,5 +425,24 @@ const getAnalyse = (val: any) => {
 .reds {
   font-size: 13px;
   color: rgb(245, 72, 72) !important;
+}
+// /deep/.el-table .el-table__cell{
+//   padding: 0!important
+// }
+/deep/.el-radio-group{
+  width: 200px!important
+}
+/deep/.el-input{
+  font-size: 5px;
+  width: 100px;
+}
+/deep/.el-radio{
+  margin-right: 10px;
+}
+/deep/.el-input__wrapper{
+  width: 190px;
+}
+/deep/.el-table--enable-row-transition .el-table__body td.el-table__cell{
+  font-size: 13px;
 }
 </style>
