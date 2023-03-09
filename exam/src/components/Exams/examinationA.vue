@@ -143,6 +143,7 @@ const GetStuDentList = async () => {
 GetStuDentList();
 
 // 分页
+const counts = ref(0)
 const getChildData = (val: any) => {
   numberValidateForm.page = val.page;
   numberValidateForm.psize = val.psize;
@@ -160,7 +161,7 @@ const slect = [
   },
 ]
 const hui=()=>{
-  router.push("/subjects")
+  router.push("/exam")
 }
 
 </script>
