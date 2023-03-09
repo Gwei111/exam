@@ -49,6 +49,8 @@
 </template>
 <script setup lang="ts">
 import Forth from "../components/Test/Forth.vue";
+import { reactive } from "vue";
+import type { FormInstance } from "element-plus";
 import { ref, defineEmits } from "vue";
 import { ShuttleAdd } from "../api/Test/Test";
 import { ElMessage, ElMessageBox } from "element-plus";
@@ -63,8 +65,7 @@ const handleClose = (done: () => void) => {
     })
     .catch(() => {});
 };
-import { reactive, ref } from "vue";
-import type { FormInstance } from "element-plus";
+
 const formRef = ref<FormInstance>();
 const numberValidateForm = reactive({
   id: 0,
@@ -80,8 +81,8 @@ const submits = async () => {
       type: "error",
     });
   }
-  let res = await ShuttleAdd(numberValidateForm);
-  console.log(res);
+  let res:any = await ShuttleAdd(numberValidateForm);
+  // console.log(res);
   if (res.errCode === 10000) {
     ElMessage({
       message: "添加成功",

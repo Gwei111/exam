@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <div>
-                    <el-button>导出excel</el-button>
+                    <el-button @click="execl">导出excel</el-button>
                 </div>
             </div>
             <div class="content">
@@ -65,8 +65,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { testDetails } from '../../api/test'
+import { getSubjects, execls } from "../../api/Test/Test";
+import {  testExcel} from "../../api/test";
 const props = defineProps(['dialogVisible', 'getid', 'title']);//父传子
-// console.log(props);
+console.log(props);
 const emit = defineEmits(['closedetailsList'])//子传父
 const closedetailsList = () => {
     emit('closedetailsList', false)
@@ -78,6 +80,22 @@ const getList = async () => {
     arr.value = res.data
 }
 getList()
+// 导出
+const execl = async () => {
+  let res:any = await testExcel({ id: props.getid });
+//   console.log(res);
+
+  let blob = new Blob([res], { type: "application/vnd.ms-excel" });
+  let url = URL.createObjectURL(blob);
+
+  let a = document.createElement("a");
+  a.href = url;
+  a.style.display = "none";
+  document.body.appendChild(a);
+  a.setAttribute("download", arr.value.title);
+  a.click();
+  document.body.removeChild(a);
+};
 </script>
 
 <style scoped lang="less">

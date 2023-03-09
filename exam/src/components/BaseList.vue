@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div>123456564321
     <el-form ref="ruleFormRef"
              :model="ruleForm"
@@ -26,7 +26,7 @@
     v-model="dialog"
     title="可见老师"
     width="50%"
-    :before-close="handleClose"
+    :before-close="close"
   >    
   </el-dialog>
   <TeacherShuttlebox v-model="teacherDialog" v-if="teacherDialog" @teacherIds="teacherIds"></TeacherShuttlebox>
@@ -162,4 +162,4 @@ const value = ref([])
 };
 </script>
 <style scoped>
-</style>
+</style> -->

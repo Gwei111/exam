@@ -83,3 +83,7 @@ export const subjects_list= (params: any) => {
 export const subjects_get= (params: any) => {
   return request.get('subjects/get', params)
 }
+// 导出Excel 
+export const testExcel= (params: any) => {
+  return request.get('test/exportExcel', params)
+}

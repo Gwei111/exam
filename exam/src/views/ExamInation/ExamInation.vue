@@ -121,7 +121,7 @@
       </el-dialog>
       <!-- 阅卷老师 -->
       <el-dialog title="阅卷老师" v-model="dialogyueTeacher" width="50%" >
-        <TascherList :dialogyueTeacher="dialogyueTeacher" v-if="dialogyueTeacher==true" @teacherCancel="teacherCancel"  @teacherConfirm="teacherConfirm"></TascherList>
+        <TascherList :dialogyueTeacher="dialogyueTeacher" v-if="dialogyueTeacher==true" @teacherCancel="teacherCancel"  @teacherConfirm="yueteacherConfirm"></TascherList>
       </el-dialog>
 
     </div>
@@ -290,9 +290,11 @@ const changeRadio = (val: any) => {
 };
 // 详情弹窗
 const getDetails = (id: any, titles: any) => {
+  console.log(titles);
+  
   dialogVisible.value = true;
   getid.value = id;
-  titles = title;
+  title = titles;
 };
 // 详情
 let closedetailsList = (val: boolean) => {
@@ -343,9 +345,14 @@ const getTeacher = (val: any) => {
   dialogTeacher.value = true;
 };
 // 老师点击确认
-const teacherConfirm = (val: any) => {
+const teacherConfirm = (val: any) => {  
   dialogTeacher.value = val;
 };
+
+// 阅卷老师点击4
+const yueteacherConfirm=(val:any)=>{
+  dialogyueTeacher.value = val;
+}
 // 老师点击关闭
 const teacherClose = (val: any) => {
   dialogTeacher.value = val;

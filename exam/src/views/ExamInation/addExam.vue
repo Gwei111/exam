@@ -323,7 +323,7 @@
         <!-- 阅卷老师 -->
         <el-dialog title="阅卷老师"
                    v-model="dialogyueTeacher"
-                   v-show="dialogyueTeacher"
+                   v-if="dialogyueTeacher"
                    width="50%">
           <TascherList v-model="dialogyueTeacher"
                        @deplenght="deplenght"
