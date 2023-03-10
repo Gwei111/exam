@@ -1,6 +1,6 @@
 <template>
   <div id="head">
-    <span class="cla_he">班级页面</span>
+    <h3 style="font-weight: normal;">班级页面</h3>
     <el-button @click="clasAdd" type="primary">
       添加班级
     </el-button>

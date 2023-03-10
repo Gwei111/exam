@@ -2,359 +2,275 @@
   <div class="box">
     <div class="top">
       <h3>创建考试</h3>
-        <el-form>
-          <div class="contet">
-            <div class="contentone">
-              <h2>1</h2><span>基本信息</span>
-            </div>
-            <div class="from">
-              <el-form label-width="100px"
-                       :model="form.params"
-                       style="max-width: 460px">
-                <el-form-item label="考试名称">
-                  <el-input v-model="params.title" />
-                </el-form-item>
-                <el-form-item label="考试说明">
-                  <el-input v-model="params.info"
-                            type="textarea" />
-                </el-form-item>
-              </el-form>
-            </div>
-            <div class="contentone">
-              <h2>2</h2><span>内容设置</span>
-            </div>
-            <div class="from">
-              <el-form label-width="100px"
-                       :model="formLabelAlign">
-                <el-form-item label="考试内容">
-                  <!-- {{ params.questions.type, 111 }} -->
-                  <div class="frombox"
-                       style=" width: 1025px;">
-                    <div class="title">
-                      <h4>试题列表</h4>
-                      <div class="right">
-                        <span>总分:{{ totalPoints}}</span>
-                        <span>已添加: {{params.questions.length}} 题</span>
-                        <el-button @click="clear">清空</el-button>
-                      </div>
-                    </div>
-                    <!-- 左边填分区域 -->
-                    <div class="testContent"
-                         v-if="params.questions.length > 0">
-                      <div class="dan"
-                           v-if="form.isChoce == true">
-                        <span style="margin-left: 10px;">单选题{{ form.numChoce }}道</span>
-                        <p style="margin-left: 10px;">每题
-                          <el-input placeholder=""
-                                    size="small"
-                                    clearable
-                                    style="width:50px;" @input="inp($event,'单选题')" v-model="radioinp"></el-input>分
-                        </p>
-                      </div>
-                      <div class="dan"
-                           v-if="form.ischeck == true">
-                        <span style="margin-left: 10px;">多选题{{ form.numCheck }}道</span>
-                        <p style="margin-left: 10px;">每题
-                          <el-input placeholder=""
-                                    size="small"
-                                    clearable
-                                    style="width:50px;"  @input="inp($event,'多选题')" v-model="checkinp"></el-input>分
-                        </p>
-                      </div>
-                      <div class="dan"
-                           v-if="form.isJudge == true">
-                        <span style="margin-left: 10px;">判断题{{ form.numJudge }}道</span>
-                        <p style="margin-left: 10px;">每题
-                          <el-input placeholder=""
-                                    size="small"
-                                    clearable
-                                    style="width:50px;"  @input="inp($event,'判断题')"></el-input>分
-                        </p>
-                      </div>
-                      <div class="dan"
-                           v-if="form.isqust == true">
-                        <span style="margin-left: 10px;">问答题{{ form.numQuest }}道</span>
-                        <p style="margin-left: 10px;">每题
-                          <el-input placeholder=""
-                                    size="small"
-                                    clearable
-                                    style="width:50px;"  @input="inp($event,'问答题')" v-model="qwdinp"></el-input>分
-                        </p>
-                      </div>
-                      <div class="dan"
-                           v-if="form.iskong == true">
-                        <span style="margin-left: 10px;">填空题{{ form.numKong }}道</span>
-                        <p style="margin-left: 10px;">每题
-                          <el-input placeholder=""
-                                    size="small"
-                                    clearable
-                                    style="width:50px;"  @input="inp($event,'填空题')"></el-input>分
-                        </p>
-                      </div>
-                    </div>
-                    <!-- {{ questions.value }} -->
-                    <!-- 试题列表 -->
-                    <div class="gotContentBox">
-                      <div class="gotContent"
-                           v-for="(item, index) in params.questions"
-                           :key="index">
-                        <div class="gottop">
-                          <div class="gotleft">
-                            <span>{{ index + 1 }}.{{ item.type }}</span>
-                            <span style="margin: 10px;">分值</span>
-                            <el-input placeholder=""
-                                      size="normal"
-                                      clearable
-                                      style="width: 50px;"></el-input>
-
-                          </div>
-                          <div class="getright">
-                            <EditPen style="width: 1em; height: 1em; margin-right: 8px; color: #299aff; font-size: 20px;"
-                                     @click="edit(item,index)" />
-                            <el-icon style="width: 1em; height: 1em; margin-right: 8px; color: #299aff; font-size: 20px;">
-                              <Delete @click="del(index)" />
-                            </el-icon>
-                          </div>
-                        </div>
-                        <div style="padding: 7px 0 ;">
-                          <span v-html="item.title"></span>
-                        </div>
-                        <!-- 正确答案 -->
-                        <!-- 填空 判断 -->
-                        <div v-if="item.type == '填空题' || item.type == '判断题'">
-                          <div class="judge">
-                            正确答案{{ item.answer }}
-                          </div>
-                          <!-- 答案解析 -->
-                          <div class="jud">
-                            答案解析：
-                          </div>
-                        </div>
-                        <!-- 单选择 -->
-                        <div v-show="item.type == '单选题'">
-                          <div class="options">
-                            <div :class="item.answer === items.answerno ? 'options optionsbox' : 'options optionerr'"
-                                 v-for="(items, indexs) in item.answers"
-                                 :key="indexs">
-                              <div class="round"></div>
-                              {{ items.answerno }}:{{ items.content }}
-                            </div>
-                          </div>
-                        </div>
-                        <!-- 多选 -->
-                        <div v-show="item.type == '多选题'">
-                          <div class="checkbox">
-                            <div :class="item.answer.includes(items.answerno) ? 'checkbox checkone' : 'checkbox checkerr'"
-                                 v-for="(items, indexs) in item.answers"
-                                 :key="indexs">
-                              <div class="fang"></div>
-                              {{ items.answerno }}:{{ items.content }}
-                            </div>
-                          </div>
-                        </div>
-                        <!-- 简答题 -->
-                        <div v-show="item.type == '简答题'">
-                          <div class="analysis">
-                            答案解析：{{ item.explains }}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="froncontent">
-                      <el-button @click="addOne">添加题目</el-button>
-                      <el-button @click="Updatadialog = true">批量导入</el-button>
-                      <el-button @click="questdialog=true">从题库中导入</el-button>
-                      <el-button @click="isshow=true">选择已有试卷</el-button>
+      <el-form>
+        <div class="contet">
+          <div class="contentone">
+            <h2>1</h2><span>基本信息</span>
+          </div>
+          <div class="from">
+            <el-form label-width="100px" :model="form.params" style="max-width: 460px" size="default">
+              <el-form-item label="考试名称">
+                <el-input v-model="params.title" />
+              </el-form-item>
+              <el-form-item label="考试说明">
+                <el-input v-model="params.info" type="textarea" />
+              </el-form-item>
+            </el-form>
+          </div>
+          <div class="contentone">
+            <h2>2</h2><span>内容设置</span>
+          </div>
+          <div class="from">
+            <el-form label-width="100px" :model="formLabelAlign" >
+              <el-form-item label="考试内容">
+                <!-- {{ params.questions.type, 111 }} -->
+                <div class="frombox" style="width: 1025px;">
+                  <div class="title">
+                    <h4>试题列表</h4>
+                    <div class="right">
+                      <span>总分:{{ totalPoints }}</span>
+                      <span>已添加: {{ params.questions.length }} 题</span>
+                      <el-button @click="clear">清空</el-button>
                     </div>
                   </div>
-                </el-form-item>
-
-                <el-form-item label="试题存入题库">
-                  <el-select v-model="value"
-                             class="m-2"
-                             placeholder="请选择题库"
-                             size="default">
-                    <el-option v-for="item in databaseList"
-                               :key="item.id"
-                               :label="item.title"
-                               :value="item.id" />
-                  </el-select>
-                  <el-button style=" margin-left: 15px" @click="dialogVisible2=true">+创建试题库</el-button>
-                </el-form-item>
-              </el-form>
-            </div>
-            <div class="contentone">
-              <h2>3</h2><span>考试设置</span>
-            </div>
-            <div class="examset">
-              <el-form :model="params"
-                       label-width="120px">
-                <el-form-item label="通过分数：">
-                  <el-input v-model.number="params.pastscores"
-                            style="width: 79px;" />
-                </el-form-item>
-                <el-form-item label="考试时长">
-                  <el-radio-group v-model="testTime">
-                    <el-radio label="1">不限制时长</el-radio>
-                    <el-radio label="2">限制时长</el-radio>
-                  </el-radio-group>
-                  <div v-show="testTime == 2">
-                    <el-input v-model.number="params.limittime"
-                              style="width: 79px;" />分钟
+                  <!-- 左边填分区域 -->
+                  <div class="testContent" v-if="params.questions.length > 0">
+                    <div class="dan" v-if="form.isChoce == true">
+                      <span style="margin-left: 10px;">单选题{{ form.numChoce }}道</span>
+                      <p style="margin-left: 10px;">每题
+                        <el-input  size="small" clearable style="width:50px;" @input="inp($event, '单选题')"
+                          v-model="radioinp"></el-input>分
+                      </p>
+                    </div>
+                    <div class="dan" v-if="form.ischeck == true">
+                      <span style="margin-left: 10px;">多选题{{ form.numCheck }}道</span>
+                      <p style="margin-left: 10px;">每题
+                        <el-input  size="small" clearable style="width:50px;" @input="inp($event, '多选题')"
+                          v-model="checkinp"></el-input>分
+                      </p>
+                    </div>
+                    <div class="dan" v-if="form.isJudge == true">
+                      <span style="margin-left: 10px;">判断题{{ form.numJudge }}道</span>
+                      <p style="margin-left: 10px;">每题
+                        <el-input  size="small" clearable style="width:50px;"
+                          @input="inp($event, '判断题')"></el-input>分
+                      </p>
+                    </div>
+                    <div class="dan" v-if="form.isqust == true">
+                      <span style="margin-left: 10px;">问答题{{ form.numQuest }}道</span>
+                      <p style="margin-left: 10px;">每题
+                        <el-input  size="small" clearable style="width:50px;" @input="inp($event, '问答题')"
+                          v-model="qwdinp"></el-input>分
+                      </p>
+                    </div>
+                    <div class="dan" v-if="form.iskong == true">
+                      <span style="margin-left: 10px;">填空题{{ form.numKong }}道</span>
+                      <p style="margin-left: 10px;">每题
+                        <el-input  size="small" clearable style="width:50px;"
+                          @input="inp($event, '填空题')"></el-input>分
+                      </p>
+                    </div>
                   </div>
-                </el-form-item>
-                <!-- 开放时间 -->
-                <el-form-item label="开放时间"
-                              style="width: 800px;">
-                  <el-date-picker v-model="opTime"
-                                  type="datetimerange"
-                                  :shortcuts="shortcuts"
-                                  range-separator="To"
-                                  format="YYYY-MM-DD HH:mm"
-                                  value-format="YYYY-MM-DD HH:mm"
-                                  start-placeholder="Start date"
-                                  end-placeholder="End date"
-                                  @change="getTime" />
-                  <span style="color: #c3c3c3;">不填表示永久</span>
-                </el-form-item>
-                <el-form-item label="答案解析：">
-                  <el-radio-group v-model="resolution">
-                    <el-radio label="1">交卷后显示</el-radio>
-                    <el-radio label="2">不允许查看</el-radio>
-                    <el-radio label="3">仅可查看对错</el-radio>
-                    <el-radio label="4">仅查看错题</el-radio>
-                    <el-radio label="5">考试结束后查看</el-radio>
-                  </el-radio-group>
-                </el-form-item>
+                  <!-- {{ questions.value }} -->
+                  <!-- 试题列表 -->
+                  <div class="gotContentBox">
+                    <div class="gotContent" v-for="(item, index) in params.questions" :key="index">
+                      <div class="gottop">
+                        <div class="gotleft">
+                          <span>{{ index + 1 }}.{{ item.type }}</span>
+                          <span style="margin: 10px;">分值</span>
+                          <el-input  size="normal" clearable style="width: 50px;"></el-input>
 
-                <el-form-item label="防作弊">
-                  <el-checkbox v-model="Disturbance"
-                               label="试题顺序打乱"
-                               name="type"
-                               @change="changeDisturbance" />
-                  <el-checkbox v-model="optionDisturbance"
-                               label="选项数据打乱(单选题，多选题，判断题)"
-                               name="type"
-                               @change="changeoptionDisturbance" />
-                </el-form-item>
+                        </div>
+                        <div class="getright">
+                          <EditPen style="width: 1em; height: 1em; margin-right: 8px; color: #299aff; font-size: 20px;"
+                            @click="edit(item, index)" />
+                          <el-icon style="width: 1em; height: 1em; margin-right: 8px; color: #299aff; font-size: 20px;">
+                            <Delete @click="del(index)" />
+                          </el-icon>
+                        </div>
+                      </div>
+                      <div style="padding: 7px 0 ;">
+                        <span v-html="item.title"></span>
+                      </div>
+                      <!-- 正确答案 -->
+                      <!-- 填空 判断 -->
+                      <div v-if="item.type == '填空题' || item.type == '判断题'">
+                        <div class="judge">
+                          正确答案{{ item.answer }}
+                        </div>
+                        <!-- 答案解析 -->
+                        <div class="jud">
+                          答案解析：
+                        </div>
+                      </div>
+                      <!-- 单选择 -->
+                      <div v-show="item.type == '单选题'">
+                        <div class="options">
+                          <div :class="item.answer === items.answerno ? 'options optionsbox' : 'options optionerr'"
+                            v-for="(items, indexs) in item.answers" :key="indexs">
+                            <div class="round"></div>
+                            {{ items.answerno }}:{{ items.content }}
+                          </div>
+                        </div>
+                      </div>
+                      <!-- 多选 -->
+                      <div v-show="item.type == '多选题'">
+                        <div class="checkbox">
+                          <div :class="item.answer.includes(items.answerno) ? 'checkbox checkone' : 'checkbox checkerr'"
+                            v-for="(items, indexs) in item.answers" :key="indexs">
+                            <div class="fang"></div>
+                            {{ items.answerno }}:{{ items.content }}
+                          </div>
+                        </div>
+                      </div>
+                      <!-- 简答题 -->
+                      <div v-show="item.type == '简答题'">
+                        <div class="analysis">
+                          答案解析：{{ item.explains }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="froncontent">
+                    <el-button @click="addOne">添加题目</el-button>
+                    <el-button @click="Updatadialog = true">批量导入</el-button>
+                    <el-button @click="questdialog = true">从题库中导入</el-button>
+                    <el-button @click="isshow = true">选择已有试卷</el-button>
+                  </div>
+                </div>
+              </el-form-item>
 
-              </el-form>
-            </div>
-            <div class="contentone">
-              <h2>4</h2><span>教师范围</span>
-            </div>
-            <div class="showTeacher">
-              <span>可见老师:</span>
-              <el-button type="defalu"
-                         size="default"
-                         @click="dialogTeacher = true">+选择</el-button>
-              <div class="leng">
-                <p>{{ params.limits.length }}</p>
-              </div>
-            </div>
-            <div class="contentone">
-              <h2>5</h2><span>考试学生</span>
-            </div>
-            <div class="showTeacher">
-              <span>考生范围：</span>
-              <el-button type="defalu"
-                         size="default"
-                         @click="dialogStudent=true">+选择</el-button>
-              <div class="leng">
-                <p>{{ params.students.length }}</p>
-              </div>
-            </div>
-            <div class="contentone">
-              <h2>6</h2><span>协同设置</span>
-            </div>
-            <div class="showTeacher">
-              <span>阅卷老师:</span>
-              <el-button type="defalu"
-                         size="default"
-                         @click="dialogyueTeacher = true">+选择</el-button>
-              <div class="leng">
-                <p>{{ params.markteachers.length }}</p>
-              </div>
+              <el-form-item label="试题存入题库">
+                <el-select v-model="value" class="m-2" placeholder="请选择题库" size="default">
+                  <el-option v-for="item in databaseList" :key="item.id" :label="item.title" :value="item.id" />
+                </el-select>
+                <el-button style=" margin-left: 15px" @click="dialogVisible2 = true">+创建试题库</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+          <div class="contentone">
+            <h2>3</h2><span>考试设置</span>
+          </div>
+          <div class="examset">
+            <el-form :model="params" label-width="120px">
+              <el-form-item label="通过分数：">
+                <el-input v-model.number="params.pastscores" style="width: 79px;" />
+              </el-form-item>
+              <el-form-item label="考试时长">
+                <el-radio-group v-model="testTime">
+                  <el-radio label="1">不限制时长</el-radio>
+                  <el-radio label="2">限制时长</el-radio>
+                </el-radio-group>
+                <div v-show="testTime == 2">
+                  <el-input v-model.number="params.limittime" style="width: 79px;" />分钟
+                </div>
+              </el-form-item>
+              <!-- 开放时间 -->
+              <el-form-item label="开放时间" style="width: 800px;">
+                <el-date-picker v-model="opTime" type="datetimerange" :shortcuts="shortcuts" range-separator="To"
+                  format="YYYY-MM-DD HH:mm" value-format="YYYY-MM-DD HH:mm" start-placeholder="Start date"
+                  end-placeholder="End date" @change="getTime" />
+                <span style="color: #c3c3c3;">不填表示永久</span>
+              </el-form-item>
+              <el-form-item label="答案解析：">
+                <el-radio-group v-model="resolution">
+                  <el-radio label="1">交卷后显示</el-radio>
+                  <el-radio label="2">不允许查看</el-radio>
+                  <el-radio label="3">仅可查看对错</el-radio>
+                  <el-radio label="4">仅查看错题</el-radio>
+                  <el-radio label="5">考试结束后查看</el-radio>
+                </el-radio-group>
+              </el-form-item>
+
+              <el-form-item label="防作弊">
+                <el-checkbox v-model="Disturbance" label="试题顺序打乱" name="type" @change="changeDisturbance" />
+                <el-checkbox v-model="optionDisturbance" label="选项数据打乱(单选题，多选题，判断题)" name="type"
+                  @change="changeoptionDisturbance" />
+              </el-form-item>
+
+            </el-form>
+          </div>
+          <div class="contentone">
+            <h2>4</h2><span>教师范围</span>
+          </div>
+          <div class="showTeacher">
+            <span>可见老师:</span>
+            <el-button type="default" size="default" @click="dialogTeacher = true">+选择</el-button>
+            <div class="leng">
+              <p>{{ params.limits.length }}</p>
             </div>
           </div>
-          <el-form-item style="margin-top: 50px; margin-left: 120px;">
-            <el-button type="primary"
-                       v-if="complie==undefined"
-                       @click="onSubmit()">发布</el-button>
-            <el-button type="primary"
-                       v-if="complie!==undefined"
-                       @click="onEdit()">编辑</el-button>
-            <el-button size="default">保存不发布</el-button>
-            <el-button>取消</el-button>
-          </el-form-item>
-        </el-form>
-        <!-- 抽屉组件 -->
-        <Drawers :table="table"
-                 v-if="table == true"
-                 @Drawerclose="Drawerclose"
-                 @adds="DrawerClick"
-                 @DrawerCancel="DrawerCancel"
-                 :title="title"
-                 :updArr="updArr"></Drawers>
-        <!-- 批量添加 -->
-        <UploadFiles v-if="Updatadialog == true"
-                     v-model="Updatadialog"
-                     :UrL="url"
-                     @updataFile="updataFile"></UploadFiles>
-        <!-- 可见老师 -->
-        <el-dialog title="可见老师"
-                   v-model="dialogTeacher"
-                   v-if="dialogTeacher"
-                   width="50%">
-          <Forth v-model="dialogTeacher"
-                 @limitss="limitss"
-                 @sub="sub"
-                 @valuesss="valuesss"></Forth>
-        </el-dialog>
-        <!-- 学生范围 -->
-        <el-dialog title="可见学生"
-                   v-model="dialogStudent"
-                   v-if="dialogStudent"
-                   width="50%">
-          <studentList v-model="dialogStudent"
-                       @studentConfirm="studentConfirm"></studentList>
-        </el-dialog>
+          <div class="contentone">
+            <h2>5</h2><span>考试学生</span>
+          </div>
+          <div class="showTeacher">
+            <span>考生范围：</span>
+            <el-button type="default" size="default" @click="dialogStudent = true">+选择</el-button>
+            <div class="leng">
+              <p>{{ params.students.length }}</p>
+            </div>
+          </div>
+          <div class="contentone">
+            <h2>6</h2><span>协同设置</span>
+          </div>
+          <div class="showTeacher">
+            <span>阅卷老师:</span>
+            <el-button type="default" size="default" @click="dialogyueTeacher = true">+选择</el-button>
+            <div class="leng">
+              <p>{{ params.markteachers.length }}</p>
+            </div>
+          </div>
+        </div>
+        <el-form-item style="margin-top: 50px; margin-left: 120px;">
+          <el-button type="primary" v-if="complie == undefined" @click="onSubmit()">发布</el-button>
+          <el-button type="primary" v-if="complie !== undefined" @click="onEdit()">编辑</el-button>
+          <el-button size="default" @click="save">保存不发布</el-button>
+          <el-button>取消</el-button>
+        </el-form-item>
+      </el-form>
+      <!-- 抽屉组件 -->
+      <Drawers :table="table" v-if="table == true" @Drawerclose="Drawerclose" @adds="DrawerClick"
+        @DrawerCancel="DrawerCancel" :title="title" :updArr="updArr"></Drawers>
+      <!-- 批量添加 -->
+      <UploadFiles v-if="Updatadialog == true" v-model="Updatadialog" :UrL="url" @updataFile="updataFile"></UploadFiles>
+      <!-- 可见老师 -->
+      <el-dialog title="可见老师" v-model="dialogTeacher" v-if="dialogTeacher" width="50%">
+        <Teacher v-model="dialogTeacher" @deplenght="teacherdeplenght" @teacherConfirm="Confirm"></Teacher>
+      </el-dialog>
+      <!-- 学生范围 -->
+      <el-dialog title="可见学生" v-model="dialogStudent" v-if="dialogStudent" width="50%">
+        <studentList v-model="dialogStudent" @studentConfirm="studentConfirm"></studentList>
+      </el-dialog>
 
-        <!-- 阅卷老师 -->
-        <el-dialog title="阅卷老师"
-                   v-model="dialogyueTeacher"
-                   v-if="dialogyueTeacher"
-                   width="50%">
-          <TascherList v-model="dialogyueTeacher"
-                       @deplenght="deplenght"
-                       @teacherConfirm="teacherConfirm"></TascherList>
-        </el-dialog>
+      <!-- 阅卷老师 -->
+      <el-dialog title="阅卷老师" v-model="dialogyueTeacher" v-if="dialogyueTeacher" width="50%">
+        <TascherList v-model="dialogyueTeacher" @deplenght="deplenght" @teacherConfirm="teacherConfirm"></TascherList>
+      </el-dialog>
 
-        <!-- 创建试题库 -->
-        <el-dialog v-model="dialogVisible2"
-                   title="题库添加"
-                   width="50%">
-          <CreaTi @isadd="isadd"
-                  @can="can"></CreaTi>
-        </el-dialog>
+      <!-- 创建试题库 -->
+      <el-dialog v-model="dialogVisible2" title="题库添加" width="50%">
+        <CreaTi @isadd="isadd" @can="can"></CreaTi>
+      </el-dialog>
 
-        <!-- 从题库中导入 -->
-        <QuestDislog :questdialog="questdialog"  @queshandleClose="queshandleClose" @quesConfirm="quesConfirm" @quesCancel="quesCancel"></QuestDislog>
-        <!-- 选择已有试卷 -->
-        <Testpaperlist :isshow="isshow" @paperhandleClose="paperhandleClose" @paperConfirm="paperConfirm" @paperCancel="paperCancel"></Testpaperlist>
-      </div>
+      <!-- 从题库中导入 -->
+      <QuestDislog :questdialog="questdialog" @queshandleClose="queshandleClose" @quesConfirm="quesConfirm"
+        @quesCancel="quesCancel"></QuestDislog>
+      <!-- 选择已有试卷 -->
+      <Testpaperlist :isshow="isshow" @paperhandleClose="paperhandleClose" @paperConfirm="paperConfirm"
+        @paperCancel="paperCancel"></Testpaperlist>
     </div>
-
+  </div>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, toRefs, watchEffect, onMounted ,computed} from "vue";
+import { reactive, ref, toRefs, watchEffect, onMounted, computed } from "vue";
 import { EditPen, Delete, CircleClose } from "@element-plus/icons-vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import Drawers from "../../components/exam/drawer.vue";
 import UploadFiles from "../../components/uploadFiles.vue";
 import { baseList, testAdd, testDetails } from "../../api/test";
-import Forth from "../../components/test/Forth.vue";
+import Teacher from "../../components/exam/teacher.vue";
 import TascherList from "../../components/test/teacherList.vue";
 import studentList from "../../components/test/studentList.vue";
 import CreaTi from '../../components/CreaTi.vue'
@@ -377,6 +293,8 @@ const dialogTeacher = ref(false); //可见老师
 const dialogyueTeacher = ref(false); //阅卷老师
 const Route = useRoute();
 let title = ref("");
+const size = ref<"default" | "large" | "small"|'mini'|"normal">("default");
+
 // 日期时间
 const shortcuts = [
   {
@@ -462,9 +380,9 @@ const Drawerclose = (val: any) => {
   table.value = val;
 };
 // ------------------------input
-const radioinp=ref('')//单选题分值
-const checkinp=ref('')
-const qwdinp=ref('')
+const radioinp = ref('')//单选题分值
+const checkinp = ref('')
+const qwdinp = ref('')
 const inp = (e: any, type: string) => {
   // console.log(e, type); //分数，类型
   if (type == '多选题') {
@@ -500,10 +418,10 @@ const inp = (e: any, type: string) => {
   }
 }
 // 计算总分
-const totalPoints=computed(()=>{
-  let sum=0
-  for(let i in params.value.questions){
-    sum=sum+Number(params.value.questions[i].scores)
+const totalPoints = computed(() => {
+  let sum = 0
+  for (let i in params.value.questions) {
+    sum = sum + Number(params.value.questions[i].scores)
   }
   return sum
 })
@@ -531,7 +449,7 @@ const DrawerCancel = (val: any) => {
 };
 // 编辑
 let updArr: any = ref([]);
-const edit:any = (val: any) => {
+const edit: any = (val: any) => {
   console.log(val);
   title.value = "修改";
   table.value = true; //弹出框
@@ -547,7 +465,7 @@ const clear = () => {
   params.value.questions = [];
 };
 // 左侧填分区域
-const getCount = () => {};
+const getCount = () => { };
 // 批量添加
 let url = "http://estate.eshareedu.cn/exam/api/test/upload";
 const updataFile = async (e: any) => {
@@ -594,23 +512,17 @@ const changeoptionDisturbance = (val: any) => {
     checktwo.value = 0;
   }
 };
-// 老师可见
-const teachClose = (done: () => void) => {
-  done();
-};
-// 老师可见穿梭框
-const limitss = (val: any) => {
-  // console.log(val);
-  params.value.limits.length = val;
-};
-const sub = () => {
-  dialogTeacher.value = false;
-};
 
-const valuesss = (val: any) => {
+// 老师可见穿梭框
+const teacherdeplenght = (val: any) => {
   // console.log(val);
-  params.value.limits = val;
+  params.value.limits.lenght = val;
 };
+const Confirm = (bool: any, val: any) => {
+  // console.log(val);
+  dialogTeacher.value = false
+  params.value.limits = val
+}
 // 阅卷老师穿梭框
 const deplenght = (val: any) => {
   // console.log(val);
@@ -619,34 +531,30 @@ const deplenght = (val: any) => {
 //
 
 // 差号
-let paperhandleClose = (val:any) => {
+let paperhandleClose = (val: any) => {
   isshow.value = val
 }
 // 确定按钮
-let paperConfirm = (val:any,data:any)=>{
+let paperConfirm = (val: any, data: any) => {
   // console.log(data.value.questions);
-  
+
   isshow.value = val //关闭弹窗
 
-  params.value.questions=data.value.questions //子组件传过来的数据
-
-
-
+  params.value.questions = data.value.questions //子组件传过来的数据
 }
-
 // 取消按钮
-let paperCancel = (val:any) => {
+let paperCancel = (val: any) => {
   isshow.value = val
 }
-
+// 阅卷老师点击确定
 const teacherConfirm = (bool: any, val: any) => {
-  console.log(bool, val);
+  // console.log(bool, val);
   dialogyueTeacher.value = false;
   params.value.markteachers = val;
 };
 // 可见学生
 const dialogStudent = ref(false);
-let dialogVisible2=ref(false)
+let dialogVisible2 = ref(false)
 const isadd = (val: any) => {
   dialogVisible2.value = val;
 };
@@ -655,22 +563,22 @@ const can = (e: any) => {
   dialogVisible2.value = false;
 };
 // 从题库中导入
-const questdialog=ref(false)
+const questdialog = ref(false)
 // 题库弹窗点击差号关闭弹窗
-let queshandleClose = (val:any) => {
+let queshandleClose = (val: any) => {
   questdialog.value = val
 }
 
 // 点击确定按钮
-let quesConfirm = (val:any) => {
+let quesConfirm = (val: any) => {
   questdialog.value = val
 }
 
 // 点击取消按钮
-let quesCancel = (val:any) => {
-  questdialog.value =val
+let quesCancel = (val: any) => {
+  questdialog.value = val
 }
-let isshow=ref(false)
+let isshow = ref(false)
 // 学生穿梭框
 const studentConfirm = (bool: any, val: any) => {
   console.log(bool, val);
@@ -717,13 +625,21 @@ const { params } = toRefs(form);
 // 点击确定添加试题
 const onSubmit = async () => {
   console.log(params.value);
-  let res: any = await testAdd(params.value);
-  // console.log(res);
-  if (res.errCode == 10000) {
-    ElMessage.success("添加成功");
-    router.push("./test");
+  if (params.value.title == '') {
+    ElMessage.error('请输入考试名称')
+  } else if (params.value.limits.length === 0) {
+    ElMessage.error('请选择可见老师')
+  } else if (params.value.students.length === 0) {
+    ElMessage.error('请选择可见学生')
+  } else if (params.value.markteachers.length === 0) {
+    ElMessage.error('请选择阅卷老师')
   } else {
-    ElMessage.error("添加失败");
+    let res: any = await testAdd(params.value)
+    // console.log(res);
+    if (res.errCode == 10000) {
+      ElMessage.success('添加成功')
+      router.push("/test");
+    }
   }
 };
 // 编辑
@@ -733,12 +649,22 @@ const onEdit = async () => {
   params.value.checktwo = checktwo.value;
   console.log(params.value);
   let res: any = await testAdd({ ...params.value, id: params.value.id });
-  console.log(res);
-  if (res.errcode == "10000") {
-    ElMessage.success("修改成功");
+  // console.log(res);
+
+  ElMessage.success("修改成功");
+  router.push("/test");
+
+};
+// 保存不发布
+const save = async () => {
+  params.value.state = 2
+  let res: any = await testAdd(params.value)
+  // console.log(res);
+  if (res.errCode == 10000) {
+    ElMessage.success('添加成功')
     router.push("/test");
   }
-};
+}
 watchEffect(() => {
   let choce = 0; //单选
   let check = 0; //多选

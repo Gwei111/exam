@@ -1,6 +1,6 @@
 <template>
   <div class="head">
-    <span>试卷管理</span>
+    <h3 style="font-weight: normal;">试卷管理</h3>
     <el-button type="primary" @click="add">创建试卷</el-button>
   </div>
 

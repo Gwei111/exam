@@ -208,7 +208,7 @@ const shortcuts = [
     },
   },
 ];
-const size = ref<"default" | "large" | "small">("default");
+const size = ref<"default" | "large" | "small"|'mini'>("default");
 interface User {
   date: string;
   name: string;
