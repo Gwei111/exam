@@ -48,7 +48,12 @@
         <el-table-column property="depname" label="所属部门" />
         <el-table-column property="classname" label="所在班级" />
         <el-table-column property="username" label="账号" />
-        <el-table-column property="addtime" label="添加时间" />
+        <el-table-column property="addtime" label="添加时间" >
+          <template #default="scope">
+          {{ moment(scope.row.addtime).format('YYYY-MM-DD hh:mm') }}
+
+          </template>
+        </el-table-column>
         <el-table-column label="操作" show-overflow-tooltip>
           <template #default="scope">
             <span class="font" @click="upoldpass(scope.row)">重置密码</span>
@@ -80,6 +85,7 @@ import AddAllAtuDent from '../../components/AddAllAtuDent.vue'
 import FenYe from "../../components/FenYe/FenYe.vue"
 import UpPass from "../../components/UpPass.vue"
 import { useRoute, useRouter } from 'vue-router';
+import moment from 'moment';
 const route = useRoute()
 
 onMounted(() => {
