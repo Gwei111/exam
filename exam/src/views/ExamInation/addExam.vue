@@ -170,7 +170,7 @@
               <el-form-item label="开放时间" style="width: 800px;">
                 <el-date-picker v-model="opTime" type="datetimerange" :shortcuts="shortcuts" range-separator="至"
                   format="YYYY-MM-DD HH:mm" value-format="YYYY-MM-DD HH:mm" start-placeholder="开始时间"
-                  end-placeholder="结束时间" @change="getTime" />
+                  end-placeholder="结束时间" @change="changetime" />
                 <span style="color: #c3c3c3;">不填表示永久</span>
               </el-form-item>
               <el-form-item label="答案解析：">
@@ -484,10 +484,11 @@ onMounted(() => {
 
 // 开放考试
 let opTime: any = ref([]);
-const getTime = (val: any) => {
+const changetime = (val: any) => {
   console.log(val);
   params.value.begintime = moment(val[0]).format("YYYY-MM-DD hh:ss");
   params.value.endtime = moment(val[1]).format("YYYY-MM-DD hh:ss");
+  
 };
 // 防作弊 试题顺序打乱
 let Disturbance = ref(false);
@@ -593,8 +594,8 @@ const form: any = reactive({
     title: "", //标题
     info: "", //说明
     admin: "ldq", //登录的用户名
-    begintime: "", //开始时间
-    endtime: "", //结束时间
+    begintime: "2023-03-07 12:00", //开始时间
+    endtime: "2023-03-22 12:00", //结束时间
     limittime: time.value, // 限制时长
     scores: 100, //总分
     state: 1,
@@ -634,7 +635,7 @@ const onSubmit = async () => {
   } else if (params.value.markteachers.length === 0) {
     ElMessage.error('请选择阅卷老师')
   } else {
-    let res: any = await testAdd(params.value)
+    let res: any = await testAdd({...params.value})
     // console.log(res);
     if (res.errCode == 10000) {
       ElMessage.success('添加成功')
