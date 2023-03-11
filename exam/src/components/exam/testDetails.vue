@@ -119,7 +119,9 @@ const execl = async () => {
     margin: 10px;
     .titletop {
         p {
-            color: #ccc;
+            padding: 10px 5px;
+    color: #909090;
+            font-size: 15px;
         }
         .options {
             .optionsbox {

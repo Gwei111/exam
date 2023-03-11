@@ -163,6 +163,7 @@ const handleClose = () => {
 
         .tiile {
             margin: 20px 0;
+            // color: #0089ff;
         }
 
         .optionlist {

@@ -38,35 +38,35 @@
                     <div class="dan" v-if="form.isChoce == true">
                       <span style="margin-left: 10px;">单选题{{ form.numChoce }}道</span>
                       <p style="margin-left: 10px;">每题
-                        <el-input  size="small" clearable style="width:50px;" @input="inp($event, '单选题')"
+                        <el-input  size="small" clearable style="width:50px;" @input="inp($event, '单选题')" type="number"
                           v-model="radioinp"></el-input>分
                       </p>
                     </div>
                     <div class="dan" v-if="form.ischeck == true">
                       <span style="margin-left: 10px;">多选题{{ form.numCheck }}道</span>
                       <p style="margin-left: 10px;">每题
-                        <el-input  size="small" clearable style="width:50px;" @input="inp($event, '多选题')"
+                        <el-input  size="small" clearable style="width:50px;" @input="inp($event, '多选题')" type="number"
                           v-model="checkinp"></el-input>分
                       </p>
                     </div>
                     <div class="dan" v-if="form.isJudge == true">
                       <span style="margin-left: 10px;">判断题{{ form.numJudge }}道</span>
                       <p style="margin-left: 10px;">每题
-                        <el-input  size="small" clearable style="width:50px;"
+                        <el-input  size="small" clearable style="width:50px;" type="number"
                           @input="inp($event, '判断题')"></el-input>分
                       </p>
                     </div>
                     <div class="dan" v-if="form.isqust == true">
                       <span style="margin-left: 10px;">问答题{{ form.numQuest }}道</span>
                       <p style="margin-left: 10px;">每题
-                        <el-input  size="small" clearable style="width:50px;" @input="inp($event, '问答题')"
+                        <el-input  size="small" clearable style="width:50px;" @input="inp($event, '问答题')" type="number"
                           v-model="qwdinp"></el-input>分
                       </p>
                     </div>
                     <div class="dan" v-if="form.iskong == true">
                       <span style="margin-left: 10px;">填空题{{ form.numKong }}道</span>
                       <p style="margin-left: 10px;">每题
-                        <el-input  size="small" clearable style="width:50px;"
+                        <el-input  size="small" clearable style="width:50px;" type="number"
                           @input="inp($event, '填空题')"></el-input>分
                       </p>
                     </div>
