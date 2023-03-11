@@ -14,7 +14,7 @@
       <el-checkbox label="只看我创建的" name="type" />
     </el-checkbox-group>
     <el-button type="primary" @click="inquire()">查询</el-button>
-    <el-button type="danger" @click="delass()">批量删除</el-button>
+    <el-button type="danger" @click="delass()" :disabled="disabled">批量删除</el-button>
   </div>
   <div>
     <el-table
@@ -65,6 +65,9 @@ import { databaselist, databasedelete, deleteall } from '../../api/department';
 import FenYe from '../../components/FenYe/FenYe.vue';
 import Queston from '../../components/question.vue'
 import { useRouter } from "vue-router";
+import { fa } from 'element-plus/es/locale';
+//禁止选项
+const disabled=ref(true)
 const router = useRouter();
 const form = reactive({
   name: '',
@@ -127,8 +130,13 @@ const del = (val: any) => {
     });
 };
 const id_s=ref()
-const handleSelectionChange = (val: any) => {
-  id_s.value = val.map((item: any) => item.id);
+const handleSelectionChange = (val: any) => {  if(val==false){
+    disabled.value=true
+  }else{
+    id_s.value = val.map((item: any) => item.id);
+    disabled.value=false
+  }
+  // 
 };
 // 批量删除
 const delass =() => {
