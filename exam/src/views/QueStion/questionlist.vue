@@ -245,8 +245,14 @@ const del = async (id: any) => {
 };
 let lids: any = ref('');
 const handleSelectionChange = (val: any) => {
-  lids.value = val.map((item: any) => item.id);
-  show.value = false;
+  if(val==false){
+    show.value=true
+  }else{
+    lids.value = val.map((item: any) => item.id);
+    show.value = false;
+  }
+ 
+  
 };
 // 批量删除
 const depls = () => {

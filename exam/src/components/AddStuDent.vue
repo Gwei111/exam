@@ -167,12 +167,14 @@ const submit = (formEl: FormInstance | undefined) => {
     formEl.validate(async (valid) => {
         if (valid) {
             dislogShow.value = false
-            if (id.value == 0) {
+            console.log(1111111111111111,id);
+            
+            if (id.value == undefined||id.value==0) {
                 // 接口
                 const res: any = await studentAdd(
                     state
                 )
-                console.log(res);
+                console.log(1,res);
                 if (res.errCode == 10000) {
                     ElMessage({
                         type: 'success',
@@ -191,6 +193,8 @@ const submit = (formEl: FormInstance | undefined) => {
                     state
                     // username:state.username
                 )
+                console.log(2,res);
+                
                 if (res.errCode == 10000) {
                     ElMessage({
                         type: 'success',
