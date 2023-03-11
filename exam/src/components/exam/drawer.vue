@@ -347,8 +347,17 @@ if(props.title=='修改'){
     check=list.answer.split('|')
     console.log(form);
 }
-
-
+    // 修改回显数据题库编辑  
+  if(props.dictionary){
+      form.title = props.dictionary.title
+      form.type = props.dictionary.type
+      form.scores = props.dictionary.scores
+      form.answers = props.dictionary.answers
+      form.answer = props.dictionary.answer
+      form.tags = props.dictionary.tags
+      form.explains = props.dictionary.explains
+      form.id = props.dictionary.id
+  }
 onMounted(() => {
     if(props.title=='修改'){
         data.leng=form.answer

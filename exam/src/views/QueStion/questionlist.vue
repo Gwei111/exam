@@ -113,7 +113,7 @@ import { useRouter } from 'vue-router';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import Qfenye from '../../components/FenYe/FenYe.vue';
 import UploadFiles from '../../components/uploadFiles.vue'; //批量导入试题
-import Drawers from '../../components/exam/drawer2.vue'; // 点击添加试题
+import Drawers from '../../components/exam/drawer.vue'; // 点击添加试题
 import Questdrawer from '../../components/questdrawer.vue'; // 详情抽屉
 const route = useRoute();
 const router = useRouter();
@@ -124,11 +124,13 @@ onMounted(() => {
 // 用浏览器内部转换器实现html编码
 // v-html="htmlEncodeByRegExp(scope.row.title)"
 const htmlEncodeByRegExp=(val:any)=>{
-    val=val.replace(/</g,'&lt;');
-    val=val.replace(/>/g,'&gt;');
-    val=val.replace(/\n/g,'<br>');
-    val = val.replace(/&lt;/g,"<");
-    val = val.replace(/&gt;/g,">");
+    // val=val.replace(/</g,'&lt;');
+    // val=val.replace(/>/g,'&gt;');
+    val=val.replace(/\n/g,"</br>");
+    val = val.replace(/&lt;img/g,"<img");
+    val = val.replace(/\/&gt/g,"/>");
+  val = val.replace(/&lt;p&gt;/g,"");
+  val = val.replace(/\&lt;\/p&gt;/g,"");
 		return val;
 	}
 const title=ref() 
@@ -307,12 +309,12 @@ const getChildData = (val: any) => {
 </script>
 
 <style scoped>
-:deep(.cell){
+/* :deep(.cell){ */
   /* height: 24px;
   line-height: 0px; */
-  display: flex;
-  align-items: center;
-}
+  /* display: flex; */
+  /* align-items: center; */
+/* } */
 /* :deep(.butle p){
   margin-top: -23px;
 } */
@@ -347,10 +349,4 @@ const getChildData = (val: any) => {
 :deep(.el-pagination__editor) {
   width: 102px;
 }
-/* :deep(.cell){
-  height: 24px;
-}
-:deep(#test1){
-  margin-top: -113px;
-} */
 </style>
