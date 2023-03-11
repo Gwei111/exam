@@ -1,7 +1,7 @@
 <template>
   <div class="top">
-    <h3>部门管理</h3>
     <div class="left">
+    <h3>部门管理</h3>
       <el-button type="primary" class="but" @click="add()">添加一级节点</el-button>
       <div class="thre">
         <el-tree :data="taabledata.arr" :props="defaultProps" @node-click="handleNodeClick"   default-expand-all/>
@@ -122,6 +122,7 @@ const updatae=async()=>{
     message: '修改成功',
     type: 'success',
   })
+  ruleForm.name=''
   list()
   }
 }
@@ -159,7 +160,6 @@ const handleNodeClick = (val: any) => {
   ruleForm.pid=val.pid
   ruleForm.id=val.id
 }
-
 const defaultProps = {
   children: 'children',
   label: 'name',
@@ -183,8 +183,8 @@ h3{
   display: flex;
 }
 .but{
-  margin-top: 20px;
-  margin-left: 21px;
+  margin-top: 10px;
+  margin-left: 16px;
   font-size: 8px;
 }
 .left{
@@ -214,5 +214,8 @@ margin-left: -50px;
 }
 .tian{
   margin-left: 70px;
+}
+:deep(.is-expanded){
+  margin-top: 8px;
 }
 </style>
