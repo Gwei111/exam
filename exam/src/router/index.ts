@@ -24,9 +24,9 @@ const routes: Array<RouteRecordRaw> = [
         meta: { title: '创建考试', isAuth: true },
       },
       {
-        path:'/Analyse',
-        component:()=>import('../views/ExamInation/Analyse.vue'),
-        meta:{title:'考试分析',isAuth:true}
+        path: '/Analyse',
+        component: () => import('../views/ExamInation/Analyse.vue'),
+        meta: { title: '考试分析', isAuth: true }
       },
       {
         path: "/exam",
@@ -99,13 +99,13 @@ const routes: Array<RouteRecordRaw> = [
         name: 'Stutest',
         component: () => import('../views/Stutest/stutest.vue'),
         meta: { title: '学生端考试列表', isAuth: true },
-      },{
+      }, {
         path: '/set',
         name: 'Set',
         component: () => import("../views/Set/set.vue"),
         meta: { title: '学生端设置', isAuth: true },
       },
-     
+
     ]
   },
   {
@@ -139,5 +139,11 @@ const router = createRouter({
   history,
   routes
 })
-
+router.afterEach((to) => {
+  if (to.meta.title) {
+    (document.title as any) = to.meta.title
+  } else {
+    document.title = '考试系统'
+  }
+})
 export default router
