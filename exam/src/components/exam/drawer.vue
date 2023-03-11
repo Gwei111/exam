@@ -64,8 +64,8 @@
         <!-- 填空题 -->
         <div v-if="form.type == '填空题' || form.type == '简答题'">
           <el-form-item label="正确答案" size="normal" v-show="data.leng.length > 0" v-if="form.type == '填空题'">
-            <div v-for="(item, index) in data.leng" :key="index">
-              <el-input size="normal" autosize clearable  style="width: 350px;"
+            <div >
+              <el-input size="normal" style="width: 350px;"   v-for="(item, index) in data.leng" v-model="data.leng[index]"  :key="index" 
                ></el-input><br/>
             </div>
           </el-form-item>
@@ -76,11 +76,11 @@
         </div>
         <!-- 分值 -->
         <el-form-item label="分值" :label-width="formLabelWidth">
-          <el-input v-model="form.scores" autocomplete="off" style="width:80px;" />
+          <el-input type="number" v-model="form.scores" autocomplete="off" style="width:80px;" />
         </el-form-item>
       </el-form>
       <div class="demo-drawer__footer">
-        <el-button type="primary" @click="onClick(form)">保存</el-button>
+        <el-button type="primary" @click="onClick()">保存</el-button>
         <el-button type="primary" plain @click="clickup">保存并继续</el-button>
         <el-button @click="cancelForm">Cancel</el-button>
 
@@ -94,19 +94,98 @@
 import { ref, reactive, shallowRef, onBeforeUnmount, onMounted, toRefs, watch, nextTick } from "vue";
 import { ElDrawer, ElMessage, ElMessageBox } from 'element-plus'
 import '@wangeditor/editor/dist/css/style.css';
-import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
+import { Editor, Toolbar, } from '@wangeditor/editor-for-vue'
+import { IEditorConfig } from '@wangeditor/editor'
+import WangEditor from 'wangeditor'
 import { CirclePlus, CircleClose, List } from '@element-plus/icons-vue';
+
 // 题库的编辑dictionary,题库的id(databaseid)
 const props = defineProps(['table','updArr','title','databaseid','dictionary'])
 const emit = defineEmits(['Drawerclose', 'adds', 'DrawerCancel'])
 watch([props], () => {
   form = props.updArr
 })
+
+
 const formLabelWidth = "80px";
 // 编辑器实例，必须用 shallowRef
 const editorRef = shallowRef()
-const toolbarConfig = {}
-const editorConfig = { placeholder: '请输入内容...' }
+// const toolbarConfig = {}
+const toolbarConfig = {
+  toolbarKeys: [
+    // 菜单 key
+    "bold",
+    "italic",
+    "underline",
+    "through",
+    "color",
+    "bgColor",
+    "bulletedList",
+    "numberedList",
+    "justifyLeft",
+    "justifyCenter",
+    "justifyRight",
+    "insertTable",
+    // 继续配置其他菜单...
+    {
+      key: "group-image", // 必填，要以 group 开头
+      title: "图片", // 必填
+      menuKeys: ["uploadImage", "insertImage"],
+    },
+  ],
+};
+const editorConfig: any = { MENU_CONF: {} };
+editorConfig.MENU_CONF["uploadImage"] = {
+  server:"http://www.eshareedu.cn/exam/api/upload/editeradd", // 上传图片地址
+  timeout: 5 * 1000, // 5s
+  fieldName: "file",
+  meta: { baseUrl: "" },
+  metaWithUrl: true, // 参数拼接到 url 上
+  headers: { Authorization: sessionStorage.getItem("token") },
+
+  maxFileSize: 10 * 1024 * 1024, // 10M
+
+  base64LimitSize: 5 * 1024, // 5kb 以下插入 base64
+
+  onBeforeUpload(files: any) {
+    console.log("onBeforeUpload", files);
+    return files; // 返回哪些文件可以上传
+  },
+  onProgress(progress: any) {
+    console.log("onProgress", progress);
+  },
+  onSuccess(file: any, res: any) {
+    console.log("onSuccess", file, res);
+  },
+  onFailed(file: any, res: any) {
+    alert(res.message);
+    console.log("onFailed", file, res);
+  },
+  onError(file: any, err: any, res: any) {
+    alert(err.message);
+    console.error("onError", file, err, res);
+  },
+  // // 用户自定义插入图片
+  customInsert(res: any, insertFn: any) {
+    var Img = res.data[0].url.slice(1);
+    // 自己插入图片
+    // console.log('自己插入图片', url)
+    // insertFn(url, alt, href)
+    insertFn("http://www.eshareedu.cn/exam/upload/" + Img);
+  },
+};
+
+// 组件销毁时，也及时销毁编辑器
+onBeforeUnmount(() => {
+  const editor = editorRef.value;
+  if (editor == null) return;
+  editor.destroy();
+});
+
+const handleCreated = (editor: any) => {
+  editorRef.value = editor; // 记录 editor 实例，重要！
+};
+// const editorConfig = { placeholder: '请输入内容...' }
 let check=ref([])//复选框正确答案的值
 let form:any = reactive({
     id: 0,
@@ -150,7 +229,7 @@ let form:any = reactive({
 watch(form.type, (newVal) => {
   form.value.type = newVal;
 });
-const  {answer}  = toRefs(form)
+// const  {answer}  = toRefs(form)
 const data:any = reactive({
   letter: [
     //选项的名
@@ -183,15 +262,13 @@ const data:any = reactive({
   ],
   leng: [],
 });
+// const{letter,leng}=toRefs(data)
 // 组件销毁时，也及时销毁编辑器
 onBeforeUnmount(() => {
   const editor = editorRef.value;
   if (editor == null) return;
   editor.destroy();
 });
-const handleCreated = (editor: any) => {
-    editorRef.value = editor // 记录 editor 实例，重要！
-};
 
 // 多选框内容改变
 const changeCheckbox = (e: any) => {
@@ -204,11 +281,8 @@ watch(()=>form.title,(newvalue)=>{
   data.leng=[]
   let res=newvalue.match(/\[\]/g)
   if(res){
-    let len=res?.length
-    for (let i = 0; i < len; i++) {
-      data.leng.push(form.title)
-      
-    }
+    let _inputNum = newvalue.match(/\[\]/g).map((item: any, index: number) => (item = data.leng[index]));
+        data.leng = [..._inputNum];
   }
   
 })
@@ -227,7 +301,8 @@ const delOptions = (val: any) => {
   form.answers.splice(val, 1);
 };
 // 点击完成
-const onClick = (val: any) => {
+const onClick = () => {
+  // console.log(form)
   if (form.type == "单选题") {
     if (!form.answer) {
       ElMessage("正确答案必填!");
@@ -255,8 +330,14 @@ const onClick = (val: any) => {
       return;
     }
   }
-  //
-  emit("adds", false, val);
+  if (form.type === "填空题" || form.type === "问答题") {
+    form.answer = data.leng.join("|");
+    if (!form.scores) {
+      ElMessage("请输入分值");
+      return;
+    }
+  }
+  emit("adds", false, form);
 };
 // 修改回显数据
 if(props.title=='修改'){

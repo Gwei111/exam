@@ -2,67 +2,46 @@
   <div class="background_box">
     <el-card class="box-card">
       <div class="Login_item_box">
-        <div class="QRimg"
-             @click="qiehuan">
+        <div class="QRimg" @click="qiehuan">
           <!--点击切换登录方式-->
-          <img src="../assets/pc.png"
-               alt=""
-               v-show="!biaodan" />
-          <img class="pc"
-               src="../assets/pass.png"
-               alt=""
-               v-show="biaodan" />
+          <img src="../assets/pc.png" alt="" v-show="!biaodan" />
+          <img class="pc" src="../assets/pass.png" alt="" v-show="biaodan" />
         </div>
         <div class="titleBox">
           <div class="imgbox">
-            <img src="http://edu.90000p.com/exam/cyx/assets/log.6449415e.png"
-                 alt="" />
+            <img src="http://edu.90000p.com/exam/cyx/assets/log.6449415e.png" alt="" />
           </div>
           <div class="logTitle">
             <p class="titleOne">考试系统</p>
           </div>
         </div>
-        <div class="item_input"
-             v-show='!biaodan'>
+        <div class="item_input" v-show='!biaodan'>
           <div class="center_item_input">
-            <el-form ref="ruleFormRef"
-                     :model="data123"
-                     :rules="rules"
-                     label-width="0"
-                     class="demo-ruleForm"
-                     size="default"
-                     status-icon>
+            <el-form ref="ruleFormRef" :model="data123" :rules="rules" label-width="0" class="demo-ruleForm"
+              size="default" status-icon>
               <el-form-item>
-                <el-input v-model="data123.username"
-                          placeholder="用户名" />
+                <el-input v-model="data123.username" placeholder="用户名" />
               </el-form-item>
               <el-form-item style="margin-top: 25px">
-                <el-input v-model="data123.pass"
-                          type="password"
-                          placeholder="密码"
-                          show-password />
+                <el-input v-model="data123.pass" type="password" placeholder="密码" show-password />
               </el-form-item>
               <el-form-item>
-                <el-button @click="debounce(loginClick,300)"
-                           type="primary"
-                           class="Login_but">登录</el-button>
+                <el-button @click="debounce(loginClick, 300)" type="primary" class="Login_but">登录</el-button>
               </el-form-item>
             </el-form>
             <div class="Forgot_pass">忘记密码</div>
           </div>
         </div>
         <!-- 二维码登录 -->
-        <div class="erwema"
-             v-show="biaodan">
-          <img src="http://edu.90000p.com/exam/cyx/assets/big_er.a666c6a8.jpg"
-               alt="">
+        <div class="erwema" v-show="biaodan">
+          <img src="http://edu.90000p.com/exam/cyx/assets/big_er.a666c6a8.jpg" alt="">
           <div class="soao">使用<span style="color: blue;">微信</span>扫一扫进行登录</div>
         </div>
       </div>
     </el-card>
   </div>
 </template>
-  <script lang='ts' setup>
+<script lang='ts' setup>
 import {
   ref,
   toRefs,
@@ -112,29 +91,35 @@ let data123: any = reactive({
 });
 
 let loginClick = async () => {
-  let res: any = await checklogin(data123);
-  console.log(res);
-  if (res.errCode === 10000) {
-    sessionStorage.setItem("token", res.data.token);
-    sessionStorage.setItem("name", res.data.model.username);
-    sessionStorage.setItem("studentid", res.data.model.id);
-    data123.menu = res.data.menu.filter((item: any) => item.pid === 0); //过滤 只要左侧菜单栏的数据
-    sessionStorage.setItem("data", JSON.stringify(data123.menu)); //左侧菜单栏数据
-    store.commit("getMenu", data123.menu); //左侧菜单栏数据 存到vuex里
-    router.push(data123.menu[0].url); //跳转页面
-    ElMessage({
-      message: "登陆成功",
-      type: "success",
-    });
-  } else if (res.errCode === 10300) {
-    ElMessage({
-      message: res.errMsg,
-      type: "error",
-    });
+  if (data123.username == '') {
+    ElMessage.error('用户名不能为空')
+  } else if (data123.pass == '') {
+    ElMessage.error('密码不能为空')
+  } else {
+    let res: any = await checklogin(data123);
+    console.log(res);
+    if (res.errCode === 10000) {
+      sessionStorage.setItem("token", res.data.token);
+      sessionStorage.setItem("name", res.data.model.username);
+      sessionStorage.setItem("studentid", res.data.model.id);
+      data123.menu = res.data.menu.filter((item: any) => item.pid === 0); //过滤 只要左侧菜单栏的数据
+      sessionStorage.setItem("data", JSON.stringify(data123.menu)); //左侧菜单栏数据
+      store.commit("getMenu", data123.menu); //左侧菜单栏数据 存到vuex里
+      router.push(data123.menu[0].url); //跳转页面
+      ElMessage({
+        message: "登陆成功",
+        type: "success",
+      });
+    } else if (res.errCode === 10300) {
+      ElMessage({
+        message: res.errMsg,
+        type: "error",
+      });
+    }
   }
 };
 </script>
-  <style lang="less" scoped>
+<style lang="less" scoped>
 .background_box {
   position: relative;
   width: 100%;
@@ -159,6 +144,7 @@ let loginClick = async () => {
       position: absolute;
       top: 59px;
       right: -16px;
+
       img {
         width: 80px;
         height: 80px;
@@ -204,14 +190,17 @@ let loginClick = async () => {
 
   .erwema {
     margin-left: 122px;
+
     img {
       width: 180px;
       height: 180px;
     }
+
     .soao {
       margin-top: 60px;
     }
   }
+
   .pc {
     width: 80px;
     height: 80px;
@@ -238,15 +227,15 @@ let loginClick = async () => {
   }
 }
 
-:deep( .el-input__wrapper) {
+:deep(.el-input__wrapper) {
   background-color: #dddcdc;
 }
 
-:deep(.el-form-item.is-error .el-input__wrapper){
+:deep(.el-form-item.is-error .el-input__wrapper) {
   box-shadow: 0 0 0 0;
 }
 
-:deep( .el-form-item--feedback .el-input__validateIcon) {
+:deep(.el-form-item--feedback .el-input__validateIcon) {
   display: none;
 }
 </style>

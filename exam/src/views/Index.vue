@@ -7,7 +7,7 @@
            <!-- 鼠标移入 弹出框 -->
           <div class="headeImg" @mouseover="userState">
             <el-avatar :size="40"
-              src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.duoziwang.com%2F2018%2F16%2F04191726703546.jpg&refer=http%3A%2F%2Fimg.duoziwang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1671774725&t=e067c5b9c6bd6656a09f8952e56238bb" />
+              src="http://edu.90000p.com/exam/cyx/assets/log.6449415e.png" />
           </div>
 
           <div class="Item">
@@ -47,7 +47,7 @@
       <el-card class="box-card" v-show="userBool" @mouseleave="userFalse">
         <div class="headeBack">
           <el-avatar :size="50"
-            src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.duoziwang.com%2F2018%2F16%2F04191726703546.jpg&refer=http%3A%2F%2Fimg.duoziwang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1671774725&t=e067c5b9c6bd6656a09f8952e56238bb"
+            src="http://edu.90000p.com/exam/cyx/assets/log.6449415e.png"
             class="headerImg" />
         </div>
         <div class="userName">

@@ -15,7 +15,7 @@
 
     </div>
     <div>
-        <span class="dialog-footer" style="float: right;">
+        <span class="dialog-footer" style="float: right; padding-top: 20px;">
             <el-button @click="teacherCancel">取消</el-button>
             <el-button type="primary" @click="teacherConfirm">
                 确认
@@ -105,5 +105,11 @@ const rightchange=(val:any)=>{
   width: 270px;
   margin-left: 40px;
   margin-top: 25px;
+}
+.topbranch{
+    margin-left: 40px;
+    span{
+        margin-right: 10px;
+    }
 }
 </style>

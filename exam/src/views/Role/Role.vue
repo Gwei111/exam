@@ -11,7 +11,7 @@
     <div class="main">
       <el-table :data="tableData" :model="data">
         <el-table-column prop="name" label="名称" />
-        <el-table-column label="操作" class="right">
+        <el-table-column label="操作" class="right" align="center">
           <template #default="scope">
             <span class="font right" @click="update(scope.row.id, scope.row)">编辑 &nbsp; &nbsp;</span>
             <span class="font right" @click="del(scope.row.id)">删除 </span>

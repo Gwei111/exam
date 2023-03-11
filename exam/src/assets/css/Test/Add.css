@@ -55,12 +55,12 @@
   margin-left: 5px;
   background-color: #eefaf6;
 }
-.cen {
-  width: 94%;
+.cen[data-v-6bf03761] {
+  width: 80%;
   margin-top: 10px;
   display: flex;
-  justify-content: center;
-  margin-left: 80px;
+  /* justify-content: center; */
+  margin-left: 137px;
 }
 .cen span {
   color: gray;

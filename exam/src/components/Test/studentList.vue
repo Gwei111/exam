@@ -9,8 +9,8 @@
         </div>
         <div class="topbranch">
             <span>班级</span>
-            <el-select v-model="classval" class="m-2" placeholder="请选择" size="default" @change="changeClass">
-                <el-option v-for="item1 in classlists" :key="item1.id" :label="item1.name" :value="item1.id" />
+            <el-select v-model="classval" class="m-2" placeholder="请选择" size="default" @change="changeClass" style="width: 150px;">
+                <el-option v-for="item1 in classlists" :key="item1.id" :label="item1.name" :value="item1.id" style="width: 150px;" />
             </el-select>
         </div>
     </div>
@@ -120,8 +120,12 @@ const rightcheckChange=(val:any)=>{//已选
 <style scoped lang="less">
 .top {
     display: flex;
-    width: 700px;
+    width: 443px;
     justify-content: space-between;
+    margin-left: 89px;
+}
+span{
+    margin-right: 10px;
 }
 :deep(.el-transfer__buttons) {
   display: none;
@@ -133,7 +137,7 @@ const rightcheckChange=(val:any)=>{//已选
 }
 .dialog-footer{
     float: right;
-    padding-bottom: 220px;
+    padding-top: 20px;
 }
 /deep/.el-dialog__body{
     height: 600px;

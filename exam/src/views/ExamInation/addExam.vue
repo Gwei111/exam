@@ -79,7 +79,7 @@
                         <div class="gotleft">
                           <span>{{ index + 1 }}.{{ item.type }}</span>
                           <span style="margin: 10px;">分值</span>
-                          <el-input  size="normal" clearable style="width: 50px;"></el-input>
+                          <el-input  type="number" v-model="item.scores" size="normal" clearable style="width: 80px;"></el-input>
 
                         </div>
                         <div class="getright">
@@ -155,7 +155,7 @@
           <div class="examset">
             <el-form :model="params" label-width="120px">
               <el-form-item label="通过分数：">
-                <el-input v-model.number="params.pastscores" style="width: 79px;" />
+                <el-input type="number" v-model="params.pastscores" style="width: 79px;" />
               </el-form-item>
               <el-form-item label="考试时长">
                 <el-radio-group v-model="testTime">

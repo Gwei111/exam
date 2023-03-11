@@ -7,10 +7,10 @@
     <div class="top">
       <el-form :inline="true" :model="query" class="demo-form-inline">
         <el-form-item label="关键字">
-          <el-input v-model="query.key" placeholder="考试名称" size="mini" />
+          <el-input v-model="query.key" placeholder="考试名称" size="mini" clearable />
         </el-form-item>
         <el-form-item label="创建人">
-          <el-input v-model="query.admin" placeholder="创建人" />
+          <el-input v-model="query.admin" placeholder="创建人" clearable />
         </el-form-item>
         <!-- 我创建的 -->
         <el-form-item>
@@ -21,8 +21,8 @@
             <el-radio label="永久开放" />
             <el-radio label="部分时段" />
           </el-radio-group>
-          <el-date-picker v-model="times" type="daterange" unlink-panels range-separator="To"
-            start-placeholder="开始时间" end-placeholder="结束时间" :shortcuts="shortcuts" :size="size" />
+          <el-date-picker v-model="times" type="daterange" unlink-panels range-separator="To" start-placeholder="开始时间"
+            end-placeholder="结束时间" :shortcuts="shortcuts" :size="size" />
         </el-form-item>
         <el-form-item label="状态">
           <el-select v-model="stateVal" clearable placeholder="选择状态" style="width: 100px" @change="changeState">
@@ -46,7 +46,8 @@
       </el-form>
     </div>
     <div class="list">
-      <el-table ref="multipleTableRef" :data="tableData" style="width: 100%, " size="small" @selection-change="handleSelectionChange">
+      <el-table ref="multipleTableRef" :data="tableData" style="width: 100%, " size="small"
+        @selection-change="handleSelectionChange">
         <el-table-column type="selection" />
         <el-table-column label="考试名称" prop="title">
           <template #default="scope">
@@ -55,7 +56,7 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column label="状态" >
+        <el-table-column label="状态">
           <template #default="scope">
             <span :class="
               scope.row.state == 0 || scope.row.state == 1 ? 'blues' : 'reds'">
@@ -64,11 +65,11 @@
           </template>
         </el-table-column>
 
-        <el-table-column property="scores" label="总分"  align="center"/>
-        <el-table-column property="pastscores" label="通过分数"  align="center"/>
-        <el-table-column property="studentcounts" label="考试人数"  align="center"/>
-        <el-table-column property="pastnum" label="通过人数"  align="center"/>
-        <el-table-column property="name" label="开放时间"  align="center">
+        <el-table-column property="scores" label="总分" align="center" />
+        <el-table-column property="pastscores" label="通过分数" align="center" />
+        <el-table-column property="studentcounts" label="考试人数" align="center" />
+        <el-table-column property="pastnum" label="通过人数" align="center" />
+        <el-table-column property="name" label="开放时间" align="center">
           <template #default="scope">
             <p v-if="scope.row.begindate == null">不限</p>
             <p v-else>
@@ -77,11 +78,11 @@
             </p>
           </template>
         </el-table-column>
-        <el-table-column property="admin" label="创建人" align="center"/>
+        <el-table-column property="admin" label="创建人" align="center" />
         <el-table-column property="addtime" label="更新时间" align="center">
           <template #default="scope">
             <p>
-              {{ moment(scope.row.addtime).format('YYYY-MM-DD hh:mm:ss') }}
+              {{ moment(scope.row.addtime).format('YYYY-MM-DD hh:mm') }}
             </p>
           </template>
         </el-table-column>
@@ -109,19 +110,20 @@
       <TestDetails :dialogVisible="dialogVisible" v-if="dialogVisible == true" @closedetailsList="closedetailsList"
         :getid="getid" :title="title"></TestDetails>
       <!-- 学生列表 -->
-      <el-dialog title="可见学生" v-model="dialogstudent" width="50%">
+      <el-dialog title="可见学生" v-model="dialogstudent" width="40%">
         <Students :dialogstudent="dialogstudent" v-if="dialogstudent == true" @studentCancel="studentCancel"
           @studentConfirm="studentConfirm" @studentClose="studentClose"></Students>
       </el-dialog>
 
       <!-- 可见老师 -->
-      <el-dialog title="可见老师" v-model="dialogTeacher" width="50%">
+      <el-dialog title="可见老师" v-model="dialogTeacher" width="40%">
         <Teacher :dialogTeacher="dialogTeacher" v-if="dialogTeacher == true" @teacherConfirm="teacherConfirm"
           @teacherClose="teacherClose"></Teacher>
       </el-dialog>
       <!-- 阅卷老师 -->
-      <el-dialog title="阅卷老师" v-model="dialogyueTeacher" width="50%" >
-        <TascherList :dialogyueTeacher="dialogyueTeacher" v-if="dialogyueTeacher==true" @teacherCancel="teacherCancel"  @teacherConfirm="yueteacherConfirm"></TascherList>
+      <el-dialog title="阅卷老师" v-model="dialogyueTeacher" width="40%">
+        <TascherList :dialogyueTeacher="dialogyueTeacher" v-if="dialogyueTeacher == true" @teacherCancel="teacherCancel"
+          @teacherConfirm="yueteacherConfirm"></TascherList>
       </el-dialog>
 
     </div>
@@ -208,7 +210,7 @@ const shortcuts = [
     },
   },
 ];
-const size = ref<"default" | "large" | "small"|'mini'>("default");
+const size = ref<"default" | "large" | "small" | 'mini'>("default");
 interface User {
   date: string;
   name: string;
@@ -291,7 +293,7 @@ const changeRadio = (val: any) => {
 // 详情弹窗
 const getDetails = (id: any, titles: any) => {
   console.log(titles);
-  
+
   dialogVisible.value = true;
   getid.value = id;
   title = titles;
@@ -303,24 +305,60 @@ let closedetailsList = (val: boolean) => {
 };
 // 单删删除
 const handleDelete = async (val: any) => {
-  // console.log(val)
-  let res: any = await testDel({ id: val });
-  // console.log(res);
-  if (res.errCode == 10000) {
-    ElMessage.success("删除成功");
-    getList();
-  }
+  ElMessageBox.confirm(
+    '此操作将永久删除该文件, 是否继续?',
+    '提示',
+    {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  )
+    .then(async () => {
+      let res: any = await testDel({ id: val });
+      // console.log(res);
+      if (res.errCode == 10000) {
+        ElMessage.success("删除成功");
+        getList();
+      }
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'error',
+        message: '已取消删除',
+      })
+    })
+
 };
 // 批删
 const delAll = async (val: any) => {
   // console.log(val);
-  let res: any = await testDelAll({ ids: addId.value });
-  // console.log(res);
-  if (res.errCode === 10000) {
-    ElMessage.success("删除成功");
-    getList();
-  }
+  ElMessageBox.confirm(
+    '此操作将永久删除该文件, 是否继续?',
+    '提示',
+    {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  )
+    .then(async () => {
+      let res: any = await testDelAll({ ids: addId.value });
+      // console.log(res);
+      if (res.errCode === 10000) {
+        ElMessage.success("删除成功");
+        getList();
+      }
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'error',
+        message: '已取消删除',
+      })
+    })
+
 };
+
 let testid = ref(0);
 // 学生弹框
 const getstudent = (id: any) => {
@@ -345,12 +383,12 @@ const getTeacher = (val: any) => {
   dialogTeacher.value = true;
 };
 // 老师点击确认
-const teacherConfirm = (val: any) => {  
+const teacherConfirm = (val: any) => {
   dialogTeacher.value = val;
 };
 
 // 阅卷老师点击4
-const yueteacherConfirm=(val:any)=>{
+const yueteacherConfirm = (val: any) => {
   dialogyueTeacher.value = val;
 }
 // 老师点击关闭
@@ -420,7 +458,7 @@ const getAnalyse = (val: any) => {
 
   .el-table .cell span {
     color: #4290f7;
-    
+
   }
 
   .el-table .cell .red {
@@ -432,23 +470,28 @@ const getAnalyse = (val: any) => {
   font-size: 13px;
   color: rgb(245, 72, 72) !important;
 }
+
 // /deep/.el-table .el-table__cell{
 //   padding: 0!important
 // }
-/deep/.el-radio-group{
-  width: 200px!important
+/deep/.el-radio-group {
+  width: 200px !important
 }
-/deep/.el-input{
+
+/deep/.el-input {
   font-size: 5px;
   width: 100px;
 }
-/deep/.el-radio{
+
+/deep/.el-radio {
   margin-right: 10px;
 }
-/deep/.el-input__wrapper{
+
+/deep/.el-input__wrapper {
   width: 190px;
 }
-/deep/.el-table--enable-row-transition .el-table__body td.el-table__cell{
+
+/deep/.el-table--enable-row-transition .el-table__body td.el-table__cell {
   font-size: 13px;
 }
 </style>
