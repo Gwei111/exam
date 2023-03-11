@@ -29,7 +29,7 @@
      <template #footer>
        <span class="dialog-footer">
          <el-button @click="dialogVisible = false">取消</el-button>
-         <el-button type="primary" @click="add()"> 确定 </el-button>
+         <el-button type="primary" @click="add(ruleFormRef)"> 确定 </el-button>
        </span>
      </template>
    </el-dialog>
@@ -51,16 +51,29 @@ const props=withDefaults(
     etsid: () =>{},
   }
 )
-const add=async()=>{
- let res:any=await teacheradd(ruleForm)
- console.log(res);
- if(res.errCode===10000){
-   ElMessage({
-       type: 'success',
-       message: '重置密码成功',
-     })
-     emits('isShow',false)
- }
+// 重置密码
+const add = (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  formEl.validate(async(valid) => {
+    if (valid) {   
+      let res:any=await teacheradd(ruleForm)
+       console.log(res);
+      if(res.errCode===10000){
+      ElMessage({
+        type: 'success',
+        message: '重置密码成功',
+      })
+       emits('isShow',false)
+    }
+    } else {
+      console.log('表单信息有误')
+      ElMessage({
+        type: 'error',
+        message: '密码不一致',
+      })
+      return false
+    }
+  })
 }
 const ruleForm = reactive({
   id:props.etsid.id,
@@ -68,17 +81,31 @@ const ruleForm = reactive({
   pass:'',
   name:'',
   asspass:''
-  // oldpass:"",
-  // checkPass: '',
-  // tel:'',
-  // depid:'',
-  // roleid:'',
-  // username:''
 });
+const validatePass = (rule: any, value: any, callback: any) => {
+  if (value === '') {
+    callback(new Error('密码不能为空'))
+  } else {
+    if (ruleForm.oldpass !== '') {
+      if (!ruleFormRef.value) return
+      ruleFormRef.value.validateField('checkPass', () => null)
+    }
+    callback()
+  }
+}
+const validatePass2 = (rule: any, value: any, callback: any) => {
+  if (value === '') {
+    callback(new Error('密码不能为空'))
+  } else if (value !== ruleForm.asspass) {
+    callback(new Error("密码不一致!"))
+  } else {
+    callback()
+  }
+}
 const ruleFormRef: any = ref<FormInstance>();
 const rules = reactive<FormRules>({
-  asspass: [{ required: true, message: '请输入6-16位的密码', trigger: 'blur' }],
-  oldpass: [{ required: true, message: '请再次输入密码', trigger: 'blur' }],
+  asspass: [{ validator: validatePass, trigger: 'blur'  }],
+  oldpass: [{validator: validatePass2, trigger: 'blur' }],
 });
 // 暴露在外面
 defineExpose({

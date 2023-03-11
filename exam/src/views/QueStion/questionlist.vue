@@ -127,9 +127,11 @@ const htmlEncodeByRegExp=(val:any)=>{
     val=val.replace(/</g,'&lt;');
     val=val.replace(/>/g,'&gt;');
     val=val.replace(/\n/g,'<br>');
+    val = val.replace(/&lt;/g,"<");
+    val = val.replace(/&gt;/g,">");
 		return val;
 	}
-const title="编辑"
+const title=ref() 
 const data = reactive({
   databaseid: route.query.databaseid, //题库id名
   psize: '',
@@ -149,9 +151,6 @@ const drawer = ref(false);
 const dra:any=(i:any)=>{
   lisvue.value=i
   drawer.value = true
-  // var s = '';
-  // i = s.replace(/</g,'&lt;');
-	// i = s.replace(/>/g,'&gt;');
 }
 const table = ref(false);
 // 编辑
@@ -159,6 +158,7 @@ const tableData = reactive({
   questionsData:''
 })
 const compile=(val:any)=>{
+  title.value='编辑'
   tableData.questionsData=val
   table.value = true;
 }
@@ -168,6 +168,7 @@ const drawerShow = (val:any) =>{
 const lits: any = ref([]);
 // 点击添加试题
 const addOne = () => {
+  title.value='添加'
   table.value = true;
 };
 // 点击
@@ -199,9 +200,6 @@ const updataFile = async (e: any) => {
     databaseid: databaseid,
     list: e,
   });
-  list();
-  console.log(data);
-  
   console.log(res, "文件上传")
   list();
 };
@@ -309,7 +307,15 @@ const getChildData = (val: any) => {
 </script>
 
 <style scoped>
-
+:deep(.cell){
+  /* height: 24px;
+  line-height: 0px; */
+  display: flex;
+  align-items: center;
+}
+/* :deep(.butle p){
+  margin-top: -23px;
+} */
 .el-page-header {
   display: flex;
   justify-content: space-between;
@@ -341,4 +347,10 @@ const getChildData = (val: any) => {
 :deep(.el-pagination__editor) {
   width: 102px;
 }
+/* :deep(.cell){
+  height: 24px;
+}
+:deep(#test1){
+  margin-top: -113px;
+} */
 </style>
