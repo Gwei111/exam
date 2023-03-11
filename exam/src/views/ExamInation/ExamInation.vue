@@ -72,11 +72,11 @@
         <el-table-column property="pastnum" label="通过人数" align="center" />
         <el-table-column property="name" label="开放时间" align="center">
           <template #default="scope">
-            <p v-if="scope.row.begindate == null">不限</p>
-            <p v-else>
-              {{ moment(scope.row.begindate).format('YYYY-MM-DD hh:mm') }}至
-              {{ moment(scope.row.enddate).format('YYYY-MM-DD hh:mm') }}
-            </p>
+            <p v-if="scope.row.begintime && scope.row.endtime"
+              >{{ moment(scope.row.begindate).format('YYYY-MM-DD hh:mm') }}至
+              {{ moment(scope.row.enddate).format('YYYY-MM-DD hh:mm') }}</p
+            >
+            <p v-else>不限</p>
           </template>
         </el-table-column>
         <el-table-column property="admin" label="创建人" align="center" />
