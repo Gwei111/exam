@@ -42,7 +42,6 @@
               <el-radio :label="data.letter[index]" v-for="(item, index) in form.answers" :key="index">
                 {{ data.letter[index] }}
               </el-radio>
-
             </el-radio-group>
           </el-form-item>
           <!-- 多选题 -->
@@ -102,9 +101,11 @@ import { CirclePlus, CircleClose, List } from '@element-plus/icons-vue';
 // 题库的编辑dictionary,题库的id(databaseid)
 const props = defineProps(['table','updArr','title','databaseid','dictionary'])
 const emit = defineEmits(['Drawerclose', 'adds', 'DrawerCancel'])
-watch([props], () => {
-  form = props.updArr
-})
+// watch([props], () => {
+//   form = props.updArr
+//   console.log(form);
+  
+// })
 
 
 const formLabelWidth = "80px";
@@ -340,13 +341,15 @@ const onClick = () => {
   emit("adds", false, form);
 };
 // 修改回显数据
-if(props.title=='修改'){
-    let list:any=JSON.parse(props.updArr)
-    // console.log(list);
-    form={...list}
-    check=list.answer.split('|')
-    console.log(form);
-}
+// if(props.title=='修改'){
+//   console.log(props.updArr);
+//   form = props.updArr
+//     let list:any=JSON.parse(props.updArr)
+//     console.log(list);
+//     form={...list}
+//     check=list.answer.split('|')
+//     console.log(form);
+// }
     // 修改回显数据题库编辑  
   if(props.dictionary){
       form.title = props.dictionary.title
@@ -363,6 +366,19 @@ onMounted(() => {
         data.leng=form.answer
     }
 })
+
+// 试题修改
+if(props.updArr.type){
+    form.title = props.updArr.title
+    form.type = props.updArr.type
+    form.scores = props.updArr.scores
+    form.answers = props.updArr.answers
+    form.answer = props.updArr.answer
+    form.tags = props.updArr.tags
+    form.explains = props.updArr.explains
+    form.id = props.updArr.id
+}
+console.log(props.updArr)
 // 保存并继续
 const clickup = () => { };
 const handleClose = (done: any) => {

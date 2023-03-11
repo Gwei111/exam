@@ -449,11 +449,13 @@ const DrawerCancel = (val: any) => {
 };
 // 编辑
 let updArr: any = ref([]);
-const edit: any = (val: any) => {
+const edit: any = (val: any,index:number) => {
   console.log(val);
   title.value = "修改";
   table.value = true; //弹出框
-  updArr.value = JSON.stringify(val);
+  updArr.value =  JSON.parse(JSON.stringify(val))
+  console.log(updArr.value);
+  
 };
 
 // 删除
