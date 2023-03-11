@@ -14,15 +14,16 @@
         </el-form-item>
         <!-- 我创建的 -->
         <el-form-item>
-          <el-checkbox label="我创建的" name="ismy" />
+          <el-checkbox label="我创建的" v-model="query.ismy"  true-label="1"
+            false-label="0" @change="changeismy"/>
         </el-form-item>
         <el-form-item label="开放时间" prop="resource">
-          <el-radio-group v-model="timeRadio" @change="changeRadio">
-            <el-radio label="永久开放" />
-            <el-radio label="部分时段" />
+          <el-radio-group v-model="radio">
+            <el-radio :label="1" value="1">永久开放</el-radio>
+            <el-radio :label="2" value="2" >部分时段</el-radio>
           </el-radio-group>
           <el-date-picker v-model="times" type="daterange" unlink-panels range-separator="To" start-placeholder="开始时间"
-            end-placeholder="结束时间" :shortcuts="shortcuts" :size="size" />
+            end-placeholder="结束时间" :shortcuts="shortcuts" :size="size" :readonly="flag==false"  @change="changepi"/>
         </el-form-item>
         <el-form-item label="状态">
           <el-select v-model="stateVal" clearable placeholder="选择状态" style="width: 100px" @change="changeState">
@@ -130,7 +131,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { reactive, ref, toRefs } from "vue";
+import { reactive, ref, toRefs ,watchEffect} from "vue";
 import { ElMessage, ElTable } from "element-plus";
 import router from "../../router/index";
 
@@ -148,7 +149,6 @@ import moment from "moment";
 import Pages from '../../components/FenYe/FenYe.vue'
 import Teacher from '../../components/test/teacherList.vue'
 import TascherList from '../../components/test/teacherList.vue'//阅卷老师
-import { Message } from '@element-plus/icons-vue'
 let getid = ref(0)
 let title = ref('')
 const data: any = reactive({
@@ -180,6 +180,12 @@ let query: any = reactive({
   admin: "",
   opentime: "",
   state: 0,
+  ismy:0
+});
+const radio = ref(1);
+const flag = ref(false);
+watchEffect(() => {
+  radio.value === 2 ? (flag.value = true) : (flag.value = false);
 });
 const shortcuts = [
   {
@@ -211,6 +217,12 @@ const shortcuts = [
   },
 ];
 const size = ref<"default" | "large" | "small" | 'mini'>("default");
+const changepi=(e:any)=>{
+  // console.log(e)
+  query.begindate = moment(e[0]).format('YYYY-MM-DD');
+  query.enddate = moment(e[1]).format('YYYY-MM-DD');
+  // console.log(query.value)
+}
 interface User {
   date: string;
   name: string;
@@ -284,6 +296,13 @@ const noissue = async () => {
     getList();
   }
 };
+const changeismy = (val:any) => {
+  console.log(val);
+  
+  if (val === 1) {
+    query.admin = "";
+  }
+};
 // 开放时间
 const changeRadio = (val: any) => {
   // console.log(val);
@@ -330,6 +349,7 @@ const handleDelete = async (val: any) => {
     })
 
 };
+
 // 批删
 const delAll = async (val: any) => {
   // console.log(val);

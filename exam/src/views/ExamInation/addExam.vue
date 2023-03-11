@@ -168,9 +168,9 @@
               </el-form-item>
               <!-- 开放时间 -->
               <el-form-item label="开放时间" style="width: 800px;">
-                <el-date-picker v-model="opTime" type="datetimerange" :shortcuts="shortcuts" range-separator="To"
-                  format="YYYY-MM-DD HH:mm" value-format="YYYY-MM-DD HH:mm" start-placeholder="Start date"
-                  end-placeholder="End date" @change="getTime" />
+                <el-date-picker v-model="opTime" type="datetimerange" :shortcuts="shortcuts" range-separator="至"
+                  format="YYYY-MM-DD HH:mm" value-format="YYYY-MM-DD HH:mm" start-placeholder="开始时间"
+                  end-placeholder="结束时间" @change="getTime" />
                 <span style="color: #c3c3c3;">不填表示永久</span>
               </el-form-item>
               <el-form-item label="答案解析：">

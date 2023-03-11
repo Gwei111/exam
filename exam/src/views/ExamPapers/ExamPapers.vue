@@ -5,7 +5,7 @@
   <div class="box" style="width:350px;margin-left:-30px;margin-top:10px">
     <el-form ref="formRef" :model="numberValidateForm" label-width="100px" class="demo-ruleForm">
       <el-form-item label="关键字：" prop="key">
-        <el-input v-model.number="numberValidateForm.key" placeholder="请输入题库名称" type="text" autocomplete="off" />
+        <el-input v-model.number="numberValidateForm.key" placeholder="请输入题库名称" clearable  type="text" autocomplete="off" />
       </el-form-item>
     </el-form>
     &emsp;<el-button type="primary" @click="seach">查询</el-button>
