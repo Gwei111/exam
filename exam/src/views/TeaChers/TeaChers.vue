@@ -6,7 +6,7 @@
    </div>
     <div class="top">
       <el-form-item label="关键字" class="gaun">
-        <el-input v-model="data.key" placeholder="请输入关键字" />
+        <el-input v-model="data.key" placeholder="请输入关键字" clearable />
       </el-form-item>
       <el-form-item label="部门">
         <el-cascader  v-model="date.depid"  :options="options.arr" @change="handleChange" :props="props" clearable />

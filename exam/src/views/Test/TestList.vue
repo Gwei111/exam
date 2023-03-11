@@ -7,10 +7,10 @@
   <div class="ip">
     <el-form :model="numberValidateForm" class="demo-ruleForm">
       <el-form-item label="关键字" prop="key">
-        <el-input v-model.string="numberValidateForm.key" placeholder="考试名称" type="text" autocomplete="off" />
+        <el-input v-model.string="numberValidateForm.key" placeholder="考试名称" type="text" clearable  autocomplete="off" />
       </el-form-item>&emsp;
       <el-form-item label="创建人" prop="admin">
-        <el-input v-model.number="numberValidateForm.admin" placeholder="创建人" type="text" autocomplete="off" />
+        <el-input v-model.number="numberValidateForm.admin" placeholder="创建人" type="text" clearable  autocomplete="off" />
       </el-form-item>&emsp;
       <el-form-item>
         <el-checkbox id="fon" v-model="checked1" label="只看我创建的" size="large" />

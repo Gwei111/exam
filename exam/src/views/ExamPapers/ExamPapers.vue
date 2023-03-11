@@ -11,7 +11,7 @@
       <el-form-item label="关键字："
                     prop="key">
         <el-input v-model.number="numberValidateForm.key"
-                  placeholder="请输入题库名称"
+                  placeholder="请输入题库名称" clearable 
                   type="text"
                   autocomplete="off" />
       </el-form-item>

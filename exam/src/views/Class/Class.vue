@@ -11,7 +11,7 @@
              class="demo-ruleForm">
       <el-form-item label="班级姓名"
                     prop="key">
-        <el-input placeholder="请输入关键字"
+        <el-input placeholder="请输入关键字" clearable 
                   v-model="numberValidateForm.key"
                   type="text" />
       </el-form-item>&emsp;

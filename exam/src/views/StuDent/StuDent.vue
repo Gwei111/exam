@@ -20,7 +20,7 @@
     <div class="input">
       <el-form :inline="true" class="demo-form-inline">
         <el-form-item label="关键字">
-          <el-input v-model="state.key" placeholder="请输入关键字" />
+          <el-input v-model="state.key" placeholder="请输入关键字" clearable />
         </el-form-item>
         <el-form-item label="部门">
           <el-cascader placeholder="请选择" v-model="state.depid" @change="getDepid" :options="departmentlistInfo"

@@ -5,7 +5,7 @@
             <div>
                 <el-form :inline="true" class="demo-form-inline">
                     <el-form-item label="关键字">
-                        <el-input v-model="query.key" placeholder="请输入关键字" />
+                        <el-input v-model="query.key" clearable  placeholder="请输入关键字" />
                     </el-form-item>
                     <el-form-item label="状态" style="width: 140px;">
                         <el-select placeholder="请选择" v-model="query.result">

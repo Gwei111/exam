@@ -5,10 +5,10 @@
   </div>
   <div class="ku">
     <el-form-item label="题库名称 :" clearable>
-      <el-input v-model="data.key" placeholder="请输入题库命名称" />
+      <el-input v-model="data.key" placeholder="请输入题库命名称"  clearable />
     </el-form-item>
     <el-form-item label="创建人:" style="margin-left: 10px">
-      <el-input v-model="form.name" placeholder="请输入创建人" />
+      <el-input v-model="form.name" placeholder="请输入创建人"  clearable />
     </el-form-item>
     <el-checkbox-group v-model="form.type">
       <el-checkbox label="只看我创建的" name="type" />
