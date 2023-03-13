@@ -18,7 +18,7 @@
     <div class="cen">
 
       <div class="dada">
-        <span id="neirong">内容时间：</span>
+        <span id="neirong">试卷内容：</span>
         <!-- 单选题 -->
         <div class="munse" v-if="data.RadioArr.length > 0">
           <span style="margin-left:15px">单选题{{ data.RadioArr.length }}道</span>
@@ -108,7 +108,10 @@
         <!-- 文件上传，模块 -->
         <UploadFiles v-if="Updatadialog" v-model="Updatadialog" :UrL="url" @updataFile="updataFile"></UploadFiles>
       </div>
+      
+      
     </div>
+    
     <div class="tom">
       <div class="tom_tom">
         <span>试题存入题库：</span>

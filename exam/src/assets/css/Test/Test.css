@@ -22,11 +22,15 @@ display: f;
   font-size: 14px;
 }
 .t{
-  margin-top: 5px;
+  margin-top: -20px;
 }
 .Blue{
   color: #409EFF;
 }
 .Blue:hover{
   border-bottom: 1px solid #409EFF;
+}
+.demo-ruleForm{
+  display: flex;
+  align-items: center;
 }

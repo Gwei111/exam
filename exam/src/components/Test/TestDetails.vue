@@ -5,7 +5,8 @@
                width="80%"
                :before-close="handleClose">
       <div class="head">
-        <div>
+        <div class="left">
+          <div>
           <span>总分</span>
           <p>{{model.scores}}</p>
         </div>
@@ -14,9 +15,10 @@
           <span>添加时间</span>
           <p>{{model.addtime}}</p>
         </div>
-        <div style="margin-left:700px">
+        </div>
+        <div >
           <el-button id="derive"
-                     @click="execl">导出execl</el-button>
+                  style="margin-left: 0;"   @click="execl">导出execl</el-button>
         </div>
       </div>
       <div v-for="item,index in model.questions"
@@ -237,14 +239,28 @@ const execl = async () => {
   border-bottom: 0.5px solid #efefef;
   margin-top: -25px;
   display: flex;
+  justify-content: space-between;
+  position: relative;
+  .left{
+    display: flex;
+    align-items: center;
+  }
 }
-.head div p {
+.left div p {
   margin-top: 5px;
+  span{
+    margin-top: 5px;
+  }
 }
 .topic {
   width: 100%;
   /* background-color: gray; */
   margin-top: 10px;
+}
+:deep(.el-form){
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
 }
 .yes {
   width: 90%;
@@ -289,6 +305,8 @@ const execl = async () => {
 }
 #derive {
   // margin-left: 730px;
+  position: absolute;
+  right: 0;
 }
 #boxxx {
   display: flex;

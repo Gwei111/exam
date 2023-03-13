@@ -13,7 +13,8 @@
         <el-input v-model.number="numberValidateForm.admin" placeholder="创建人" type="text" clearable  autocomplete="off" />
       </el-form-item>&emsp;
       <el-form-item>
-        <el-checkbox id="fon" v-model="checked1" label="只看我创建的" size="large" />
+        <el-checkbox id="fon" v-model="numberValidateForm.ismy" label="只看我创建的"  true-label="1"
+            false-label="0" @change="changeismy" />
       </el-form-item>&emsp;
       <el-button type="primary" class="t" @click="search">查询</el-button>
     </el-form>
@@ -59,14 +60,22 @@ const router = useRouter();
 const counts = ref(0);
 const formRef = ref<FormInstance>();
 const Detailsdialog = ref(false);
-const checked1 = ref(false);
+// const checked1 = ref(false);
 
 const numberValidateForm = reactive({
   key: "",
   page: "1",
   psize: "10",
   admin: "",
+  ismy:0
 });
+const changeismy = (val:any) => {
+  console.log(val);
+  
+  if (val === 1) {
+    numberValidateForm.admin = "";
+  }
+};
 // 试卷页面列表展示
 const tableData = ref([]);
 const subjectsID = ref();

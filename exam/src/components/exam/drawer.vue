@@ -81,7 +81,7 @@
       <div class="demo-drawer__footer">
         <el-button type="primary" @click="onClick()">保存</el-button>
         <el-button type="primary" plain @click="clickup">保存并继续</el-button>
-        <el-button @click="cancelForm">Cancel</el-button>
+        <el-button @click="cancelForm">取消</el-button>
 
       </div>
 
@@ -364,7 +364,7 @@ const handleClose = (done: any) => {
 };
 
 const cancelForm = () => {
-  // emit('DrawerCancel', false)
+  emit('DrawerCancel', false)
 };
 </script>
 

@@ -53,8 +53,10 @@
 
   </el-table>
   <!-- 使用分页组件 -->
-  <FenYe :counts="counts" @getChildData="getChildData" />
-  <TestPaper v-if="data.isOpen" @GetStuDentList="GetStuDentList"></TestPaper>
+  <div class="page" style="width: 600px; margin: 30px auto;">
+      <FenYe :counts="counts" @getChildData="getChildData" />
+
+    </div>  <TestPaper v-if="data.isOpen" @GetStuDentList="GetStuDentList"></TestPaper>
 </template>
 
 <script setup lang="ts">
