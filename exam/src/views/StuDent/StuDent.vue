@@ -9,7 +9,7 @@
     </div>
     <!-- 批量添加 -->
     <AddAllAtuDent v-if="centerDialogVisible" :centerDialogVisible="centerDialogVisible" :databaseid="route.query.id"
-      @cancel="centerDialogVisible = false" @batchAdd="batchAdd"></AddAllAtuDent>
+      @cancel="centerDialogVisible = false" @batchAdd="batchAdd" @getStudentList="getStudentList"></AddAllAtuDent>
     <!-- 添加弹出框 -->
     <AddStuDent :dislogShow="dislogShow" :upusername="upusername" :uppass="uppass" :upclassid="upclassid"
       :updepid="updepid" :upname="upname" :upmobile="upmobile" :upremarks="upremarks" :upid="upid" @stuCancel="stuCancel"
@@ -284,7 +284,7 @@ const stuSub = (val: any) => {
 let dislogShow = ref(false)
 const add = () => {
   dislogShow.value = true
-
+  getStudentList()
 }
 
 //修改

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-dialog v-model="props.centerDialogVisible" title="批量导入试题" width="40%" :before-close="handleClose">
+        <el-dialog v-model="center" title="批量导入试题" width="40%" :before-close="handleClose">
             <div class="box">
                 <div style="height: 125px">
                     <el-steps direction="vertical" process-status="wait">
@@ -75,14 +75,14 @@ let props = withDefaults(defineProps<{
     centerDialogVisible: false,
     databaseid: 0
 })
-const emits = defineEmits(['cancel', 'batchAdd'])
+const emits = defineEmits(['cancel', 'batchAdd','getStudentList'])
 
 const count = reactive({
     list: []
 })
 const { list } = toRefs(count)
 let data = ref([])
-
+let center:any=props.centerDialogVisible
 const upload = ref<UploadInstance>()
 const token = sessionStorage.getItem('token')
 // 学生模板下载
@@ -129,6 +129,8 @@ const beforeRemove = (a: any) => {
 }
 // 确定
 const yesaddAll = async () => {
+   
+    
     dialogTableVisible.value = true
 }
 // excel表格
@@ -154,7 +156,10 @@ const addALL= async()=>{
                 message: "添加成功"
             })
             dialogTableVisible.value=false
+            center=false
+           
         })
+        emits('getStudentList')
 }
 
 // 关闭
