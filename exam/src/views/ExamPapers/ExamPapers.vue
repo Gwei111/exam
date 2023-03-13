@@ -75,7 +75,7 @@ const questions = (val: any) => {
   console.log(val);
   router.push({ path: "/examinationA", query: { id: val.id, name: val.title } });
   // router.push({ name: "examinationA", state:{params: id }});
-  console.log({ path: "/examinationA", query: { name: val.title, id: val.id } });
+  // console.log({ path: "/examinationA", query: { name: val.title, id: val.id } });
 };
 // 分页
 const getChildData = (val: any) => {

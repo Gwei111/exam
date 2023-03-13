@@ -48,3 +48,11 @@ export const ShuttleAdd  = (params: any) => {
 export const execls  = (params: any) => {
   return request.get('subjects/exportExcel', params,{responseType:'blob'})
 }
+// 获取学生答题列表
+export const getListforstu=(testid:number,studentid:number)=>{
+  return request.get('question/listforstu',{testid,studentid})
+}
+// 老师判卷
+export const postStudentanswerUpdate=(params:any)=>{
+  return request.post('studentanswer/update',params)
+}

@@ -33,7 +33,13 @@
         </template>
       </el-table-column>
       <el-table-column property="counts" label="题量数目"  />
-      <el-table-column property="addtime" label="创建时间 "  />
+      <el-table-column property="addtime" label="创建时间 ">
+        <template #default="scope">
+        <p>
+          {{moment(scope.row.addtime).format('YYYY-MM-DD hh:mm') }}
+        </p>
+      </template>
+      </el-table-column>
       <el-table-column property="admin" label="创建人"  />
       <el-table-column label="操作" >
         <template #default="scope">
@@ -61,11 +67,12 @@
 <script setup lang="ts">
 import { reactive, ref, onMounted,toRaw } from 'vue';
 import { ElMessage, ElMessageBox, ElTable } from 'element-plus';
+import moment from 'moment';
 import { databaselist, databasedelete, deleteall } from '../../api/department';
 import FenYe from '../../components/FenYe/FenYe.vue';
 import Queston from '../../components/question.vue'
 import { useRouter } from "vue-router";
-import { fa } from 'element-plus/es/locale';
+
 //禁止选项
 const disabled=ref(true)
 const router = useRouter();
