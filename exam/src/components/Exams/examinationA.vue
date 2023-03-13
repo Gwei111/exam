@@ -54,7 +54,7 @@
   </el-table>
   <!-- 使用分页组件 -->
   <FenYe :counts="counts" @getChildData="getChildData" />
-  <TestPaper v-if="data.isOpen"></TestPaper>
+  <TestPaper v-if="data.isOpen" @GetStuDentList="GetStuDentList"></TestPaper>
 </template>
 
 <script setup lang="ts">

@@ -54,6 +54,7 @@
 import { reactive, toRefs, ref, provide, inject, nextTick } from "vue";
 import { getListforstu, postStudentanswerUpdate } from "../../api/Test/Test";
 import { ElTable, ElMessage } from "element-plus";
+import { emit } from "process";
 const data: any = reactive({
     drawer: false,
     ruleForm: [],
@@ -62,6 +63,7 @@ const data: any = reactive({
 const { drawer, ruleForm, ruleFormRef } = toRefs(data);
 //父里面的数据
 const datas: any = inject("data");
+const emit=defineEmits(['GetStuDentList'])
 // 分数表单验证方法
 const getRules = (maxvalue: any) => {
     return [
@@ -142,6 +144,7 @@ const submitForm = async (formEl: any) => {
             });
             studentanswerUpdate(params);
             datas.isOpen = false;
+            emit('GetStuDentList')
             // console.log(data.ruleForm);
         } else {
             var obj: any = Object.keys(fields);
