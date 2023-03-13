@@ -100,6 +100,7 @@ import { CirclePlus, CircleClose, List } from '@element-plus/icons-vue';
 
 // 题库的编辑dictionary,题库的id(databaseid)
 const props = defineProps(['table','updArr','title','databaseid','dictionary'])
+console.log(props.dictionary);
 
 const emit = defineEmits(['Drawerclose', 'adds', 'DrawerCancel'])
 // watch([props], () => {
@@ -341,21 +342,23 @@ const onClick = () => {
   }
   emit("adds", false, form);
 };
-// 修改回显数据
-// if(props.title=='修改'){
-//   console.log(props.updArr);
-//   form = props.updArr
-//     let list:any=JSON.parse(props.updArr)
-//     console.log(list);
-//     form={...list}
-//     check=list.answer.split('|')
-//     console.log(form);
-// }
+    // 修改回显数据题库编辑  
+  if(props.dictionary){
+      form.title = props.dictionary.title
+      form.type = props.dictionary.type
+      form.scores = props.dictionary.scores
+      form.answers = props.dictionary.answers
+      form.answer = props.dictionary.answer
+      form.tags = props.dictionary.tags
+      form.explains = props.dictionary.explains
+      form.id = props.dictionary.id
+  }
 onMounted(() => {
     if(props.title=='修改'){
         data.leng=form.answer
     }
 })
+
 // 保存并继续
 const clickup = () => { };
 const handleClose = (done: any) => {
